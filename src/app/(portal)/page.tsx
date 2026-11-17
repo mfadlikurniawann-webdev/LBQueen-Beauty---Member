@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import useSWR from "swr";
 import { useDebounce } from "@/hooks/useDebounce";
-import { Search, Plus, Minus, X, ArrowRight, Star, Gem, Loader2, Scissors, AlertTriangle, ShoppingCart, Heart, Grip, BadgePercent, ShoppingBag, Ticket, ChevronRight } from "lucide-react";
+import { Search, Plus, Minus, X, ArrowRight, Star, Gem, Loader2, Scissors, AlertTriangle, ShoppingCart, Heart, BadgePercent, ShoppingBag, Ticket, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
@@ -18,10 +18,9 @@ const WA_NUMBER = "6282176171448";
 
 
 const CATEGORIES = [
-  { id: 'semua', label: 'Lihat Semua', icon: Grip, color: '#C94F78' }, 
   { id: 'promo', label: 'Promo', icon: BadgePercent, color: '#F43F5E' }, 
-  { id: 'Treatment Care & Beauty', label: 'Layanan', icon: Scissors, color: '#C94F78' }, 
-  { id: 'Product Care & Beauty', label: 'Produk', icon: ShoppingBag, color: '#F59E0B' }, 
+  { id: 'layanan', label: 'Layanan', icon: Scissors, color: '#C94F78' }, 
+  { id: 'produk', label: 'Produk', icon: ShoppingBag, color: '#F59E0B' }, 
 ];
 
 import { useRouter } from "next/navigation";
@@ -32,9 +31,11 @@ export default function CustomerPortalPage() {
   const [customer, setCustomer] = useState<any>(null);
   const [authChecked, setAuthChecked] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, updateActiveTab] = useState("semua");
   const [page, setPage] = useState(1);
-  const setActiveTab = (value: string) => { setPage(1); updateActiveTab(value); };
+  const changePage = (next: number) => {
+    setPage(next);
+    document.getElementById("katalog-beranda")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [selectionQty, setSelectionQty] = useState(1);
@@ -51,11 +52,11 @@ export default function CustomerPortalPage() {
   const debouncedSearch = useDebounce(searchQuery, 400);
 
   const { data, isLoading: loading, isValidating, error: catalogError, mutate } = useSWR(
-    ['/api/catalog', debouncedSearch, activeTab, page],
-    ([, search, category, page]) => loadCatalog({ search, category, page }),
+    ['/api/catalog', debouncedSearch, page],
+    ([, search, page]) => loadCatalog({ search, category: search ? "semua" : "promo", page }),
     {
       revalidateOnFocus: false,
-      keepPreviousData: false
+      keepPreviousData: true
     }
   );
 
@@ -115,16 +116,14 @@ export default function CustomerPortalPage() {
     return "Selamat Malam";
   };
 
-  const popularTreatments = products.filter(p => p.type === "Treatment Care & Beauty").slice(0, 6);
-  const bestSelling = products.filter(p => p.type === "Product Care & Beauty").slice(0, 10);
 
   if ((loading && customer) || !authChecked) {
     return (
       <div className="min-h-screen bg-[#FDFBFB] animate-in fade-in duration-500">
         <div className="h-[220px] w-full bg-gradient-to-br from-[#E9C3D0] to-[#D79BB0] animate-pulse rounded-b-[32px] mb-8"></div>
         <div className="mx-5 mb-8 h-[200px] rounded-[32px] bg-[#F3E7EA] animate-pulse"></div>
-        <div className="px-5 mb-8 grid grid-cols-4 gap-3">
-           {[1,2,3,4].map(i => <div key={i} className="mx-auto w-[64px] h-[64px] rounded-[24px] bg-[#F3E7EA] animate-pulse"></div>)}
+        <div className="px-5 mb-8 grid grid-cols-3 gap-3">
+           {[1,2,3].map(i => <div key={i} className="mx-auto w-[64px] h-[64px] rounded-[24px] bg-[#F3E7EA] animate-pulse"></div>)}
         </div>
         <div className="px-5 grid grid-cols-2 gap-4">
            {[1,2,3,4].map(i => <div key={i} className="h-[220px] rounded-[24px] bg-[#F3E7EA] animate-pulse"></div>)}
@@ -208,38 +207,26 @@ export default function CustomerPortalPage() {
 
       {/* ── CATEGORIES ── */}
       <div className="portal-section">
-        <div className="grid grid-cols-4 sm:flex sm:justify-start sm:gap-8 gap-3 py-3" aria-label="Kategori katalog">
+        <nav className="grid grid-cols-3 sm:flex sm:justify-start sm:gap-8 gap-3 py-3" aria-label="Kategori katalog">
           {CATEGORIES.map((cat) => {
             const Icon = cat.icon;
-            const active = activeTab === cat.id;
             return (
               <button 
                 key={cat.id}
-                aria-pressed={active}
-                onClick={() => setActiveTab(cat.id)}
+                type="button"
+                onClick={() => router.push(`/category/${cat.id}`)}
                 className="flex min-w-0 flex-col items-center transition-all duration-300 active:scale-95"
               >
-                <div 
-                  className={`w-[64px] h-[64px] rounded-[24px] flex items-center justify-center mb-2.5 transition-all duration-500 relative overflow-hidden group
-                    ${active ? "shadow-sm" : "bg-white border border-[#EEDFE3] hover:border-rose-200"}`}
-                  style={active ? { 
-                    background: `linear-gradient(135deg, ${cat.color}, #C94F78)`,
-                  } : {}}
-                >
-                  <Icon 
-                    className={`w-7 h-7 transition-all duration-500 ${active ? "text-white scale-110" : ""}`} 
-                    style={{ color: active ? '#ffffff' : cat.color }}
-                    strokeWidth={active ? 2.5 : 2}
-                  />
+                <div className="w-[64px] h-[64px] rounded-[24px] flex items-center justify-center mb-2.5 transition-all duration-500 relative overflow-hidden group bg-white border border-[#EEDFE3] hover:border-rose-200">
+                  <Icon className="w-7 h-7 transition-all duration-500" style={{ color: cat.color }} strokeWidth={2} />
                 </div>
-                <span className={`text-xs transition-all duration-300
-                  ${active ? "text-[#A83960] font-bold" : "text-[#766B68] font-medium"}`}>
+                <span className="text-xs transition-all duration-300 text-[#766B68] font-medium">
                   {cat.label}
                 </span>
               </button>
             );
           })}
-        </div>
+        </nav>
       </div>
 
       {/* ── EXCLUSIVE MEMBER CARD ── */}
@@ -357,88 +344,39 @@ export default function CustomerPortalPage() {
         )}
       </div>
 
-      {/* ── SEARCH RESULTS OR DEFAULT SECTIONS ── */}
-      {searchQuery || activeTab !== "semua" ? (
-        <div className="px-[var(--portal-gutter)] pb-6">
-          <div className="flex justify-between items-center gap-3 mb-4">
+      {/* ── PROMO CATALOG OR SEARCH RESULTS ── */}
+      <div id="katalog-beranda" className="scroll-mt-24 px-[var(--portal-gutter)] pb-6">
+        <div className="flex justify-between items-center gap-3 mb-4">
+          {searchQuery ? (
             <h3 className="text-[18px] font-bold text-[#2D2926] tracking-tight">Hasil Pencarian</h3>
-            <span className="shrink-0 rounded-full bg-[#FDF2F5] px-3 py-1 text-[12px] font-semibold text-[#A83960] tabular-nums">{products.length} ditemukan</span>
-          </div>
-          {products.length > 0 ? (
-            <div className="portal-catalog-grid">
-              {products.map(p => (
-                <ProductCard key={p.id} product={p} onOpen={() => openModal(p)} />
-              ))}
-            </div>
           ) : (
-            <div className="py-12 px-6 flex flex-col items-center justify-center text-center bg-white border border-[#EEDFE3] rounded-[32px]">
-              <div className="w-16 h-16 rounded-full bg-[#FDF2F5] flex items-center justify-center mb-4">
-                <Search className="w-7 h-7 text-[#A83960]" aria-hidden="true" />
-              </div>
-              <p className="text-[15px] font-bold text-[#2D2926]">Tidak ada hasil ditemukan</p>
-              <p className="text-[13px] text-[#766B68] mt-1.5 max-w-[260px] leading-relaxed">Coba kata kunci lain atau pilih kategori yang berbeda.</p>
-            </div>
+            <SectionHeading title="Promo Spesial" />
           )}
+          {products.length > 0 && <span className="shrink-0 rounded-full bg-[#FDF2F5] px-3 py-1 text-[12px] font-semibold text-[#A83960] tabular-nums">Halaman {page}</span>}
         </div>
-      ) : (
-        <>
-          {/* ── BEST SELLING PRODUCTS ── */}
-          {bestSelling.length > 0 && (
-            <div className="pb-10">
-              <div className="px-[var(--portal-gutter)]">
-                <SectionHeading title="Produk Terlaris" onSeeAll={() => setActiveTab("Product Care & Beauty")} />
-              </div>
-              <div className="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory px-[var(--portal-gutter)] pt-1 pb-4">
-                {bestSelling.map(p => (
-                  <ProductCard key={p.id} product={p} onOpen={() => openModal(p)} className="snap-start shrink-0 w-[176px] sm:w-[200px]" />
-                ))}
-              </div>
+        {loading ? (
+          <div className="portal-catalog-grid" aria-busy="true">
+            <span className="sr-only">Memuat katalog</span>
+            {[1, 2, 3, 4].map(i => <div key={i} className="h-[240px] rounded-[24px] bg-[#F3E7EA] animate-pulse" />)}
+          </div>
+        ) : products.length > 0 ? (
+          <div className="portal-catalog-grid">
+            {products.map(p => (
+              <ProductCard key={p.id} product={p} onOpen={() => openModal(p)} />
+            ))}
+          </div>
+        ) : (
+          <div className="py-12 px-6 flex flex-col items-center justify-center text-center bg-white border border-[#EEDFE3] rounded-[32px]">
+            <div className="w-16 h-16 rounded-full bg-[#FDF2F5] flex items-center justify-center mb-4">
+              {searchQuery ? <Search className="w-7 h-7 text-[#A83960]" aria-hidden="true" /> : <BadgePercent className="w-7 h-7 text-[#A83960]" aria-hidden="true" />}
             </div>
-          )}
+            <p className="text-[15px] font-bold text-[#2D2926]">{searchQuery ? "Tidak ada hasil ditemukan" : "Belum ada promo aktif"}</p>
+            <p className="text-[13px] text-[#766B68] mt-1.5 max-w-[260px] leading-relaxed">{searchQuery ? "Coba kata kunci lain." : "Lihat Layanan atau Produk untuk menjelajahi katalog lengkap."}</p>
+          </div>
+        )}
+      </div>
 
-          {/* ── POPULAR TREATMENTS ── */}
-          {popularTreatments.length > 0 && (
-            <div className="pb-10">
-              <div className="px-[var(--portal-gutter)]">
-                <SectionHeading title="Layanan Terpopuler" onSeeAll={() => setActiveTab("Treatment Care & Beauty")} />
-              </div>
-              <div className="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory px-[var(--portal-gutter)] pt-1 pb-4">
-                {popularTreatments.map(p => {
-                  const discount = p.voucher_discount || 0;
-                  return (
-                    <button type="button" key={p.id} onClick={() => openModal(p)}
-                         className="snap-start shrink-0 w-[260px] text-left bg-white rounded-[28px] border border-[#EEDFE3] shadow-[0_6px_18px_-10px_rgba(168,57,96,0.28)] overflow-hidden cursor-pointer group active:scale-[0.98] transition-all hover:shadow-lg hover:shadow-rose-100 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25">
-                      <div className="relative w-full h-[150px]">
-                        {p.image_url ? (
-                          <Image src={p.image_url} alt={p.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                        ) : (
-                          <ProductPlaceholder type={p.type} size="lg" />
-                        )}
-                        {discount > 0 && <PromoBadge />}
-                      </div>
-                      <div className="p-4 pt-3.5">
-                        <span className="inline-flex max-w-full items-center gap-1 rounded-full bg-[#FDF2F5] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.06em] text-[#A83960]">
-                          <Scissors className="w-3 h-3 shrink-0" aria-hidden="true" />
-                          <span className="truncate">{p.sub_category || "Layanan"}</span>
-                        </span>
-                        <h4 className="mt-2 text-[15px] font-bold text-[#2D2926] line-clamp-2 leading-snug min-h-[2.75em]">{p.name}</h4>
-                        <div className="flex items-end justify-between gap-2 mt-3">
-                          <PriceStack price={p.selling_price} discount={discount} size="lg" />
-                          <span className="w-9 h-9 shrink-0 rounded-xl bg-[#FDF2F5] flex items-center justify-center text-[#A83960] group-hover:bg-[#C94F78] group-hover:text-white transition-colors" aria-hidden="true">
-                            <ArrowRight className="w-4 h-4" />
-                          </span>
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </>
-      )}
-
-      {(searchQuery || activeTab !== "semua") && <PageControls page={page} hasMore={!!data?.hasMore} loading={isValidating} onChange={setPage} />}
+      {(page > 1 || data?.hasMore) && <PageControls page={page} hasMore={!!data?.hasMore} loading={isValidating} onChange={changePage} />}
 
       {selectedProduct && (() => {
         const basePrice = selectedVariant ? selectedVariant.price : selectedProduct.selling_price;

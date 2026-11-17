@@ -1,5 +1,11 @@
 # Architectural Decisions & Changes Log (LBQueen Member)
 
+## 2026-11-17: Navigasi kategori berlapis
+
+- Beranda hanya menampilkan tombol Promo, Layanan, Produk (tanpa "Lihat Semua") yang membuka `/category/promo|layanan|produk`. Isi beranda di bawahnya hanya katalog promo (atau hasil pencarian) dengan paginasi; bagian Produk Terlaris/Layanan Terpopuler dihapus.
+- Halaman kategori menyimpan nomor halaman di URL (`?page=N`, `router.push`) sehingga tombol back browser/HP kembali per halaman; tombol panah header kembali ke beranda. Filter mengatur ulang ke halaman 1 dengan `router.replace`.
+- `proxy.ts` mengalihkan alamat lama `/category/Treatment Care & Beauty` dan `/category/Product Care & Beauty` (308) dan memberi 404 untuk kategori tak dikenal (validasi di halaman tidak bisa mengubah status karena `loading.tsx` memulai streaming).
+
 ## 2026-11-17: Pengerasan keamanan, beban, dan keterbacaan UI
 
 - `src/lib/rate-limit.ts` memakai RPC `consume_login_attempt` (8 hit per kunci per 15 menit) dengan kunci berjendela waktu untuk batas per IP tanpa migrasi skema: login 8/menit per IP + 8/15 menit per akun, daftar 8/5 menit per IP + per nomor HP, ganti password 8/15 menit per member, checkout dan ulasan 8/5 menit per member. Baris `auth_attempts` > 24 jam dibersihkan secara acak (2%).

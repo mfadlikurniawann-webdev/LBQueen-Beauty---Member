@@ -3,6 +3,8 @@ import type { NextRequest } from 'next/server';
 import { verifySession } from '@/lib/session';
 
 const protectedRoutes = ['/cart', '/orders', '/profile', '/invoice'];
+const categorySlugs = new Set(['promo', 'layanan', 'produk']);
+const legacyCategories: Record<string, string> = { 'Treatment Care & Beauty': 'layanan', 'Product Care & Beauty': 'produk' };
 
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
@@ -11,6 +13,16 @@ export async function proxy(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = path.slice('/customer-portal'.length) || '/';
     return NextResponse.redirect(url, 308);
+  }
+
+  if (path.startsWith('/category/')) {
+    const type = decodeURIComponent(path.slice('/category/'.length));
+    if (legacyCategories[type]) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/category/${legacyCategories[type]}`;
+      return NextResponse.redirect(url, 308);
+    }
+    if (!categorySlugs.has(type)) return NextResponse.rewrite(new URL('/kategori-tidak-ditemukan', request.url), { status: 404 });
   }
 
   if (protectedRoutes.some(route => path === route || path.startsWith(`${route}/`))) {
