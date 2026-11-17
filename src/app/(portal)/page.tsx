@@ -79,6 +79,11 @@ export default function CustomerPortalPage() {
     return () => clearInterval(interval);
   }, [slides.length]);
 
+  useEffect(() => {
+    CATEGORIES.forEach(cat => router.prefetch(`/category/${cat.id}`));
+    ["/cart", "/orders", "/profile"].forEach(path => router.prefetch(path));
+  }, [router]);
+
   const openModal = (p: Product) => {
     setSelectedProduct(p);
     setSelectedVariant(p.variants && p.variants.length > 0 ? p.variants[0] : null);

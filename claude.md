@@ -1,5 +1,10 @@
 # Architectural Decisions & Changes Log (LBQueen Member)
 
+## 2026-11-17: Latensi navigasi
+
+- Header `x-vercel-id: sin1::iad1` menunjukkan fungsi (API, server action, proxy) berjalan di Washington DC, sementara pengguna dan Supabase berada di Asia Tenggara; respons API live 1,3–1,9 detik. `vercel.json` kini menetapkan `regions: ["sin1"]` (Singapura). Bila region Supabase bukan Singapura, samakan region ini dengan region database.
+- Matcher `proxy.ts` dibatasi ke rute yang memang perlu diperiksa, sehingga beranda, login, aset `public/`, dan halaman publik tidak lagi melewati fungsi proxy.
+
 ## 2026-11-17: Navigasi kategori berlapis
 
 - Beranda hanya menampilkan tombol Promo, Layanan, Produk (tanpa "Lihat Semua") yang membuka `/category/promo|layanan|produk`. Isi beranda di bawahnya hanya katalog promo (atau hasil pencarian) dengan paginasi; bagian Produk Terlaris/Layanan Terpopuler dihapus.

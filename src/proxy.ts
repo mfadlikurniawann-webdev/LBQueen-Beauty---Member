@@ -35,5 +35,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)'],
+  matcher: ['/cart/:path*', '/orders/:path*', '/profile/:path*', '/invoice/:path*', '/category/:path*', '/customer-portal/:path*'],
 };
