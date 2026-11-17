@@ -1,25 +1,22 @@
 "use client";
 
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
-const navButton = "min-w-0 gap-1.5 rounded-2xl border border-[#EEDFE3] bg-white px-3 text-[13px] font-bold text-[#A83960] shadow-sm hover:border-[#C94F78]/40 hover:bg-[#FDF2F5] disabled:opacity-100 disabled:border-transparent disabled:bg-[#F3ECEE] disabled:text-[#8C8280] disabled:shadow-none sm:px-5";
+const arrow = "inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-[#E3C3CF] bg-white text-[#A83960] shadow-[0_1px_4px_rgba(201,79,120,0.08)] transition-colors hover:border-[#C94F78] hover:bg-[#FFF0F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C94F78]/40 disabled:cursor-not-allowed disabled:border-[#EEE6E3] disabled:bg-[#F7F3F1] disabled:text-[#B9ADA9] disabled:shadow-none";
 
 export function PageControls({ page, hasMore, loading, onChange }: {
   page: number; hasMore: boolean; loading: boolean; onChange: (page: number) => void;
 }) {
-  return <nav aria-label="Navigasi halaman data" className="flex flex-wrap items-center justify-center gap-2 px-2 py-5 sm:gap-3">
-    <Button variant="outline" className={navButton} disabled={loading || page <= 1} onClick={() => onChange(page - 1)}>
-      <ChevronLeft aria-hidden="true" />
-      Sebelumnya
-    </Button>
-    <span aria-live="polite" className="inline-flex min-h-11 items-center gap-1.5 rounded-2xl bg-[#FDF2F5] px-3 text-[13px] font-semibold text-[#2D2926] tabular-nums">
-      {loading && <Loader2 aria-hidden="true" className="h-3.5 w-3.5 animate-spin text-[#C94F78]" />}
-      Halaman <span className="font-bold text-[#A83960]">{page}</span>
+  if (page <= 1 && !hasMore) return null;
+  return <nav aria-label="Navigasi halaman data" className="flex items-center justify-center gap-2 pt-1 pb-4">
+    <button type="button" aria-label="Sebelumnya" className={arrow} disabled={loading || page <= 1} onClick={() => onChange(page - 1)}>
+      <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+    </button>
+    <span aria-live="polite" aria-label={`Halaman ${page}`} className="inline-flex h-10 min-w-10 items-center justify-center rounded-2xl bg-[#FDF2F5] px-3 text-[14px] font-bold text-[#A83960] tabular-nums">
+      {loading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : page}
     </span>
-    <Button variant="outline" className={navButton} disabled={loading || !hasMore} onClick={() => onChange(page + 1)}>
-      Berikutnya
-      <ChevronRight aria-hidden="true" />
-    </Button>
+    <button type="button" aria-label="Berikutnya" className={arrow} disabled={loading || !hasMore} onClick={() => onChange(page + 1)}>
+      <ChevronRight className="h-5 w-5" aria-hidden="true" />
+    </button>
   </nav>;
 }

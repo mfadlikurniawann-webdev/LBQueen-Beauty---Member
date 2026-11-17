@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import { ShoppingBag, Loader2, Clock, CheckCircle2, Package, MessageCircle, Wallet, XCircle, ChevronLeft, ChevronRight, Star, Scissors } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useToast } from "@/components/Toast";
@@ -194,10 +193,6 @@ export default function OrdersPage() {
             </div>
             <h2 className="text-[18px] font-bold! text-[#2D2926] tracking-tight">Belum Ada Pesanan</h2>
             <p className="text-[14px] text-[#766B68] leading-relaxed mt-1.5 max-w-[280px]">Pesanan yang Anda buat akan tampil di sini beserta statusnya.</p>
-            <Link href="/" className="mt-6 h-12 px-6 rounded-2xl text-white text-[14px] font-bold flex items-center gap-2"
-              style={{ background: 'linear-gradient(135deg,#C94F78,#9B3055)', boxShadow: '0 10px 24px rgba(201,79,120,0.25)' }}>
-              Eksplor Katalog
-            </Link>
           </div>
         ) : (
           <div className="space-y-3.5">
@@ -293,9 +288,10 @@ export default function OrdersPage() {
             })}
           </div>
         )}
+        <div className="mt-4">
+          <PageControls page={page} hasMore={hasMore} loading={loading} onChange={setPage} />
+        </div>
       </div>
-
-      <PageControls page={page} hasMore={hasMore} loading={loading} onChange={setPage} />
 
       {selectedOrder && (() => {
         const o = selectedOrder;
