@@ -5,6 +5,7 @@ import { productDiscount } from "@/lib/promotions";
 export const dynamic = "force-dynamic";
 const pageSize = 24;
 const headers = { "Cache-Control": "private, no-store" };
+const cached = { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" };
 const categories = ["Treatment Care & Beauty", "Product Care & Beauty"];
 
 export async function GET(request: NextRequest) {
@@ -43,7 +44,7 @@ export async function GET(request: NextRequest) {
       products: rows.slice(0, pageSize).map(p => ({ ...p, voucher_discount: productDiscount(p.selling_price, p.promotions || []) })),
       hasMore: rows.length > pageSize,
       allVouchers: vouchers.data || [],
-    }, { headers });
+    }, { headers: cached });
   } catch {
     return Response.json({ message: "Katalog belum dapat dimuat." }, { status: 503, headers });
   }

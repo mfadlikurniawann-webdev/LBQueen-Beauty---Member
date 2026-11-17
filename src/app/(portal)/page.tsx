@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import useSWR from "swr";
 import { useDebounce } from "@/hooks/useDebounce";
-import { Search, Plus, Minus, X, ArrowRight, Star, Gem, Loader2, Scissors, AlertTriangle, ShoppingCart, Heart, Grip, BadgePercent, ShoppingBag, Ticket } from "lucide-react";
+import { Search, Plus, Minus, X, ArrowRight, Star, Gem, Loader2, Scissors, AlertTriangle, ShoppingCart, Heart, Grip, BadgePercent, ShoppingBag, Ticket, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
@@ -121,12 +121,13 @@ export default function CustomerPortalPage() {
   if ((loading && customer) || !authChecked) {
     return (
       <div className="min-h-screen bg-[#FDFBFB] animate-in fade-in duration-500">
-        <div className="h-[180px] w-full bg-slate-200 animate-pulse rounded-b-[48px] mb-6"></div>
-        <div className="px-5 mb-8 flex gap-3 overflow-x-hidden">
-           {[1,2,3,4].map(i => <div key={i} className="min-w-[64px] h-[64px] rounded-[24px] bg-slate-200 animate-pulse"></div>)}
+        <div className="h-[220px] w-full bg-gradient-to-br from-[#E9C3D0] to-[#D79BB0] animate-pulse rounded-b-[32px] mb-8"></div>
+        <div className="mx-5 mb-8 h-[200px] rounded-[32px] bg-[#F3E7EA] animate-pulse"></div>
+        <div className="px-5 mb-8 grid grid-cols-4 gap-3">
+           {[1,2,3,4].map(i => <div key={i} className="mx-auto w-[64px] h-[64px] rounded-[24px] bg-[#F3E7EA] animate-pulse"></div>)}
         </div>
         <div className="px-5 grid grid-cols-2 gap-4">
-           {[1,2,3,4].map(i => <div key={i} className="h-[180px] rounded-[24px] bg-slate-200 animate-pulse"></div>)}
+           {[1,2,3,4].map(i => <div key={i} className="h-[220px] rounded-[24px] bg-[#F3E7EA] animate-pulse"></div>)}
         </div>
       </div>
     );
@@ -156,23 +157,23 @@ export default function CustomerPortalPage() {
 
         <div className="relative z-10">
           <div className="mb-6">
-            <h2 className="text-2xl lg:text-4xl font-semibold text-white tracking-tight leading-tight">
+            <h2 className="text-[26px] lg:text-4xl font-semibold text-white tracking-tight leading-tight drop-shadow-sm">
               {getGreeting()},<br/>
               <span className="text-[#F5E3C0]">{customer?.name ? customer.name.split(' ')[0] : 'Guest'}!</span>
             </h2>
-            <p className="text-white/85 text-sm mt-3">Waktu untuk merawat diri. Temukan perawatan pilihan Anda.</p>
+            <p className="text-white/90 text-[14px] leading-relaxed mt-3 max-w-md">Waktu untuk merawat diri. Temukan perawatan pilihan Anda.</p>
           </div>
 
-          <div className="relative w-full max-w-2xl shadow-sm rounded-2xl overflow-hidden bg-white">
+          <div className="relative w-full max-w-2xl rounded-2xl overflow-hidden bg-white shadow-lg shadow-[#7A2240]/20 ring-1 ring-white/60 transition-shadow focus-within:ring-4 focus-within:ring-white/40">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <Search className="h-4 w-4 text-[#C94F78]" />
+              <Search aria-hidden="true" className="h-[18px] w-[18px] text-[#A83960]" />
             </div>
-            <input 
+            <input
               type="search" aria-label="Cari treatment atau produk"
-              placeholder="Cari treatment atau produk..." 
-              value={searchQuery} 
+              placeholder="Cari treatment atau produk..."
+              value={searchQuery}
               onChange={e => { setPage(1); setSearchQuery(e.target.value); }}
-              className="block w-full pl-11 pr-4 py-4 text-base bg-transparent outline-none text-[#2D2926]"
+              className="block w-full pl-12 pr-4 py-4 text-base bg-transparent outline-none text-[#2D2926] placeholder:text-[#8C8280]"
             />
           </div>
         </div>
@@ -244,117 +245,112 @@ export default function CustomerPortalPage() {
       {/* ── EXCLUSIVE MEMBER CARD ── */}
       <div className="portal-section">
         {!customer || !customer.is_member ? (
-          <Link href="/login" className="block group">
-            <div className="relative overflow-hidden rounded-[32px] p-6 transition-all duration-500 hover:shadow-2xl hover:shadow-rose-100 hover:-translate-y-1 active:scale-[0.98]"
-              style={{ background: 'linear-gradient(135deg, #fff 0%, #FFF5F8 100%)', border: '1px solid rgba(201,79,120,0.08)' }}>
-              
-              {/* Background Decorative Elements */}
+          <Link href="/login" className="block group rounded-[32px] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25">
+            <div className="relative overflow-hidden rounded-[32px] p-5 sm:p-6 border border-[#EEDFE3] shadow-[0_8px_24px_-12px_rgba(168,57,96,0.25)] transition-all duration-500 hover:shadow-xl hover:shadow-rose-100 hover:-translate-y-1 active:scale-[0.98]"
+              style={{ background: 'linear-gradient(135deg, #fff 0%, #FFF5F8 100%)' }}>
+
               <div className="absolute -right-12 -top-12 w-48 h-48 bg-[#C94F78]/5 rounded-full blur-3xl group-hover:bg-[#C94F78]/10 transition-colors duration-500" />
               <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-[#D4AF37]/5 rounded-full blur-2xl" />
-              
-              <div className="relative z-10 flex items-center justify-between gap-6">
-                <div className="flex-1">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C94F78]/10 text-[#C94F78] text-[9px] font-bold uppercase tracking-widest mb-3">
-                    <Star className="w-3 h-3 fill-current" />
+
+              <div className="relative z-10 flex items-center justify-between gap-4 sm:gap-6">
+                <div className="flex-1 min-w-0">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C94F78]/10 text-[#A83960] text-[11px] font-bold uppercase tracking-[0.1em] mb-3">
+                    <Star className="w-3 h-3 fill-current" aria-hidden="true" />
                     Exclusive Member
                   </div>
-                  <h3 className="text-[18px] font-bold text-[#2D2926] leading-tight mb-2 tracking-tight">
-                    Daftar member, dapatkan <span className="text-[#C94F78]">Keuntungan Extra!</span>
+                  <h3 className="text-[18px] font-bold text-[#2D2926] leading-snug mb-2 tracking-tight">
+                    Daftar member, dapatkan <span className="text-[#A83960]">Keuntungan Extra!</span>
                   </h3>
-                  <p className="text-[11px] text-[#2D2926]/50 font-medium max-w-[200px] leading-relaxed">
+                  <p className="text-[13px] text-[#766B68] font-medium max-w-[260px] leading-relaxed">
                     Nikmati promo khusus, poin belanja, dan layanan prioritas setiap kunjungan.
                   </p>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-bold text-[#A83960] group-hover:text-[#7A2240] transition-colors">
+                    Daftar sekarang <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                  </span>
                 </div>
-                
-                {/* Visual Element: 3D-ish Card Icon */}
-                <div className="relative w-24 h-24 flex items-center justify-center shrink-0">
+
+                <div className="relative hidden min-[360px]:flex w-20 h-20 sm:w-24 sm:h-24 items-center justify-center shrink-0" aria-hidden="true">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#C94F78] to-[#9B3055] rounded-[24px] rotate-12 opacity-10 group-hover:rotate-6 transition-transform duration-500" />
-                  <div className="w-16 h-22 bg-gradient-to-br from-[#C94F78] to-[#9B3055] rounded-2xl shadow-2xl shadow-[#C94F78]/30 flex flex-col justify-between p-3 transform -rotate-12 group-hover:-rotate-6 transition-transform duration-500 border border-white/20">
+                  <div className="w-14 h-20 sm:w-16 sm:h-22 bg-gradient-to-br from-[#C94F78] to-[#9B3055] rounded-2xl shadow-2xl shadow-[#C94F78]/30 flex flex-col justify-between p-3 transform -rotate-12 group-hover:-rotate-6 transition-transform duration-500 border border-white/20">
                     <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
                       <Gem className="w-4 h-4 text-white" />
                     </div>
                     <div className="space-y-2">
-                      <div className="w-10 h-1 bg-white/40 rounded-full" />
-                      <div className="w-12 h-1 bg-white/20 rounded-full" />
-                      <div className="flex justify-end pt-1">
-                      </div>
+                      <div className="w-8 sm:w-10 h-1 bg-white/50 rounded-full" />
+                      <div className="w-6 sm:w-8 h-1 bg-white/30 rounded-full" />
                     </div>
-                  </div>
-                  
-                  {/* Floating Action Circle */}
-                  <div className="absolute -right-2 -bottom-2 w-11 h-11 rounded-full bg-white shadow-xl flex items-center justify-center text-[#C94F78] transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 z-20">
-                    <ArrowRight className="w-6 h-6" />
                   </div>
                 </div>
               </div>
             </div>
           </Link>
         ) : (
-            <div className="space-y-4">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-[15px] font-semibold text-[#2D2926]">Status Membership</h3>
-              </div>
-              <div className="bg-white rounded-[32px] p-5 shadow-sm border border-rose-100/50 mb-6 relative overflow-hidden group">
-                <div className="absolute right-0 top-0 w-32 h-32 bg-gradient-to-br from-[#D4AF37]/10 to-transparent rounded-full blur-2xl pointer-events-none" />
-                <div className="flex items-center justify-between mb-4 relative z-10">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-100 to-amber-50 flex items-center justify-center border border-amber-200/50 shadow-sm">
-                      <Gem className="w-5 h-5 text-amber-500" />
+            <div>
+              <SectionHeading title="Status Membership" />
+              <div className="bg-white rounded-[28px] p-5 border border-[#EEDFE3] shadow-[0_8px_24px_-12px_rgba(168,57,96,0.22)] mb-8 relative overflow-hidden">
+                <div className="absolute -right-6 -top-6 w-36 h-36 bg-gradient-to-br from-[#D4AF37]/15 to-transparent rounded-full blur-2xl pointer-events-none" />
+                <div className="flex items-center justify-between gap-3 mb-5 relative z-10">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#F7E7B4] to-[#FBF3DC] flex items-center justify-center border border-[#D4AF37]/30 shrink-0">
+                      <Gem className="w-5 h-5 text-[#9A7614]" aria-hidden="true" />
                     </div>
-                    <div>
-                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none mb-1">Tier Saat Ini</p>
-                      <p className="text-[15px] font-bold text-[#2D2926] leading-none">{memberTier} Member</p>
+                    <div className="min-w-0">
+                      <p className="text-[11px] text-[#766B68] font-bold uppercase tracking-[0.1em] leading-none mb-1.5">Tier Saat Ini</p>
+                      <p className="text-[16px] font-bold text-[#2D2926] leading-tight line-clamp-2">{memberTier} Member</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-[18px] font-extrabold text-[#C94F78] leading-none">{customer.points}</p>
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Total Poin</p>
+                  <div className="text-right shrink-0">
+                    <p className="text-[24px] font-extrabold text-[#A83960] leading-none tabular-nums">{customer.points}</p>
+                    <p className="text-[11px] font-bold text-[#766B68] uppercase tracking-[0.1em] mt-1.5">Total Poin</p>
                   </div>
                 </div>
-                
-                {/* Progress Bar */}
-                <div className="relative z-10 mt-2">
-                  <div className="flex justify-between text-[10px] font-bold mb-2">
-                    <span className="text-[#C94F78]">{customer.points} Pts</span>
-                    <span className="text-slate-400">{nextTierPoints} Pts</span>
+
+                <div className="relative z-10 rounded-2xl bg-[#FDF7F9] border border-[#F3E4E9] p-4">
+                  <div className="flex justify-between text-[12px] font-bold mb-2 tabular-nums">
+                    <span className="text-[#A83960]">{customer.points} Pts</span>
+                    <span className="text-[#766B68]">{nextTierPoints} Pts</span>
                   </div>
-                  <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-gradient-to-r from-[#C94F78] to-[#D4AF37] rounded-full transition-all duration-1000 ease-out" 
+                  <div className="h-2.5 w-full bg-[#F1DDE4] rounded-full overflow-hidden" role="progressbar" aria-label="Progres poin menuju target berikutnya" aria-valuemin={0} aria-valuemax={nextTierPoints} aria-valuenow={customer.points}>
+                    <div
+                      className="h-full bg-gradient-to-r from-[#C94F78] to-[#D4AF37] rounded-full transition-all duration-1000 ease-out"
                       style={{ width: `${progressPercent}%` }}
                     />
                   </div>
-                  <p className="text-[10px] text-slate-400 font-medium mt-3 text-center">
-                    Kumpulkan {nextTierPoints - customer.points} poin lagi untuk target berikutnya.
+                  <p className="text-[12px] text-[#766B68] font-medium mt-3 text-center leading-relaxed">
+                    Kumpulkan <span className="font-bold text-[#2D2926] tabular-nums">{nextTierPoints - customer.points}</span> poin lagi untuk target berikutnya.
                   </p>
                 </div>
               </div>
 
-              <div className="flex justify-between items-center">
-                <h3 className="text-[15px] font-semibold text-[#2D2926]">Promo Member</h3>
-              </div>
+              <SectionHeading title="Promo Member" />
             {allVouchers.length > 0 ? (
-              <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
+              <div className="flex gap-4 overflow-x-auto no-scrollbar snap-x -mx-[var(--portal-gutter)] px-[var(--portal-gutter)] pb-3">
                 {allVouchers.map(v => (
-                  <div key={v.id} className="shrink-0 w-[260px] h-[100px] rounded-2xl overflow-hidden p-4 flex items-center justify-between shadow-sm border border-rose-100 bg-white relative">
-                    <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[#FDFBFB]" />
-                    <div className="absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[#FDFBFB]" />
-                    <div className="relative z-10 flex-1">
-                      <p className="text-[#C94F78] text-[10px] font-bold uppercase tracking-wider mb-0.5">{v.name}</p>
-                      <h4 className="text-[#2D2926] text-[15px] font-bold mb-2">Potongan {v.type === "nominal" ? `Rp ${v.discount_amount.toLocaleString('id-ID')}` : `${v.discount_amount}%`}</h4>
-                      <div className="inline-block bg-[#FDF2F5] text-[#C94F78] px-2 py-0.5 rounded-md text-[9px] font-bold border border-rose-100">
+                  <div key={v.id} className="snap-start shrink-0 w-[272px] min-h-[112px] rounded-[24px] overflow-hidden flex items-stretch border border-[#EEDFE3] bg-white shadow-[0_6px_18px_-10px_rgba(168,57,96,0.3)] relative">
+                    <div className="relative z-10 flex-1 min-w-0 p-4 pr-3 flex flex-col justify-center">
+                      <p className="text-[#A83960] text-[11px] font-bold uppercase tracking-[0.08em] mb-1 line-clamp-1">{v.name}</p>
+                      <h4 className="text-[#2D2926] text-[16px] font-bold leading-tight mb-2.5 tabular-nums">Potongan {v.type === "nominal" ? `Rp ${v.discount_amount.toLocaleString('id-ID')}` : `${v.discount_amount}%`}</h4>
+                      <div className="self-start max-w-full truncate bg-[#FDF2F5] text-[#A83960] px-2.5 py-1 rounded-lg text-[12px] font-bold border border-dashed border-[#E3B5C5]">
                         Kode: {v.code}
                       </div>
                     </div>
-                    <div className="relative z-10 w-[60px] h-[60px] bg-rose-50 rounded-xl flex items-center justify-center border border-rose-100">
-                      <Ticket className="w-8 h-8 text-[#C94F78] opacity-40" />
+                    <div className="relative w-[76px] shrink-0 flex items-center justify-center border-l-2 border-dashed border-[#EEDFE3] bg-gradient-to-br from-[#C94F78] to-[#9B3055]">
+                      <div className="absolute -left-[9px] -top-2 w-4 h-4 rounded-full bg-[#FDFBFB] border border-[#EEDFE3]" />
+                      <div className="absolute -left-[9px] -bottom-2 w-4 h-4 rounded-full bg-[#FDFBFB] border border-[#EEDFE3]" />
+                      <Ticket className="w-7 h-7 text-white" aria-hidden="true" />
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="w-full h-[80px] rounded-2xl border-2 border-dashed border-slate-100 flex items-center justify-center bg-white">
-                <p className="text-[12px] text-slate-300 font-medium italic">Promo segera hadir</p>
+              <div className="w-full rounded-[24px] border-2 border-dashed border-[#EEDFE3] bg-white px-5 py-5 flex items-center gap-4">
+                <div className="w-11 h-11 rounded-full bg-[#FDF2F5] flex items-center justify-center shrink-0">
+                  <Ticket className="w-5 h-5 text-[#A83960]" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-[14px] text-[#2D2926] font-semibold">Promo segera hadir</p>
+                  <p className="text-[12px] text-[#766B68] mt-0.5">Promo khusus member akan tampil di sini.</p>
+                </div>
               </div>
             )}
           </div>
@@ -363,40 +359,24 @@ export default function CustomerPortalPage() {
 
       {/* ── SEARCH RESULTS OR DEFAULT SECTIONS ── */}
       {searchQuery || activeTab !== "semua" ? (
-        <div className="px-5 pb-12">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-[15px] font-bold text-[#2D2926] tracking-tight">Hasil Pencarian</h3>
-            <span className="text-[11px] text-slate-400 font-medium">{products.length} ditemukan</span>
+        <div className="px-[var(--portal-gutter)] pb-6">
+          <div className="flex justify-between items-center gap-3 mb-4">
+            <h3 className="text-[18px] font-bold text-[#2D2926] tracking-tight">Hasil Pencarian</h3>
+            <span className="shrink-0 rounded-full bg-[#FDF2F5] px-3 py-1 text-[12px] font-semibold text-[#A83960] tabular-nums">{products.length} ditemukan</span>
           </div>
           {products.length > 0 ? (
             <div className="portal-catalog-grid">
               {products.map(p => (
-                <div key={p.id} onClick={() => openModal(p)}
-                     className="bg-white rounded-[24px] shadow-sm border border-[#f0eded] overflow-hidden cursor-pointer active:scale-[0.98] transition-all">
-                  <div className="relative w-full aspect-[4/3] bg-rose-50/30">
-                    {p.image_url ? (
-                      <Image src={p.image_url} alt={p.name} fill className="object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center opacity-10">
-                        <Image src="/lbqueen_logo.png" alt="logo" width={40} height={40} />
-                      </div>
-                    )}
-                    <div className="absolute top-2 right-2 w-7 h-7 bg-white/90 backdrop-blur-md rounded-lg flex items-center justify-center shadow-sm text-[#C94F78]">
-                      <Plus className="w-3 h-3" />
-                    </div>
-                  </div>
-                  <div className="p-3 flex flex-col gap-1">
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest truncate">{p.sub_category || (p.type === "Treatment Care & Beauty" ? "Layanan" : "Produk")}</p>
-                    <h4 className="text-[12px] font-bold text-[#2D2926] truncate leading-tight mb-1">{p.name}</h4>
-                    <span className="text-[13px] font-bold text-[#C94F78]">Rp {p.selling_price.toLocaleString('id-ID')}</span>
-                  </div>
-                </div>
+                <ProductCard key={p.id} product={p} onOpen={() => openModal(p)} />
               ))}
             </div>
           ) : (
-            <div className="py-12 flex flex-col items-center justify-center text-center border-2 border-dashed border-slate-100 rounded-[32px]">
-              <Search className="w-8 h-8 text-slate-200 mb-3" />
-              <p className="text-[13px] font-bold text-slate-400">Tidak ada hasil ditemukan</p>
+            <div className="py-12 px-6 flex flex-col items-center justify-center text-center bg-white border border-[#EEDFE3] rounded-[32px]">
+              <div className="w-16 h-16 rounded-full bg-[#FDF2F5] flex items-center justify-center mb-4">
+                <Search className="w-7 h-7 text-[#A83960]" aria-hidden="true" />
+              </div>
+              <p className="text-[15px] font-bold text-[#2D2926]">Tidak ada hasil ditemukan</p>
+              <p className="text-[13px] text-[#766B68] mt-1.5 max-w-[260px] leading-relaxed">Coba kata kunci lain atau pilih kategori yang berbeda.</p>
             </div>
           )}
         </div>
@@ -404,35 +384,13 @@ export default function CustomerPortalPage() {
         <>
           {/* ── BEST SELLING PRODUCTS ── */}
           {bestSelling.length > 0 && (
-            <div className="px-0 pb-12">
-              <div className="px-5 flex justify-between items-center mb-4">
-                <h3 className="text-[15px] font-bold text-[#2D2926] tracking-tight">Produk Terlaris</h3>
-                <button onClick={() => setActiveTab("Product Care & Beauty")} className="text-xs font-semibold text-[#A83960] min-h-11">Lihat semua</button>
+            <div className="pb-10">
+              <div className="px-[var(--portal-gutter)]">
+                <SectionHeading title="Produk Terlaris" onSeeAll={() => setActiveTab("Product Care & Beauty")} />
               </div>
-              <div className="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory px-5 pb-4">
+              <div className="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory px-[var(--portal-gutter)] pt-1 pb-4">
                 {bestSelling.map(p => (
-                  <div key={p.id} onClick={() => openModal(p)}
-                       className="snap-center shrink-0 w-[190px] bg-white rounded-[28px] shadow-sm border border-[#f0eded] overflow-hidden cursor-pointer group active:scale-[0.98] transition-all">
-                    <div className="relative w-full aspect-[4/3] bg-rose-50/30">
-                      {p.image_url ? (
-                        <Image src={p.image_url} alt={p.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center opacity-10">
-                          <Image src="/lbqueen_logo.png" alt="logo" width={50} height={50} />
-                        </div>
-                      )}
-                      <div className="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-md rounded-xl flex items-center justify-center shadow-sm text-[#C94F78]">
-                        <Plus className="w-4 h-4" />
-                      </div>
-                    </div>
-                    <div className="p-4 flex flex-col gap-1">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate">{p.sub_category || "Produk"}</p>
-                      <h4 className="text-[13px] font-bold text-[#2D2926] truncate leading-tight mb-2">{p.name}</h4>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[14px] font-bold text-[#C94F78]">Rp {p.selling_price.toLocaleString('id-ID')}</span>
-                      </div>
-                    </div>
-                  </div>
+                  <ProductCard key={p.id} product={p} onOpen={() => openModal(p)} className="snap-start shrink-0 w-[176px] sm:w-[200px]" />
                 ))}
               </div>
             </div>
@@ -440,35 +398,40 @@ export default function CustomerPortalPage() {
 
           {/* ── POPULAR TREATMENTS ── */}
           {popularTreatments.length > 0 && (
-            <div className="px-0 pb-12">
-              <div className="px-5 flex justify-between items-center mb-4">
-                <h3 className="text-[15px] font-bold text-[#2D2926] tracking-tight">Layanan Terpopuler</h3>
-                <button onClick={() => setActiveTab("Treatment Care & Beauty")} className="text-xs font-semibold text-[#A83960] min-h-11">Lihat semua</button>
+            <div className="pb-10">
+              <div className="px-[var(--portal-gutter)]">
+                <SectionHeading title="Layanan Terpopuler" onSeeAll={() => setActiveTab("Treatment Care & Beauty")} />
               </div>
-              <div className="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory px-5 pb-4">
-                {popularTreatments.map(p => (
-                  <div key={p.id} onClick={() => openModal(p)}
-                       className="snap-center shrink-0 w-[260px] bg-white rounded-[28px] shadow-sm border border-[#f0eded] overflow-hidden cursor-pointer group active:scale-[0.98] transition-all">
-                    <div className="relative w-full h-[150px] bg-rose-50/30">
-                      {p.image_url ? (
-                        <Image src={p.image_url} alt={p.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center opacity-10">
-                          <Image src="/lbqueen_logo.png" alt="logo" width={50} height={50} />
+              <div className="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory px-[var(--portal-gutter)] pt-1 pb-4">
+                {popularTreatments.map(p => {
+                  const discount = p.voucher_discount || 0;
+                  return (
+                    <button type="button" key={p.id} onClick={() => openModal(p)}
+                         className="snap-start shrink-0 w-[260px] text-left bg-white rounded-[28px] border border-[#EEDFE3] shadow-[0_6px_18px_-10px_rgba(168,57,96,0.28)] overflow-hidden cursor-pointer group active:scale-[0.98] transition-all hover:shadow-lg hover:shadow-rose-100 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25">
+                      <div className="relative w-full h-[150px]">
+                        {p.image_url ? (
+                          <Image src={p.image_url} alt={p.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                        ) : (
+                          <ProductPlaceholder type={p.type} size="lg" />
+                        )}
+                        {discount > 0 && <PromoBadge />}
+                      </div>
+                      <div className="p-4 pt-3.5">
+                        <span className="inline-flex max-w-full items-center gap-1 rounded-full bg-[#FDF2F5] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.06em] text-[#A83960]">
+                          <Scissors className="w-3 h-3 shrink-0" aria-hidden="true" />
+                          <span className="truncate">{p.sub_category || "Layanan"}</span>
+                        </span>
+                        <h4 className="mt-2 text-[15px] font-bold text-[#2D2926] line-clamp-2 leading-snug min-h-[2.75em]">{p.name}</h4>
+                        <div className="flex items-end justify-between gap-2 mt-3">
+                          <PriceStack price={p.selling_price} discount={discount} size="lg" />
+                          <span className="w-9 h-9 shrink-0 rounded-xl bg-[#FDF2F5] flex items-center justify-center text-[#A83960] group-hover:bg-[#C94F78] group-hover:text-white transition-colors" aria-hidden="true">
+                            <ArrowRight className="w-4 h-4" />
+                          </span>
                         </div>
-                      )}
-                    </div>
-                    <div className="p-5">
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="text-[15px] font-bold text-[#2D2926] truncate pr-2 leading-tight">{p.name}</h4>
                       </div>
-                      <div className="flex items-center justify-between mt-4">
-                        <span className="text-[16px] font-bold text-[#C94F78]">Rp {p.selling_price.toLocaleString('id-ID')}</span>
-                        <div className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Layanan</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -477,78 +440,76 @@ export default function CustomerPortalPage() {
 
       {(searchQuery || activeTab !== "semua") && <PageControls page={page} hasMore={!!data?.hasMore} loading={isValidating} onChange={setPage} />}
 
-      {selectedProduct && (
+      {selectedProduct && (() => {
+        const basePrice = selectedVariant ? selectedVariant.price : selectedProduct.selling_price;
+        const discount = selectedProduct.voucher_discount || 0;
+        return (
         <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 pb-32 md:pb-6">
-          <div className="bg-white w-full max-w-[440px] max-h-[82vh] rounded-[40px] flex flex-col shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
-            {/* Header Image & Info */}
-            <div className="relative w-full h-[200px] bg-slate-100 shrink-0">
+          <div role="dialog" aria-modal="true" aria-labelledby="product-detail-title" className="bg-white w-full max-w-[440px] max-h-[82vh] rounded-[32px] flex flex-col shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+            <div className="relative w-full h-[210px] shrink-0">
               {selectedProduct.image_url ? (
                 <Image src={selectedProduct.image_url} alt={selectedProduct.name} fill className="object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#FDF2F5] to-[#FCE8ED]">
-                  <Image src="/lbqueen_logo.png" alt="logo" width={100} height={100} className="object-contain opacity-20" />
-                </div>
+                <ProductPlaceholder type={selectedProduct.type} size="xl" tone="deep" />
               )}
-              
-              {/* Gradient Overlays */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent h-20" />
 
-              {/* Close Button */}
-              <button 
-                onClick={() => setSelectedProduct(null)} 
-                className="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/40 transition-all z-20 border border-white/30"
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/25 to-transparent h-20" />
+
+              <button
+                type="button"
+                aria-label="Tutup detail"
+                onClick={() => setSelectedProduct(null)}
+                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/25 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/40 transition-all z-20 border border-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 <X className="w-5 h-5" />
               </button>
 
-              {/* Header Text Overlay */}
-              <div className="absolute bottom-6 left-6 right-6 z-10">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="px-2.5 py-1 rounded-full bg-[#C94F78] text-white text-[9px] font-bold uppercase tracking-widest shadow-lg shadow-[#C94F78]/20">
+              <div className="absolute bottom-9 left-5 right-5 z-10">
+                <div className="flex flex-wrap items-center gap-2 mb-2">
+                  <span className="px-2.5 py-1 rounded-full bg-[#C94F78] text-white text-[11px] font-bold uppercase tracking-[0.08em] shadow-lg shadow-[#C94F78]/20">
                     {selectedProduct.type.split(' ')[0]}
                   </span>
                   {selectedProduct.sub_category && (
-                    <span className="px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-widest border border-white/30">
+                    <span className="max-w-[60%] truncate px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-[11px] font-bold uppercase tracking-[0.08em] border border-white/30">
                       {selectedProduct.sub_category}
                     </span>
                   )}
                 </div>
-                <h3 className="text-[20px] font-bold text-white leading-tight mb-2 drop-shadow-md">
+                <h3 id="product-detail-title" className="text-[20px] font-bold text-white leading-snug mb-1.5 drop-shadow-md line-clamp-2">
                   {selectedProduct.name}
                 </h3>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-[22px] font-bold text-white">
-                      Rp {(selectedVariant ? selectedVariant.price : selectedProduct.selling_price).toLocaleString("id-ID")}
+                <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 tabular-nums">
+                  <span className="text-[22px] font-bold text-white drop-shadow-sm">
+                    Rp {Math.max(0, basePrice - discount).toLocaleString("id-ID")}
+                  </span>
+                  {discount > 0 && (
+                    <span className="text-[13px] font-medium text-white/80 line-through">
+                      Rp {basePrice.toLocaleString("id-ID")}
                     </span>
-                    {selectedProduct.voucher_discount && selectedProduct.voucher_discount > 0 && (
-                      <span className="text-[12px] text-white/60 line-through">
-                        Rp {((selectedVariant ? selectedVariant.price : selectedProduct.selling_price) + selectedProduct.voucher_discount).toLocaleString("id-ID")}
-                      </span>
-                    )}
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto bg-white rounded-t-[32px] -mt-6 relative z-20 p-6 space-y-8">
-              {/* Variants Section */}
+            <div className="flex-1 overflow-y-auto bg-white rounded-t-[28px] -mt-6 relative z-20 p-5 sm:p-6 space-y-7">
               {selectedProduct.variants && selectedProduct.variants.length > 0 && (
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-[13px] font-bold text-[#2D2926] uppercase tracking-wider">Pilih Varian</h4>
-                    <span className="text-[11px] text-slate-400 font-medium">Wajib dipilih</span>
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    <h4 className="text-[13px] font-bold text-[#2D2926] uppercase tracking-[0.08em]">Pilih Varian</h4>
+                    <span className="rounded-full bg-[#FDF2F5] px-2.5 py-0.5 text-[11px] text-[#A83960] font-semibold">Wajib dipilih</span>
                   </div>
                   <div className="flex flex-wrap gap-2.5">
                     {selectedProduct.variants.map(v => (
-                      <button 
-                        key={v.id} 
+                      <button
+                        type="button"
+                        key={v.id}
+                        aria-pressed={selectedVariant?.id === v.id}
                         onClick={() => setSelectedVariant(v)}
-                        className={`px-5 py-3 rounded-2xl text-[12px] font-bold transition-all duration-300 border-2 ${
+                        className={`px-4 min-h-11 rounded-2xl text-[13px] font-bold transition-all duration-300 border-2 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20 ${
                           selectedVariant?.id === v.id
                           ? 'bg-[#C94F78] border-[#C94F78] text-white shadow-lg shadow-[#C94F78]/20'
-                          : 'bg-white border-slate-100 text-[#2D2926]/60 hover:border-[#C94F78]/30'
+                          : 'bg-white border-[#EEDFE3] text-[#2D2926] hover:border-[#C94F78]/40 hover:text-[#A83960]'
                         }`}
                       >
                         {v.variant_name}
@@ -558,82 +519,85 @@ export default function CustomerPortalPage() {
                 </div>
               )}
 
-              {/* Quantity Selector */}
               <div>
-                <h4 className="text-[13px] font-bold text-[#2D2926] uppercase tracking-wider mb-4">Jumlah Pesanan</h4>
-                <div className="flex items-center justify-between bg-slate-50 p-2 rounded-[24px] border border-slate-100">
-                  <button 
-                    onClick={() => setSelectionQty(Math.max(1, selectionQty - 1))} 
-                    className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-[#C94F78] hover:scale-105 active:scale-95 transition-all"
+                <h4 className="text-[13px] font-bold text-[#2D2926] uppercase tracking-[0.08em] mb-3">Jumlah Pesanan</h4>
+                <div className="flex items-center justify-between bg-[#FDF7F9] p-2 rounded-[24px] border border-[#EEDFE3]">
+                  <button
+                    type="button"
+                    aria-label="Kurangi jumlah"
+                    onClick={() => setSelectionQty(Math.max(1, selectionQty - 1))}
+                    className="w-12 h-12 rounded-full bg-white border border-[#EEDFE3] shadow-sm flex items-center justify-center text-[#A83960] hover:scale-105 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20"
                   >
                     <Minus className="w-5 h-5" />
                   </button>
                   <div className="flex flex-col items-center">
-                    <span className="text-[20px] font-bold text-[#2D2926]">{selectionQty}</span>
-                    <span className="text-[10px] text-slate-400 font-medium uppercase tracking-widest">Qty</span>
+                    <span className="text-[22px] font-bold text-[#2D2926] tabular-nums leading-none" aria-live="polite">{selectionQty}</span>
+                    <span className="text-[11px] text-[#766B68] font-semibold uppercase tracking-[0.1em] mt-1">Qty</span>
                   </div>
-                  <button 
-                    onClick={() => setSelectionQty(selectionQty + 1)} 
-                    className="w-12 h-12 rounded-full bg-[#C94F78] shadow-lg shadow-[#C94F78]/20 flex items-center justify-center text-white hover:scale-105 active:scale-95 transition-all"
+                  <button
+                    type="button"
+                    aria-label="Tambah jumlah"
+                    onClick={() => setSelectionQty(selectionQty + 1)}
+                    className="w-12 h-12 rounded-full bg-[#C94F78] shadow-lg shadow-[#C94F78]/20 flex items-center justify-center text-white hover:scale-105 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25"
                   >
                     <Plus className="w-5 h-5" />
                   </button>
                 </div>
               </div>
 
-              {/* Treatment Advisory */}
               {isTreatment && (
-                <div className="p-5 rounded-[24px] space-y-4 bg-[#FBF7ED] border border-[#D4AF37]/20 relative overflow-hidden">
-                  <div className="absolute -right-4 -top-4 w-20 h-20 bg-[#D4AF37]/5 rounded-full" />
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center shrink-0">
-                      <AlertTriangle className="w-5 h-5 text-[#B8941F]" />
+                <div className="p-4 sm:p-5 rounded-[24px] space-y-4 bg-[#FBF7ED] border border-[#D4AF37]/30 relative overflow-hidden">
+                  <div className="absolute -right-4 -top-4 w-20 h-20 bg-[#D4AF37]/10 rounded-full" />
+                  <div className="relative flex items-start gap-3.5">
+                    <div className="w-10 h-10 rounded-xl bg-[#D4AF37]/15 flex items-center justify-center shrink-0">
+                      <AlertTriangle className="w-5 h-5 text-[#8A6A0F]" aria-hidden="true" />
                     </div>
                     <div>
-                      <h5 className="text-[14px] font-bold text-[#B8941F] mb-1">Informasi Penting</h5>
-                      <p className="text-[12px] text-[#2D2926]/70 leading-relaxed font-medium">
+                      <h5 className="text-[14px] font-bold text-[#7A5C0B] mb-1">Informasi Penting</h5>
+                      <p className="text-[13px] text-[#4A4340] leading-relaxed">
                         H-7 & H+7 treatment dilarang konsumsi alkohol atau obat terlarang. Mohon jujur mengenai kondisi tubuh Anda kepada therapist kami demi keamanan Anda.
                       </p>
                     </div>
                   </div>
-                  
-                  <label className="flex items-center gap-3 cursor-pointer p-4 rounded-xl bg-white/50 border border-[#D4AF37]/10 hover:bg-white transition-colors group">
-                    <div className="relative flex items-center justify-center">
-                      <input 
-                        type="checkbox" 
-                        checked={isAgreed} 
+
+                  <label className="relative flex items-center gap-3 cursor-pointer p-3.5 rounded-2xl bg-white border border-[#D4AF37]/25 hover:border-[#D4AF37]/50 transition-colors group">
+                    <div className="relative flex items-center justify-center shrink-0">
+                      <input
+                        type="checkbox"
+                        checked={isAgreed}
                         onChange={e => setIsAgreed(e.target.checked)}
-                        className="peer appearance-none w-6 h-6 border-2 border-[#D4AF37]/30 rounded-lg checked:bg-[#D4AF37] checked:border-[#D4AF37] transition-all cursor-pointer" 
+                        className="peer appearance-none w-6 h-6 border-2 border-[#C9A43A] rounded-lg bg-white checked:bg-[#B8941F] checked:border-[#B8941F] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#D4AF37]/30"
                       />
                       <CheckIcon className="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-all scale-50 peer-checked:scale-100" />
                     </div>
-                    <span className="text-[13px] font-bold text-[#B8941F] group-hover:text-[#8D6E12]">Saya mengerti & menyetujui persyaratan di atas</span>
+                    <span className="text-[13px] font-semibold text-[#5E4708] leading-snug">Saya mengerti & menyetujui persyaratan di atas</span>
                   </label>
                 </div>
               )}
             </div>
 
-            {/* Sticky Action Footer */}
-            <div className="shrink-0 p-5 pb-8 border-t border-slate-100 bg-white grid grid-cols-[1fr_2.5fr] gap-3">
-              <button 
+            <div className="shrink-0 p-4 sm:p-5 pb-6 border-t border-[#F3E4E9] bg-white grid grid-cols-[1fr_2.5fr] gap-3">
+              <button
+                type="button"
                 onClick={handleAddToCart}
-                className="h-[60px] rounded-[20px] text-[13px] font-bold flex flex-col items-center justify-center gap-0.5 transition-all bg-slate-50 text-[#C94F78] border border-slate-100 hover:bg-slate-100 active:scale-95"
+                className="h-[56px] rounded-2xl font-bold flex flex-col items-center justify-center gap-0.5 transition-all bg-[#FDF2F5] text-[#A83960] border border-[#EEDFE3] hover:bg-[#FBE7EE] active:scale-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20"
               >
-                <ShoppingCart className="w-5 h-5" />
-                <span className="text-[10px] uppercase tracking-wider">+ Cart</span>
+                <ShoppingCart className="w-5 h-5" aria-hidden="true" />
+                <span className="text-[11px] uppercase tracking-[0.08em]">+ Cart</span>
               </button>
-              
-              <button 
-                onClick={handleBuyNow} 
+
+              <button
+                type="button"
+                onClick={handleBuyNow}
                 disabled={(isTreatment && !isAgreed) || processing}
-                className="h-[60px] rounded-[20px] text-[15px] font-bold text-white flex items-center justify-center gap-3 transition-all disabled:opacity-50 disabled:grayscale shadow-xl shadow-[#C94F78]/30 active:scale-95"
+                className="h-[56px] rounded-2xl text-[15px] font-bold text-white flex items-center justify-center gap-2.5 transition-all disabled:opacity-60 disabled:saturate-50 disabled:shadow-none disabled:cursor-not-allowed shadow-xl shadow-[#C94F78]/30 active:scale-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/30"
                 style={{ background: 'linear-gradient(135deg,#C94F78,#9B3055)' }}
               >
                 {processing ? (
                   <Loader2 className="w-6 h-6 animate-spin" />
                 ) : (
                   <>
-                    <ShoppingCart className="w-6 h-6" />
+                    <ShoppingCart className="w-5 h-5" aria-hidden="true" />
                     <span>Order Sekarang</span>
                   </>
                 )}
@@ -641,14 +605,109 @@ export default function CustomerPortalPage() {
             </div>
           </div>
         </div>
+        );
+      })()}
+    </div>
+  );
+}
+
+function ProductPlaceholder({ type, size = "md", tone = "soft" }: { type: string; size?: "md" | "lg" | "xl"; tone?: "soft" | "deep" }) {
+  const isTreatmentItem = type === "Treatment Care & Beauty";
+  const Icon = isTreatmentItem ? Scissors : ShoppingBag;
+  const circle = size === "xl" ? "w-20 h-20" : size === "lg" ? "w-16 h-16" : "w-14 h-14";
+  const icon = size === "xl" ? "w-9 h-9" : size === "lg" ? "w-7 h-7" : "w-6 h-6";
+  if (tone === "deep") {
+    return (
+      <div className="absolute inset-0 flex items-start justify-center pt-8 bg-gradient-to-br from-[#C94F78] via-[#A83960] to-[#7A2240]" aria-hidden="true">
+        <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-white/10 blur-2xl" />
+        <div className="absolute -left-6 bottom-0 w-32 h-32 rounded-full bg-[#D4AF37]/20 blur-2xl" />
+        <div className={`relative ${circle} rounded-full bg-white/15 border border-white/30 flex items-center justify-center`}>
+          <Icon className={`${icon} text-white`} strokeWidth={1.75} />
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-[#F9E1E9] via-[#FCEFF3] to-[#FAF7F5]" aria-hidden="true">
+      <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-[#C94F78]/10 blur-xl" />
+      <div className="absolute -left-4 -bottom-4 w-20 h-20 rounded-full bg-[#D4AF37]/15 blur-xl" />
+      <div className={`relative ${circle} rounded-full bg-white/90 border border-[#EEDFE3] shadow-sm flex items-center justify-center`}>
+        <Icon className={`${icon} text-[#A83960]`} strokeWidth={1.75} />
+      </div>
+      <span className="relative text-[11px] font-bold uppercase tracking-[0.12em] text-[#A83960]/80">LBQueen</span>
+    </div>
+  );
+}
+
+function PromoBadge() {
+  return (
+    <span className="absolute top-2.5 left-2.5 z-10 inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700 shadow-sm">
+      <BadgePercent className="w-3 h-3" aria-hidden="true" />
+      Promo
+    </span>
+  );
+}
+
+function PriceStack({ price, discount, size = "md" }: { price: number; discount: number; size?: "md" | "lg" }) {
+  return (
+    <div className="min-w-0 tabular-nums">
+      {discount > 0 && (
+        <p className="text-[12px] font-medium text-[#766B68] line-through leading-none mb-1">Rp {price.toLocaleString("id-ID")}</p>
+      )}
+      <p className={`${size === "lg" ? "text-[17px]" : "text-[15px]"} font-bold text-[#A83960] leading-tight`}>
+        Rp {Math.max(0, price - discount).toLocaleString("id-ID")}
+      </p>
+    </div>
+  );
+}
+
+function SectionHeading({ title, onSeeAll }: { title: string; onSeeAll?: () => void }) {
+  return (
+    <div className="flex items-center justify-between gap-3 mb-3">
+      <h3 className="flex items-center gap-2.5 text-[18px] font-bold text-[#2D2926] tracking-tight">
+        <span className="h-5 w-1 rounded-full bg-gradient-to-b from-[#C94F78] to-[#D4AF37]" aria-hidden="true" />
+        {title}
+      </h3>
+      {onSeeAll && (
+        <button type="button" onClick={onSeeAll} className="-mr-2 inline-flex min-h-11 items-center gap-0.5 rounded-2xl px-2 text-[13px] font-bold text-[#A83960] hover:text-[#7A2240] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C94F78]/30">
+          Lihat semua <ChevronRight className="w-4 h-4" aria-hidden="true" />
+        </button>
       )}
     </div>
   );
 }
 
+function ProductCard({ product, onOpen, className = "" }: { product: Product; onOpen: () => void; className?: string }) {
+  const discount = product.voucher_discount || 0;
+  const fallbackLabel = product.type === "Treatment Care & Beauty" ? "Layanan" : "Produk";
+  return (
+    <button type="button" onClick={onOpen}
+      className={`flex flex-col text-left bg-white rounded-[24px] border border-[#EEDFE3] shadow-[0_6px_18px_-10px_rgba(168,57,96,0.28)] overflow-hidden cursor-pointer group active:scale-[0.98] transition-all hover:shadow-lg hover:shadow-rose-100 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25 ${className}`}>
+      <div className="relative w-full aspect-[4/3] shrink-0">
+        {product.image_url ? (
+          <Image src={product.image_url} alt={product.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+        ) : (
+          <ProductPlaceholder type={product.type} />
+        )}
+        {discount > 0 && <PromoBadge />}
+        <span className="absolute top-2.5 right-2.5 w-8 h-8 bg-white/95 backdrop-blur-md rounded-xl flex items-center justify-center shadow-sm text-[#A83960] group-hover:bg-[#C94F78] group-hover:text-white transition-colors" aria-hidden="true">
+          <Plus className="w-4 h-4" />
+        </span>
+      </div>
+      <div className="p-3.5 flex flex-1 flex-col">
+        <p className="text-[11px] font-semibold text-[#A83960] uppercase tracking-[0.06em] truncate">{product.sub_category || fallbackLabel}</p>
+        <h4 className="mt-1 text-[14px] font-semibold text-[#2D2926] line-clamp-2 leading-snug min-h-[2.75em]">{product.name}</h4>
+        <div className="mt-auto pt-2.5">
+          <PriceStack price={product.selling_price} discount={discount} />
+        </div>
+      </div>
+    </button>
+  );
+}
+
 function UserAvatar({ name }: { name: string }) {
   const initial = name ? name.charAt(0).toUpperCase() : 'U';
-  return <span className="text-[18px] font-bold text-slate-400">{initial}</span>;
+  return <span className="text-[18px] font-bold text-slate-500">{initial}</span>;
 }
 
 function CheckIcon(props: any) {
@@ -715,7 +774,7 @@ function OnboardingView() {
             
             {/* Premium Brand Tag Floating */}
             <div className="absolute bottom-6 left-6 z-10 flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/30 text-white">
-              <span className="text-[11px] font-bold uppercase tracking-wider">Care & Beauty Clinic</span>
+              <span className="text-[12px] font-bold uppercase tracking-[0.08em]">Care & Beauty Clinic</span>
             </div>
           </div>
         </div>
@@ -726,16 +785,16 @@ function OnboardingView() {
         
         {/* Brand logo at the top */}
         <div className="flex flex-col items-center pt-2 lg:pt-6">
-          <div className="w-[72px] h-[72px] rounded-[22px] bg-white border border-[#f0eded] flex items-center justify-center overflow-hidden mb-3 shadow-md transition-transform hover:scale-105 duration-300">
+          <div className="w-[76px] h-[76px] rounded-[24px] bg-white border border-[#EEDFE3] flex items-center justify-center overflow-hidden mb-3 shadow-lg shadow-rose-100/70 transition-transform hover:scale-105 duration-300">
             <Image src="/lbqueen_logo.png" alt="LBQueen Logo" width={56} height={56} className="object-contain" style={{ width: 'auto', height: 'auto' }} />
           </div>
-          <p className="font-bold text-[16px] tracking-wide" style={{ color: '#C94F78' }}>LBQueen</p>
-          <p className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: 'rgba(45,41,38,0.4)' }}>Care & Beauty</p>
+          <p className="font-bold text-[18px] tracking-tight text-[#A83960]">LBQueen</p>
+          <p className="mt-0.5 text-[11px] uppercase tracking-[0.12em] font-semibold text-[#766B68]">Care & Beauty</p>
         </div>
 
         {/* Mobile Only: Looping Images (Horizontal Layout, rounded, 2s interval) */}
         <div className="lg:hidden flex items-center justify-center my-6 w-full">
-          <div className="relative w-full aspect-[16/10] rounded-[28px] overflow-hidden shadow-lg shadow-rose-100/50 bg-rose-50/20 p-1 border border-rose-100/35">
+          <div className="relative w-full aspect-[16/10] rounded-[32px] overflow-hidden shadow-xl shadow-rose-200/40 bg-white p-1.5 border border-[#EEDFE3]">
             <div className="relative w-full h-full rounded-[24px] overflow-hidden">
               {onboardingImages.map((src, idx) => (
                 <Image 
@@ -755,21 +814,21 @@ function OnboardingView() {
         </div>
 
         {/* Dynamic Slide Text */}
-        <div className="text-center px-4 my-6 lg:my-8 min-h-[110px] flex flex-col justify-center">
-          <h2 className="text-[22px] font-bold text-[#2D2926] tracking-tight leading-snug mb-3 transition-all duration-500 lg:text-[24px]">
+        <div className="text-center px-2 sm:px-4 my-6 lg:my-8 min-h-[132px] flex flex-col justify-center" aria-live="polite">
+          <h2 className="text-[24px] font-bold text-[#2D2926] tracking-tight leading-snug mb-3 transition-all duration-500 lg:text-[28px]">
             {onboardSlides[onboardSlide].title}
           </h2>
-          <p className="text-[13px] leading-relaxed text-[#2D2926]/55 font-medium transition-all duration-500 max-w-[320px] mx-auto lg:max-w-[360px] lg:text-[14px]">
+          <p className="text-[14px] leading-relaxed text-[#5F5552] transition-all duration-500 max-w-[320px] mx-auto lg:max-w-[380px] lg:text-[15px]">
             {onboardSlides[onboardSlide].desc}
           </p>
           
           {/* Bullet Indicators */}
-          <div className="flex justify-center gap-1.5 mt-6">
+          <div className="flex justify-center gap-1.5 mt-6" aria-hidden="true">
             {onboardSlides.map((_, i) => (
               <div 
                 key={i} 
                 className={`h-1.5 rounded-full transition-all duration-300 ${
-                  onboardSlide === i ? "w-5 bg-[#C94F78]" : "w-1.5 bg-slate-200"
+                  onboardSlide === i ? "w-6 bg-[#C94F78]" : "w-1.5 bg-[#E6CFD7]"
                 }`} 
               />
             ))}
@@ -777,20 +836,24 @@ function OnboardingView() {
         </div>
 
         {/* Buttons */}
-        <div className="space-y-4 w-full px-2 lg:px-8 max-w-[380px] mx-auto">
+        <div className="space-y-3 w-full px-0 sm:px-2 lg:px-8 max-w-[380px] mx-auto">
           <button 
+            type="button"
             onClick={() => router.push("/login")}
-            className="w-full h-[56px] rounded-[20px] text-white text-[15px] font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:shadow-xl hover:shadow-rose-100/60 shadow-lg shadow-rose-100 cursor-pointer animate-in fade-in duration-300"
+            className="group w-full h-[56px] rounded-2xl text-white text-[16px] font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:shadow-xl hover:shadow-rose-200/70 shadow-lg shadow-rose-200/60 cursor-pointer animate-in fade-in duration-300 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/30"
             style={{ background: 'linear-gradient(135deg,#C94F78,#9B3055)' }}
           >
             Masuk
+            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
           </button>
 
           <button 
+            type="button"
             onClick={() => router.push("/register")}
-            className="w-full h-[56px] rounded-[20px] font-bold text-[14px] flex items-center justify-center transition-all active:scale-[0.98] border border-slate-200 text-[#2D2926]/70 hover:bg-slate-50 hover:text-[#C94F78] hover:border-[#C94F78]/20 cursor-pointer animate-in fade-in duration-350"
+            className="w-full min-h-[56px] px-4 rounded-2xl text-[14px] flex flex-wrap items-center justify-center gap-x-1 transition-all active:scale-[0.98] border border-[#EEDFE3] bg-white hover:bg-[#FDF2F5] hover:border-[#C94F78]/30 cursor-pointer animate-in fade-in duration-350 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20"
           >
-            Belum ada akun? Daftar dulu
+            <span className="font-medium text-[#766B68]">Belum ada akun?</span>
+            <span className="font-bold text-[#A83960]">Daftar dulu</span>
           </button>
         </div>
       </div>

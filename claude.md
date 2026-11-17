@@ -1,5 +1,13 @@
 # Architectural Decisions & Changes Log (LBQueen Member)
 
+## 2026-11-17: Pengerasan keamanan, beban, dan keterbacaan UI
+
+- `src/lib/rate-limit.ts` memakai RPC `consume_login_attempt` (8 hit per kunci per 15 menit) dengan kunci berjendela waktu untuk batas per IP tanpa migrasi skema: login 8/menit per IP + 8/15 menit per akun, daftar 8/5 menit per IP + per nomor HP, ganti password 8/15 menit per member, checkout dan ulasan 8/5 menit per member. Baris `auth_attempts` > 24 jam dibersihkan secara acak (2%).
+- Form daftar memiliki honeypot `website`; panjang input dibatasi di server. Checkout memvalidasi item, kode voucher, serta format tanggal/jam sebelum RPC.
+- Gateway: voucher hanya bisa dicek per kode (`code=eq.X`), jumlah baris dibatasi 100, `limit`/`offset` divalidasi, header `Range` tidak diteruskan. Respons katalog publik (`/api/catalog` 60 dtk, tabel katalog di gateway 30 dtk) di-cache CDN dengan stale-while-revalidate; data milik member tetap `private, no-store`.
+- Header CSP `frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'` dan COOP `same-origin-allow-popups` (WhatsApp tetap bisa dibuka).
+- UI: teks sekunder minimal setara slate-500/#766B68, ukuran minimum 11px, placeholder input lebih kontras. Banner promo dan tombol kategori beranda sengaja tidak diubah atas permintaan pemilik.
+
 ## 2026-11-17: Dipisahkan dari POS LBQueen
 
 - Portal pelanggan (`/customer-portal`) dipindahkan dari proyek `POS LBQueen` menjadi aplikasi Next.js tersendiri untuk domain `lbqueen.id`. Rute berada di root (`/`, `/cart`, `/orders`, `/profile`, `/login`, `/register`, `/category/[type]`, `/invoice/[id]`); `/customer-portal/*` lama diarahkan 308 ke rute baru.

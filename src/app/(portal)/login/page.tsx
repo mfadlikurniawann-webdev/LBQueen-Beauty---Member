@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { Eye, EyeOff, ArrowRight, Loader2, Ticket, Star, Heart, ShieldCheck } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, Loader2, Ticket, Star, Heart, ShieldCheck, Info } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -26,6 +26,9 @@ const LeftBg = () => (
     <ellipse cx="50%" cy="50%" rx="230" ry="75" fill="rgba(255,255,255,0.025)" transform="rotate(-15 50% 50%)" />
   </svg>
 );
+
+const INPUT_CLASS = "w-full min-h-12 px-4 py-3 rounded-2xl text-base sm:text-[14px] text-[#2D2926] bg-[#FAF7F5] border border-[#E8D5DB] placeholder:text-[#8C8280] outline-none transition-all focus:bg-white focus:border-[#C94F78] focus:ring-4 focus:ring-[#C94F78]/10";
+const LABEL_CLASS = "block text-[12px] font-bold text-[#766B68] mb-2 uppercase tracking-[0.08em]";
 
 const BENEFITS = [
   { icon: Star, text: "Akses Katalog Treatment Eksklusif" },
@@ -93,132 +96,109 @@ export default function CustomerLoginPage() {
   return (
     <div className="min-h-screen flex" style={{ background: '#F7F2F0' }}>
 
-      {/* ══════════════════════════════
-          LEFT PANEL — Gradient + Logo
-          ══════════════════════════════ */}
       <div className="hidden lg:flex flex-col items-center justify-center w-[42%] relative overflow-hidden"
         style={{ background: 'linear-gradient(160deg, #D4608A 0%, #C94F78 35%, #9B3055 70%, #7A2240 100%)' }}>
         <LeftBg />
 
-        <div className="relative z-10 flex flex-col items-center text-center px-10 max-w-[380px]">
-          {/* Logo card */}
-          <div className="w-[88px] h-[88px] rounded-[22px] bg-white flex items-center justify-center overflow-hidden mb-6 shadow-xl"
+        <div className="relative z-10 flex flex-col items-center text-center px-10 max-w-[400px]">
+          <div className="w-[88px] h-[88px] rounded-[24px] bg-white flex items-center justify-center overflow-hidden mb-6 shadow-xl"
             style={{ boxShadow: '0 12px 40px rgba(45,41,38,0.20)' }}>
             <Image src="/lbqueen_logo.png" alt="LBQueen" width={72} height={72} className="object-contain" style={{ width: 'auto', height: 'auto' }} />
           </div>
 
-          <h1 className="text-[24px] font-medium text-white mb-1.5 tracking-tight">LBQueen Member</h1>
-          <p className="text-white/50 text-[13px] font-normal mb-10">Care & Beauty Clinic</p>
+          <h1 className="text-[26px] font-bold! text-white mb-1.5 tracking-tight">LBQueen Member</h1>
+          <p className="text-white/80 text-[14px] font-medium mb-10">Care & Beauty Clinic</p>
 
-          {/* Benefit bullets */}
-          <div className="w-full space-y-2.5">
+          <ul className="w-full space-y-2.5">
             {BENEFITS.map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-3 px-4 py-3 rounded-xl border"
-                style={{ background: 'rgba(255,255,255,0.10)', borderColor: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)' }}>
-                <div className="w-7 h-7 rounded-lg bg-white/15 flex items-center justify-center shrink-0">
-                  <Icon className="w-3.5 h-3.5 text-white/70" />
+              <li key={text} className="flex items-center gap-3 px-4 py-3 rounded-2xl border text-left"
+                style={{ background: 'rgba(255,255,255,0.12)', borderColor: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(8px)' }}>
+                <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
+                  <Icon className="w-4 h-4 text-white" aria-hidden="true" />
                 </div>
-                <span className="text-[12px] font-normal text-white/80">+ {text}</span>
-              </div>
+                <span className="text-[13px] font-medium text-white">{text}</span>
+              </li>
             ))}
-          </div>
+          </ul>
 
-          <p className="text-white/25 text-[10px] mt-10 uppercase tracking-[0.25em]">PT. LBQueen Care Beauty</p>
+          <p className="text-white/65 text-[11px] font-semibold mt-10 uppercase tracking-[0.12em]">PT. LBQueen Care Beauty</p>
         </div>
       </div>
 
-      {/* ══════════════════════════════
-          RIGHT PANEL — Clean Form
-          ══════════════════════════════ */}
-      <div className="flex-1 flex items-center justify-center p-8 lg:p-16 bg-white">
+      <div className="flex-1 flex items-center justify-center px-5 py-10 sm:p-8 lg:p-16 bg-white">
         <div className="w-full max-w-[400px]">
 
-          {/* Mobile logo */}
           <div className="lg:hidden flex flex-col items-center mb-8">
-            <div className="w-16 h-16 rounded-2xl bg-white border border-[#f0eded] flex items-center justify-center overflow-hidden mb-3 shadow-md">
+            <div className="w-16 h-16 rounded-2xl bg-white border border-[#EEDFE3] flex items-center justify-center overflow-hidden mb-3 shadow-md">
               <Image src="/lbqueen_logo.png" alt="LBQueen" width={48} height={48} className="object-contain" style={{ width: 'auto', height: 'auto' }} />
             </div>
-            <p className="font-medium text-[16px]" style={{ color: '#C94F78' }}>LBQueen</p>
-            <p className="text-[11px] text-[#2D2926]/30">Care & Beauty</p>
+            <p className="font-bold text-[17px] text-[#A83960]">LBQueen</p>
+            <p className="text-[12px] font-medium text-[#766B68]">Care & Beauty</p>
           </div>
 
-          {/* Welcome label */}
-          <div className="flex items-center gap-1.5 mb-4">
-            <span className="text-[10px] font-medium uppercase tracking-[0.2em]" style={{ color: '#D4AF37' }}>Selamat Datang</span>
-          </div>
-          <h2 className="text-[28px] font-medium text-[#2D2926] tracking-tight mb-1.5">Masuk ke Akun</h2>
-          <p className="text-[13px] mb-8" style={{ color: 'rgba(45,41,38,0.40)' }}>
-            Masukkan <span style={{ color: '#C94F78' }}>Username</span> dan <span style={{ color: '#C94F78' }}>Password</span> Anda
+          <p className="text-[12px] font-bold uppercase tracking-[0.12em] mb-3 text-[#9A7B22]">Selamat Datang</p>
+          <h2 className="text-[28px] font-bold! text-[#2D2926] tracking-tight leading-tight mb-2">Masuk ke Akun</h2>
+          <p className="text-[14px] text-[#766B68] mb-8 leading-relaxed">
+            Masukkan <span className="font-semibold text-[#A83960]">Username</span> dan <span className="font-semibold text-[#A83960]">Password</span> Anda
           </p>
 
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-5">
             <div>
-              <label className="block text-[11px] font-medium text-[#2D2926]/35 mb-1.5 uppercase tracking-[0.12em]">Nomor HP / Username</label>
-              <input type="text" placeholder="Masukkan Username / Nomor HP" required value={form.phone}
+              <label htmlFor="login-identifier" className={LABEL_CLASS}>Nomor HP / Username</label>
+              <input id="login-identifier" type="text" autoComplete="username" placeholder="Masukkan Username / Nomor HP" required value={form.phone}
                 onChange={e => setForm({ ...form, phone: e.target.value })}
-                className="w-full px-4 py-3.5 rounded-xl text-[13px] outline-none transition-all"
-                style={{ background: '#F7F5F4', border: '1.5px solid transparent', color: '#2D2926' }}
-                onFocus={e => e.currentTarget.style.borderColor = '#C94F78'}
-                onBlur={e => e.currentTarget.style.borderColor = 'transparent'} />
+                className={INPUT_CLASS} />
             </div>
 
             <div>
-              <label className="block text-[11px] font-medium text-[#2D2926]/35 mb-1.5 uppercase tracking-[0.12em]">Password</label>
+              <label htmlFor="login-password" className={LABEL_CLASS}>Password</label>
               <div className="relative">
-                <input type={showPass ? "text" : "password"} placeholder="Masukkan Password" required value={form.password}
+                <input id="login-password" type={showPass ? "text" : "password"} autoComplete="current-password" placeholder="Masukkan Password" required value={form.password}
                   onChange={e => setForm({ ...form, password: e.target.value })}
-                  className="w-full px-4 py-3.5 pr-12 rounded-xl text-[13px] outline-none transition-all"
-                  style={{ background: '#F7F5F4', border: '1.5px solid transparent', color: '#2D2926' }}
-                  onFocus={e => e.currentTarget.style.borderColor = '#C94F78'}
-                  onBlur={e => e.currentTarget.style.borderColor = 'transparent'} />
+                  className={`${INPUT_CLASS} pr-14`} />
                 <button type="button" onClick={() => setShowPass(!showPass)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors"
-                  style={{ color: 'rgba(45,41,38,0.2)' }}
-                  onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.color = '#C94F78'}
-                  onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.color = 'rgba(45,41,38,0.2)'}>
-                  {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  aria-label={showPass ? "Sembunyikan password" : "Tampilkan password"}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl flex items-center justify-center text-[#766B68] hover:text-[#C94F78] hover:bg-[#FDF2F5] transition-colors">
+                  {showPass ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
             </div>
 
-            {/* Remember Me Option */}
-            <div className="flex items-center justify-between pb-2">
-              <label className="flex items-center gap-2.5 cursor-pointer group select-none">
-                <input 
-                  type="checkbox" 
-                  checked={rememberMe} 
-                  onChange={e => setRememberMe(e.target.checked)} 
-                  className="w-4 h-4 rounded border-gray-300 accent-[#C94F78] cursor-pointer" 
-                />
-                <span className="text-[12px] font-medium text-[#2D2926]/60 group-hover:text-[#C94F78] transition-colors">
-                  Ingatkan Saya
-                </span>
-              </label>
-            </div>
+            <label className="flex w-fit items-center gap-2.5 cursor-pointer group select-none">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={e => setRememberMe(e.target.checked)}
+                className="w-5 h-5 rounded border-gray-300 accent-[#C94F78] cursor-pointer"
+              />
+              <span className="text-[14px] font-medium text-[#2D2926] group-hover:text-[#A83960] transition-colors">
+                Ingatkan Saya
+              </span>
+            </label>
 
             {error && (
-              <div className="px-4 py-3 rounded-xl text-[12px]"
-                style={{ background: 'rgba(201,79,120,0.06)', color: '#C94F78', border: '1px solid rgba(201,79,120,0.15)' }}>
+              <div role="alert" className="px-4 py-3 rounded-2xl text-[13px] font-medium bg-rose-50 text-rose-700 border border-rose-200">
                 {error}
               </div>
             )}
 
-            <button type="submit" disabled={loading}
-              className="w-full h-[52px] rounded-xl text-white font-medium text-[14px] flex items-center justify-center gap-2 transition-all active:scale-[0.98] mt-2 cursor-pointer"
-              style={{ background: 'linear-gradient(135deg, #D4608A 0%, #C94F78 50%, #9B3055 100%)', boxShadow: '0 8px 24px rgba(201,79,120,0.30)' }}>
-              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Masuk Sekarang <ArrowRight className="w-4 h-4" /></>}
-            </button>
+            <div className="space-y-3 pt-1">
+              <button type="submit" disabled={loading}
+                className="w-full h-[52px] rounded-2xl text-white font-bold text-[15px] flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:brightness-105 disabled:opacity-80 disabled:cursor-wait cursor-pointer"
+                style={{ background: 'linear-gradient(135deg, #D4608A 0%, #C94F78 50%, #9B3055 100%)', boxShadow: '0 8px 24px rgba(201,79,120,0.30)' }}>
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Masuk Sekarang <ArrowRight className="w-4 h-4" /></>}
+              </button>
 
-            <Link href="/register" 
-              className="w-full h-[52px] rounded-xl font-medium text-[13px] flex items-center justify-center gap-2 transition-all active:scale-[0.98] border border-[#f0eded] text-[#2D2926]/60 hover:bg-[#FDFBFB] hover:text-[#C94F78] hover:border-[#C94F78]/20">
-               Belum ada akun? Daftar dulu
-            </Link>
+              <Link href="/register"
+                className="w-full h-[52px] rounded-2xl font-bold text-[14px] flex items-center justify-center gap-1.5 transition-all active:scale-[0.98] border border-[#EEDFE3] bg-white text-[#766B68] hover:bg-[#FDF2F5] hover:border-[#F0CBD8]">
+                Belum ada akun? <span className="text-[#A83960]">Daftar dulu</span>
+              </Link>
+            </div>
           </form>
 
-          {/* Member info */}
-          <div className="mt-8 p-4 rounded-xl flex items-start gap-2.5"
-            style={{ background: 'rgba(212,175,55,0.07)', border: '1px solid rgba(212,175,55,0.18)' }}>
-            <p className="text-[11px] font-normal leading-relaxed" style={{ color: '#B8941F' }}>
+          <div className="mt-8 p-4 rounded-2xl flex items-start gap-3 bg-[#FBF7ED] border border-[#EADFB8]">
+            <Info className="w-4 h-4 shrink-0 mt-0.5 text-[#9A7B22]" aria-hidden="true" />
+            <p className="text-[13px] leading-relaxed text-[#6B5512]">
               Silakan mendaftar secara online melalui link pendaftaran di atas, atau minta dibuatkan akun oleh kasir/admin di klinik.
             </p>
           </div>

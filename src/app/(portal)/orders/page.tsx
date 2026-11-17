@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "@/lib/supabase";
-import { ShoppingBag, Loader2, Clock, CheckCircle2, Package, MessageCircle, Wallet, XCircle, ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ShoppingBag, Loader2, Clock, CheckCircle2, Package, MessageCircle, Wallet, XCircle, ChevronLeft, ChevronRight, Star, Scissors } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -126,11 +126,11 @@ export default function OrdersPage() {
   );
 
   const getStatus = (s: string) => {
-    if (s === "pending")    return { label: "Menunggu",  icon: Clock,         color: '#D97706', bg: 'rgba(245,158,11,0.08)',   border: 'rgba(245,158,11,0.18)' };
-    if (s === "processing") return { label: "Diproses",  icon: Package,       color: '#2563EB', bg: 'rgba(37,99,235,0.07)',    border: 'rgba(37,99,235,0.15)' };
-    if (s === "dp")         return { label: "Sudah DP",  icon: Wallet,        color: '#9333EA', bg: 'rgba(147,51,234,0.07)',   border: 'rgba(147,51,234,0.15)' };
-    if (s === "cancelled")  return { label: "Dibatalkan",icon: XCircle,       color: '#DC2626', bg: 'rgba(220,38,38,0.07)',    border: 'rgba(220,38,38,0.15)' };
-    return                         { label: "Selesai",   icon: CheckCircle2,  color: '#059669', bg: 'rgba(5,150,105,0.07)',    border: 'rgba(5,150,105,0.15)' };
+    if (s === "pending")    return { label: "Menunggu",   icon: Clock,        cls: "bg-amber-50 text-amber-700 border-amber-200" };
+    if (s === "processing") return { label: "Diproses",   icon: Package,      cls: "bg-sky-50 text-sky-700 border-sky-200" };
+    if (s === "dp")         return { label: "Sudah DP",   icon: Wallet,       cls: "bg-violet-50 text-violet-700 border-violet-200" };
+    if (s === "cancelled")  return { label: "Dibatalkan", icon: XCircle,      cls: "bg-rose-50 text-rose-700 border-rose-200" };
+    return                         { label: "Selesai",    icon: CheckCircle2, cls: "bg-emerald-50 text-emerald-700 border-emerald-200" };
   };
 
   const TABS = [
@@ -144,158 +144,147 @@ export default function OrdersPage() {
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 min-h-screen bg-[#FDFBFB]">
-      {/* Gradient header */}
-      <div className="relative overflow-hidden px-6 pt-10 pb-12 rounded-b-[48px] shadow-lg shadow-rose-100/20" 
+      <div className="relative overflow-hidden px-5 sm:px-8 pt-10 pb-12 rounded-b-[40px] shadow-lg shadow-rose-100/30"
         style={{ background: 'linear-gradient(160deg,#C94F78 0%,#9B3055 55%,#7A2240 100%)' }}>
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-[#D4AF37]/10 rounded-full blur-2xl -ml-12 -mb-12"></div>
         <div className="absolute top-0 left-0 w-64 h-64 bg-white/20 rounded-full blur-[80px] -ml-32 -mt-32"></div>
-        
+
         <div className="relative z-10 flex items-center gap-4">
-          <button onClick={() => router.back()} className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center text-white border border-white/20">
+          <button type="button" aria-label="Kembali" onClick={() => router.back()}
+            className="w-11 h-11 shrink-0 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center text-white border border-white/25 hover:bg-white/25 transition-colors">
             <ChevronLeft className="w-6 h-6" />
           </button>
-          <div>
-            <h1 className="text-[22px] font-bold text-white tracking-tight">Pesanan Saya</h1>
-            <p className="text-white/60 text-[11px] font-medium">Riwayat dan status pesanan</p>
+          <div className="min-w-0">
+            <h1 className="text-[22px] font-bold! text-white tracking-tight leading-tight">Pesanan Saya</h1>
+            <p className="text-white/85 text-[13px] font-medium mt-0.5">Riwayat dan status pesanan</p>
           </div>
         </div>
       </div>
 
-      <div className="px-4 md:px-8 pt-5 pb-8">
-        {/* Tabs */}
-        <div className="flex gap-2 mb-6 overflow-x-auto no-scrollbar">
-          {TABS.map(t => (
-            <button key={t.id} onClick={() => setActiveTab(t.id)}
-              className="px-4 py-2 rounded-xl text-[11px] font-medium whitespace-nowrap transition-all"
-              style={activeTab === t.id
-                ? { background: 'linear-gradient(135deg,#C94F78,#9B3055)', color: 'white', boxShadow: '0 6px 16px rgba(201,79,120,0.25)' }
-                : { background: 'white', color: 'rgba(45,41,38,0.30)', border: '1px solid rgba(201,79,120,0.08)' }}>
-              {t.label}
-            </button>
-          ))}
+      <div className="px-4 md:px-8 pt-5 pb-4">
+        <div className="flex gap-2 mb-5 -mx-4 px-4 md:mx-0 md:px-0 pb-1 overflow-x-auto no-scrollbar" aria-label="Filter status pesanan">
+          {TABS.map(t => {
+            const active = activeTab === t.id;
+            return (
+              <button key={t.id} type="button" aria-pressed={active} onClick={() => setActiveTab(t.id)}
+                className={`h-10 px-4 rounded-2xl text-[13px] whitespace-nowrap transition-all shrink-0 border ${active
+                  ? "font-bold text-white border-transparent shadow-[0_6px_16px_rgba(201,79,120,0.25)]"
+                  : "font-semibold bg-white text-[#766B68] border-[#EEDFE3] hover:text-[#A83960] hover:border-[#E3C3CE]"}`}
+                style={active ? { background: 'linear-gradient(135deg,#C94F78,#9B3055)' } : undefined}>
+                {t.label}
+              </button>
+            );
+          })}
         </div>
 
+        {loadError && (
+          <p role="alert" className="mb-4 px-4 py-3 rounded-2xl bg-rose-50 border border-rose-200 text-[13px] font-medium text-rose-700 text-center">{loadError}</p>
+        )}
+
         {loading ? (
-          <div className="py-20 flex flex-col items-center gap-4">
-            <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#C94F78' }} />
-            <p className="text-[11px] text-[#2D2926]/20 uppercase tracking-widest">Memuat...</p>
+          <div className="py-20 flex flex-col items-center gap-3" role="status">
+            <Loader2 className="w-8 h-8 animate-spin text-[#C94F78]" />
+            <p className="text-[13px] font-medium text-[#766B68]">Memuat pesanan...</p>
           </div>
         ) : filtered.length === 0 ? (
-          <div className="py-20 flex flex-col items-center gap-4 text-center">
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(201,79,120,0.07)' }}>
-              <ShoppingBag className="w-7 h-7 text-[#C94F78]/30" />
+          <div className="py-16 px-6 flex flex-col items-center text-center">
+            <div className="w-20 h-20 rounded-full flex items-center justify-center mb-5 bg-[#FDF2F5] border border-[#F6DDE6]">
+              <ShoppingBag className="w-8 h-8 text-[#C94F78]" aria-hidden="true" />
             </div>
-            <p className="text-[14px] font-medium text-[#2D2926]">Belum Ada Pesanan</p>
-            <Link href="/" className="mt-2 h-10 px-6 rounded-xl text-white text-[12px] font-medium flex items-center gap-2"
-              style={{ background: 'linear-gradient(135deg,#C94F78,#9B3055)' }}>
+            <h2 className="text-[18px] font-bold! text-[#2D2926] tracking-tight">Belum Ada Pesanan</h2>
+            <p className="text-[14px] text-[#766B68] leading-relaxed mt-1.5 max-w-[280px]">Pesanan yang Anda buat akan tampil di sini beserta statusnya.</p>
+            <Link href="/" className="mt-6 h-12 px-6 rounded-2xl text-white text-[14px] font-bold flex items-center gap-2"
+              style={{ background: 'linear-gradient(135deg,#C94F78,#9B3055)', boxShadow: '0 10px 24px rgba(201,79,120,0.25)' }}>
               Eksplor Katalog
             </Link>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-3.5">
             {filtered.map(o => {
               const s = getStatus(o.status);
               const Icon = s.icon;
-              
+
               const parsed = parseProductName(o.product_name);
               const match = o.product_name.match(/\(x(\d+)\)$/);
               const qty = o.qty || (match ? parseInt(match[1]) : 1);
               const invoiceNum = `ONL-${o.id.toString().padStart(5, '0')}`;
-              const prodImage = o.product_id ? productsMap[o.product_id]?.image_url : undefined;
-              
+              const product = o.product_id ? productsMap[o.product_id] : undefined;
+              const totalVal = o.total_price || (parsed.itemPrice * qty);
+
               return (
-                <div key={o.id} className="bg-white rounded-[24px] p-6 border border-[#f0eded] relative overflow-hidden group transition-all hover:shadow-xl hover:shadow-rose-100/20"
-                  style={{ boxShadow: '0 4px 20px rgba(201,79,120,0.03)' }}>
-                  
-                  {/* Status & Invoice Header */}
-                  <div className="flex justify-between items-start mb-5 pb-4 border-b border-slate-50">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">No. Pesanan</span>
-                        <span className="text-[11px] font-bold text-[#2D2926]">#{invoiceNum}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-[10px] text-slate-400 font-medium">
-                        <Clock className="w-3 h-3" />
+                <div key={o.id} className="bg-white rounded-[24px] p-5 border border-[#EEDFE3] transition-shadow hover:shadow-xl hover:shadow-rose-100/30"
+                  style={{ boxShadow: '0 4px 18px rgba(201,79,120,0.06)' }}>
+
+                  <div className="flex justify-between items-start gap-3 pb-4 border-b border-[#F4E8EC]">
+                    <div className="min-w-0 space-y-1">
+                      <p className="text-[11px] font-bold text-[#766B68] uppercase tracking-[0.1em]">No. Pesanan</p>
+                      <p className="text-[14px] font-bold text-[#2D2926] tabular-nums">#{invoiceNum}</p>
+                      <p className="flex items-center gap-1.5 text-[12px] text-[#766B68] font-medium">
+                        <Clock className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                         {formatDate(o.ordered_at)}
-                      </div>
+                      </p>
                     </div>
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[10px] font-bold uppercase tracking-tight"
-                      style={{ color: s.color, background: s.bg, borderColor: s.border }}>
-                      <Icon className="w-3 h-3" /> {s.label}
-                    </div>
+                    <StatusBadge cls={s.cls} icon={Icon} label={s.label} />
                   </div>
 
-                  {/* Product Details */}
-                  <div className="flex gap-4 mb-6">
-                    <div className="w-16 h-16 rounded-2xl bg-[#faf9f9] border border-[#f0eded] overflow-hidden shrink-0 relative flex items-center justify-center shadow-inner">
-                      {prodImage ? (
-                        <Image src={prodImage} alt={parsed.mainName} fill className="object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center p-3 opacity-20">
-                          <Image src="/lbqueen_logo.png" alt="LB" width={40} height={40} className="object-contain" style={{ width:'auto', height:'auto' }} />
-                        </div>
-                      )}
-                    </div>
+                  <div className="flex gap-3.5 py-4">
+                    <OrderThumb src={product?.image_url} alt={parsed.mainName} type={product?.type} size="md" />
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-[14px] font-bold text-[#2D2926] leading-snug mb-1 line-clamp-2">{parsed.mainName}</h3>
+                      <h3 className="text-[15px] font-semibold! text-[#2D2926] leading-snug line-clamp-2">{parsed.mainName}</h3>
                       {parsed.variantName && (
-                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full inline-block bg-[#FDF2F5] text-[#C94F78] mb-1">
+                        <span className="text-[12px] font-semibold px-2.5 py-0.5 rounded-full inline-block bg-[#FDF2F5] text-[#A83960] mt-1 max-w-full truncate">
                           {parsed.variantName}
                         </span>
                       )}
-                      <p className="text-[11px] text-slate-400 font-medium">Kuantitas: {qty}x</p>
+                      <p className="text-[13px] text-[#766B68] font-medium mt-1">Kuantitas: {qty}x</p>
                     </div>
                   </div>
 
-                  {/* Status specific info */}
                   {o.status === 'completed' && o.completed_at && (
-                    <div className="mb-6 p-3 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center gap-2.5">
-                      <div className="w-7 h-7 rounded-lg bg-white flex items-center justify-center text-emerald-500 shadow-sm">
-                        <CheckCircle2 className="w-4 h-4" />
+                    <div className="mb-4 p-3 bg-emerald-50 rounded-2xl border border-emerald-200 flex items-center gap-3">
+                      <div className="w-8 h-8 shrink-0 rounded-xl bg-white flex items-center justify-center text-emerald-600 shadow-sm">
+                        <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
                       </div>
-                      <div>
-                        <p className="text-[10px] text-emerald-800 font-bold uppercase tracking-widest leading-none mb-1">Pesanan Selesai</p>
-                        <p className="text-[11px] text-emerald-600 font-medium">{formatDate(o.completed_at)}</p>
+                      <div className="min-w-0">
+                        <p className="text-[11px] text-emerald-800 font-bold uppercase tracking-[0.1em] leading-none mb-1">Pesanan Selesai</p>
+                        <p className="text-[12px] text-emerald-700 font-medium">{formatDate(o.completed_at)}</p>
                       </div>
                     </div>
                   )}
 
-                  {/* Pricing & Footer */}
-                  <div className="pt-5 border-t border-slate-50 flex items-center justify-between">
-                    <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Pembayaran</p>
-                      <p className="text-[16px] font-bold text-[#C94F78]">
-                        {(() => {
-                          const totalVal = o.total_price || (parsed.itemPrice * qty);
-                          return totalVal > 0 ? `Rp ${totalVal.toLocaleString("id-ID")}` : "TBD (Cek WA)";
-                        })()}
+                  <div className="pt-4 border-t border-[#F4E8EC] flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-baseline justify-between gap-3 sm:block">
+                      <p className="text-[11px] font-bold text-[#766B68] uppercase tracking-[0.1em] sm:mb-1">Total Pembayaran</p>
+                      <p className="text-[17px] font-bold text-[#A83960] tabular-nums">
+                        {totalVal > 0 ? `Rp ${totalVal.toLocaleString("id-ID")}` : "TBD (Cek WA)"}
                       </p>
                     </div>
-                    <div className="flex gap-2">
-                       <button
+                    <div className="grid grid-cols-2 gap-2 sm:flex">
+                      <button type="button"
                         onClick={() => setSelectedOrder(o)}
-                        className="h-10 px-4 rounded-xl bg-slate-50 text-slate-500 text-[11px] font-bold hover:bg-slate-100 transition-all border border-slate-100 flex items-center gap-2">
+                        className="h-11 px-4 rounded-2xl bg-white text-[#A83960] text-[13px] font-bold hover:bg-[#FDF2F5] transition-colors border border-[#F0CBD8] flex items-center justify-center gap-2">
                         Rincian
                       </button>
-                      <button
+                      <button type="button"
                         onClick={() => window.location.href = `https://wa.me/${WA_NUMBER}?text=Halo, saya tanya pesanan: ${o.product_name} (#${invoiceNum})`}
-                        className="h-10 px-4 rounded-xl bg-[#C94F78] text-white text-[11px] font-bold shadow-lg shadow-rose-100 hover:scale-105 transition-all flex items-center gap-2">
+                        className="h-11 px-4 rounded-2xl text-white text-[13px] font-bold shadow-lg shadow-rose-100 hover:brightness-105 transition-all flex items-center justify-center gap-2"
+                        style={{ background: 'linear-gradient(135deg,#C94F78,#9B3055)' }}>
                         <MessageCircle className="w-4 h-4" /> Chat
                       </button>
                     </div>
                   </div>
-                  
+
                   {o.status === "completed" && (
-                    <div className="pt-4 mt-4 border-t border-slate-50">
-                      <button 
+                    <div className="pt-3 mt-3">
+                      <button type="button"
                         onClick={() => {
                            setSelectedReviewOrder(o);
                            setReviewModalOpen(true);
                         }}
-                        className="w-full h-10 rounded-xl bg-amber-50 text-amber-600 text-[11px] font-bold hover:bg-amber-100 transition-colors flex items-center justify-center gap-2 border border-amber-100"
+                        className="w-full h-11 rounded-2xl bg-amber-50 text-amber-800 text-[13px] font-bold hover:bg-amber-100 transition-colors flex items-center justify-center gap-2 border border-amber-200"
                       >
-                        <Star className="w-4 h-4" fill="currentColor" /> Beri Ulasan & Dapat Poin
+                        <Star className="w-4 h-4 text-amber-500" fill="currentColor" /> Beri Ulasan & Dapat Poin
                       </button>
                     </div>
                   )}
@@ -306,9 +295,8 @@ export default function OrdersPage() {
         )}
       </div>
 
-      {loadError && <p role="alert" className="p-5 text-center">{loadError}</p>}
       <PageControls page={page} hasMore={hasMore} loading={loading} onChange={setPage} />
-      {/* Rincian Pesanan Modal */}
+
       {selectedOrder && (() => {
         const o = selectedOrder;
         const s = getStatus(o.status);
@@ -317,160 +305,142 @@ export default function OrdersPage() {
         const match = o.product_name.match(/\(x(\d+)\)$/);
         const qty = o.qty || (match ? parseInt(match[1]) : 1);
         const totalVal = o.total_price || (parsed.itemPrice * qty);
-        const prodImage = o.product_id ? productsMap[o.product_id]?.image_url : undefined;
+        const product = o.product_id ? productsMap[o.product_id] : undefined;
         const invoiceNum = `ONL-${o.id.toString().padStart(5, '0')}`;
-        
+
         return (
           <div className="fixed inset-0 z-[110] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4 animate-in fade-in duration-300">
-            <div className="bg-white w-full sm:max-w-[480px] max-h-[92vh] sm:max-h-[85vh] rounded-t-[32px] sm:rounded-[32px] flex flex-col shadow-2xl overflow-hidden animate-in slide-in-from-bottom duration-300">
-              
-              {/* Header */}
-              <div className="px-6 py-5 border-b border-slate-50 flex items-center justify-between shrink-0 bg-slate-50/55">
-                <div className="flex items-center gap-3">
-                  <button 
-                    onClick={() => setSelectedOrder(null)} 
-                    className="w-8 h-8 rounded-lg bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors"
+            <div role="dialog" aria-modal="true" aria-labelledby="order-detail-title"
+              className="bg-white w-full sm:max-w-[480px] max-h-[92vh] sm:max-h-[85vh] rounded-t-[32px] sm:rounded-[32px] flex flex-col shadow-2xl overflow-hidden animate-in slide-in-from-bottom duration-300">
+
+              <div className="px-5 py-4 border-b border-[#F4E8EC] flex items-center justify-between gap-3 shrink-0 bg-[#FDFAFB]">
+                <div className="flex items-center gap-3 min-w-0">
+                  <button type="button" aria-label="Tutup rincian"
+                    onClick={() => setSelectedOrder(null)}
+                    className="w-10 h-10 shrink-0 rounded-2xl bg-white shadow-sm border border-[#EEDFE3] flex items-center justify-center text-[#766B68] hover:text-[#A83960] transition-colors"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
-                  <h3 className="text-[16px] font-bold text-[#2D2926]">Rincian Pesanan</h3>
+                  <h3 id="order-detail-title" className="text-[17px] font-bold! text-[#2D2926] truncate">Rincian Pesanan</h3>
                 </div>
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[9px] font-bold uppercase tracking-tight"
-                  style={{ color: s.color, background: s.bg, borderColor: s.border }}>
-                  <Icon className="w-3 h-3" /> {s.label}
-                </div>
+                <StatusBadge cls={s.cls} icon={Icon} label={s.label} />
               </div>
 
-              {/* Scrollable Content */}
-              <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                
-                {/* Shop Information */}
-                <div className="flex items-center gap-2.5 pb-4 border-b border-slate-100">
-                  <div className="w-6 h-6 rounded-lg bg-rose-50 border border-rose-100 flex items-center justify-center text-[#C94F78]">
-                    <ShoppingBag className="w-3.5 h-3.5" />
+              <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-5">
+
+                <div className="flex items-center gap-2.5 pb-4 border-b border-[#F4E8EC]">
+                  <div className="w-8 h-8 rounded-xl bg-[#FDF2F5] border border-[#F6DDE6] flex items-center justify-center text-[#C94F78]">
+                    <ShoppingBag className="w-4 h-4" aria-hidden="true" />
                   </div>
-                  <span className="text-[12px] font-bold text-[#2D2926]">LBQueen Clinic & Beauty</span>
+                  <span className="text-[13px] font-bold text-[#2D2926]">LBQueen Clinic & Beauty</span>
                 </div>
 
-                {/* Product Info */}
                 <div className="flex gap-4">
-                  <div className="w-20 h-20 rounded-2xl bg-[#faf9f9] border border-[#f0eded] overflow-hidden shrink-0 relative flex items-center justify-center shadow-inner">
-                    {prodImage ? (
-                      <Image src={prodImage} alt={parsed.mainName} fill className="object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center p-4 opacity-20">
-                        <Image src="/lbqueen_logo.png" alt="LB" width={48} height={48} className="object-contain" />
-                      </div>
-                    )}
-                  </div>
+                  <OrderThumb src={product?.image_url} alt={parsed.mainName} type={product?.type} size="lg" />
                   <div className="flex-1 min-w-0 flex flex-col justify-between">
                     <div>
-                      <h4 className="text-[14px] font-bold text-[#2D2926] leading-snug mb-1 line-clamp-2">{parsed.mainName}</h4>
+                      <h4 className="text-[15px] font-semibold! text-[#2D2926] leading-snug mb-1 line-clamp-2">{parsed.mainName}</h4>
                       {parsed.variantName && (
-                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full inline-block bg-[#FDF2F5] text-[#C94F78]">
+                        <span className="text-[12px] font-semibold px-2.5 py-0.5 rounded-full inline-block bg-[#FDF2F5] text-[#A83960] max-w-full truncate">
                           {parsed.variantName}
                         </span>
                       )}
                     </div>
-                    <div className="flex items-baseline justify-between mt-2">
-                      <span className="text-[11px] text-slate-400 font-medium">x{qty}</span>
-                      <span className="text-[13px] font-bold text-[#C94F78]">
+                    <div className="flex items-baseline justify-between gap-2 mt-2">
+                      <span className="text-[13px] text-[#766B68] font-medium tabular-nums">x{qty}</span>
+                      <span className="text-[14px] font-bold text-[#A83960] tabular-nums">
                         {parsed.itemPrice > 0 ? `Rp ${parsed.itemPrice.toLocaleString("id-ID")}` : "TBD"}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Pricing Summary */}
-                <div className="bg-slate-50/50 rounded-2xl p-4 border border-slate-100/50 space-y-3">
-                  <div className="flex justify-between text-[12px]">
-                    <span className="text-slate-400 font-medium">Harga Satuan</span>
-                    <span className="text-[#2D2926] font-bold">
+                <div className="bg-[#FAF7F5] rounded-2xl p-4 border border-[#EEDFE3] space-y-3">
+                  <div className="flex justify-between gap-3 text-[13px]">
+                    <span className="text-[#766B68] font-medium">Harga Satuan</span>
+                    <span className="text-[#2D2926] font-semibold tabular-nums">
                       {parsed.itemPrice > 0 ? `Rp ${parsed.itemPrice.toLocaleString("id-ID")}` : "TBD"}
                     </span>
                   </div>
-                  <div className="flex justify-between text-[12px]">
-                    <span className="text-slate-400 font-medium">Jumlah Pesanan</span>
-                    <span className="text-[#2D2926] font-bold">{qty} produk</span>
+                  <div className="flex justify-between gap-3 text-[13px]">
+                    <span className="text-[#766B68] font-medium">Jumlah Pesanan</span>
+                    <span className="text-[#2D2926] font-semibold tabular-nums">{qty} produk</span>
                   </div>
-                  <div className="h-px bg-slate-100 my-2" />
-                  <div className="flex justify-between items-center text-[13px]">
-                    <span className="text-[#2D2926] font-bold">Total Pesanan</span>
-                    <span className="text-[15px] font-extrabold text-[#C94F78]">
+                  <div className="h-px bg-[#EEDFE3]" />
+                  <div className="flex justify-between items-center gap-3">
+                    <span className="text-[14px] text-[#2D2926] font-bold">Total Pesanan</span>
+                    <span className="text-[18px] font-bold text-[#A83960] tabular-nums">
                       {totalVal > 0 ? `Rp ${totalVal.toLocaleString("id-ID")}` : "TBD"}
                     </span>
                   </div>
                 </div>
 
-                {/* Need Help Section */}
-                <div className="space-y-2">
-                  <h5 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">Butuh Bantuan?</h5>
-                  
-                  <button 
+                <div>
+                  <h5 className="text-[11px] font-bold! text-[#766B68] uppercase tracking-[0.1em] mb-2.5">Butuh Bantuan?</h5>
+                  <button type="button"
                     onClick={() => window.location.href = `https://wa.me/${WA_NUMBER}?text=Halo, saya butuh bantuan terkait pesanan #${invoiceNum}`}
-                    className="w-full h-12 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors flex items-center justify-between px-4 group"
+                    className="w-full h-14 rounded-2xl border border-[#EEDFE3] bg-white hover:bg-[#FDF2F5] hover:border-[#F0CBD8] transition-colors flex items-center justify-between px-4 group"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 group-hover:text-[#C94F78] group-hover:bg-[#C94F78]/5 transition-colors">
-                        <MessageCircle className="w-4 h-4" />
+                      <div className="w-9 h-9 rounded-xl bg-[#FDF2F5] flex items-center justify-center text-[#C94F78]">
+                        <MessageCircle className="w-4 h-4" aria-hidden="true" />
                       </div>
-                      <span className="text-[12px] font-bold text-[#2D2926] group-hover:text-[#C94F78] transition-colors">Hubungi Penjual</span>
+                      <span className="text-[14px] font-bold text-[#2D2926] group-hover:text-[#A83960] transition-colors">Hubungi Penjual</span>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-[#C94F78] transition-colors" />
+                    <ChevronRight className="w-5 h-5 text-[#766B68] group-hover:text-[#A83960] transition-colors" aria-hidden="true" />
                   </button>
                 </div>
 
-                {/* Order Details / Info */}
-                <div className="space-y-3 pt-4 border-t border-slate-100">
-                  <h5 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">Info Pesanan</h5>
-                  
-                  <div className="flex justify-between items-center text-[12px]">
-                    <span className="text-slate-400 font-medium">No. Pesanan</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[#2D2926] font-bold">#{invoiceNum}</span>
-                      <button 
+                <div className="space-y-3 pt-4 border-t border-[#F4E8EC]">
+                  <h5 className="text-[11px] font-bold! text-[#766B68] uppercase tracking-[0.1em] mb-1">Info Pesanan</h5>
+
+                  <div className="flex justify-between items-center gap-3 text-[13px]">
+                    <span className="text-[#766B68] font-medium">No. Pesanan</span>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="text-[#2D2926] font-bold tabular-nums">#{invoiceNum}</span>
+                      <button type="button"
                         onClick={() => {
                           navigator.clipboard.writeText(invoiceNum);
                           toast("Nomor pesanan disalin!", "success");
                         }}
-                        className="px-2 py-1 rounded bg-slate-50 hover:bg-slate-100 border border-slate-100 text-[10px] font-bold text-[#C94F78] transition-all"
+                        className="h-8 px-3 rounded-xl bg-[#FDF2F5] hover:bg-[#FBE7EE] border border-[#F0CBD8] text-[12px] font-bold text-[#A83960] transition-colors"
                       >
                         Salin
                       </button>
                     </div>
                   </div>
 
-                  <div className="flex justify-between text-[12px]">
-                    <span className="text-slate-400 font-medium">Metode Pembayaran</span>
-                    <span className="text-[#2D2926] font-bold">Transfer Bank / QRIS</span>
+                  <div className="flex justify-between gap-3 text-[13px]">
+                    <span className="text-[#766B68] font-medium">Metode Pembayaran</span>
+                    <span className="text-[#2D2926] font-semibold text-right">Transfer Bank / QRIS</span>
                   </div>
 
-                  <div className="flex justify-between text-[12px]">
-                    <span className="text-slate-400 font-medium">Waktu Pemesanan</span>
-                    <span className="text-[#2D2926] font-semibold">{formatDate(o.ordered_at)}</span>
+                  <div className="flex justify-between gap-3 text-[13px]">
+                    <span className="text-[#766B68] font-medium">Waktu Pemesanan</span>
+                    <span className="text-[#2D2926] font-semibold text-right">{formatDate(o.ordered_at)}</span>
                   </div>
 
                   {o.completed_at && (
-                    <div className="flex justify-between text-[12px]">
-                      <span className="text-slate-400 font-medium">Waktu Pesanan Selesai</span>
-                      <span className="text-[#2D2926] font-semibold">{formatDate(o.completed_at)}</span>
+                    <div className="flex justify-between gap-3 text-[13px]">
+                      <span className="text-[#766B68] font-medium">Waktu Pesanan Selesai</span>
+                      <span className="text-[#2D2926] font-semibold text-right">{formatDate(o.completed_at)}</span>
                     </div>
                   )}
                 </div>
 
               </div>
 
-              {/* Footer Buttons */}
-              <div className="p-5 pb-8 border-t border-slate-100 bg-white grid grid-cols-2 gap-3 shrink-0">
-                <button 
+              <div className="px-5 pt-4 border-t border-[#F4E8EC] bg-white grid grid-cols-2 gap-3 shrink-0"
+                style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)' }}>
+                <button type="button"
                   onClick={() => setSelectedOrder(null)}
-                  className="h-12 rounded-xl text-[12px] font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 transition-colors border border-slate-100"
+                  className="h-12 rounded-2xl text-[14px] font-bold text-[#766B68] bg-white hover:bg-[#FAF7F5] transition-colors border border-[#E8D5DB]"
                 >
                   Tutup
                 </button>
-                <button 
+                <button type="button"
                   onClick={() => window.location.href = `https://wa.me/${WA_NUMBER}?text=Halo, saya tanya pesanan: ${o.product_name} (#${invoiceNum})`}
-                  className="h-12 rounded-xl text-[12px] font-bold text-white shadow-lg shadow-rose-100 hover:scale-105 transition-all flex items-center justify-center gap-2"
+                  className="h-12 rounded-2xl text-[14px] font-bold text-white shadow-lg shadow-rose-100 hover:brightness-105 transition-all flex items-center justify-center gap-2"
                   style={{ background: 'linear-gradient(135deg,#C94F78,#9B3055)' }}
                 >
                   <MessageCircle className="w-4 h-4" /> Chat Admin
@@ -482,51 +452,60 @@ export default function OrdersPage() {
         );
       })()}
 
-      {/* Review Modal */}
       {reviewModalOpen && selectedReviewOrder && (() => {
         const parsed = parseProductName(selectedReviewOrder.product_name);
         return (
           <div className="fixed inset-0 z-[120] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4 animate-in fade-in duration-300">
-            <div className="bg-white w-full sm:max-w-[400px] rounded-t-[32px] sm:rounded-[32px] p-6 shadow-2xl flex flex-col items-center text-center animate-in slide-in-from-bottom duration-300">
-              <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center text-amber-500 mb-4 border border-amber-100">
-                <Star className="w-8 h-8" fill="currentColor" />
+            <div role="dialog" aria-modal="true" aria-labelledby="review-title"
+              className="bg-white w-full sm:max-w-[400px] rounded-t-[32px] sm:rounded-[32px] p-6 shadow-2xl flex flex-col items-center text-center animate-in slide-in-from-bottom duration-300"
+              style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 24px)' }}>
+              <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center text-amber-500 mb-4 border border-amber-200">
+                <Star className="w-8 h-8" fill="currentColor" aria-hidden="true" />
               </div>
-              <h3 className="text-[18px] font-bold text-[#2D2926] mb-1">Bagaimana pesanan Anda?</h3>
-              <p className="text-[12px] text-slate-500 mb-6 px-4 leading-relaxed">
-                Berikan ulasan untuk pesanan <span className="font-bold text-[#C94F78]">{parsed.mainName}</span> dan dapatkan poin tambahan!
+              <h3 id="review-title" className="text-[18px] font-bold! text-[#2D2926] mb-1.5">Bagaimana pesanan Anda?</h3>
+              <p className="text-[13px] text-[#766B68] mb-5 px-2 leading-relaxed">
+                Berikan ulasan untuk pesanan <span className="font-bold text-[#A83960]">{parsed.mainName}</span> dan dapatkan poin tambahan!
               </p>
-              
-              <div className="flex gap-2 mb-6">
+
+              <div className="flex gap-1.5 mb-5" role="group" aria-label="Penilaian">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <button 
+                  <button
                     key={star}
+                    type="button"
+                    aria-label={`${star} bintang`}
+                    aria-pressed={reviewRating >= star}
                     onClick={() => setReviewRating(star)}
-                    className={`p-1 transition-transform hover:scale-110 active:scale-95 ${reviewRating >= star ? 'text-amber-400' : 'text-slate-200'}`}
+                    className={`p-1 rounded-xl transition-transform hover:scale-110 active:scale-95 ${reviewRating >= star ? 'text-amber-400' : 'text-slate-300'}`}
                   >
-                    <Star className="w-10 h-10" fill={reviewRating >= star ? "currentColor" : "none"} />
+                    <Star className="w-9 h-9" fill={reviewRating >= star ? "currentColor" : "none"} />
                   </button>
                 ))}
               </div>
 
-              <textarea 
+              <label htmlFor="review-text" className="sr-only">Ulasan</label>
+              <textarea
+                id="review-text"
                 value={reviewText}
                 onChange={(e) => setReviewText(e.target.value)}
                 placeholder="Ceritakan pengalaman Anda di sini (opsional)..."
-                className="w-full h-24 p-3 mb-6 bg-slate-50 border border-slate-200 rounded-2xl text-[12px] outline-none focus:border-[#C94F78] resize-none"
+                className="w-full h-24 p-3.5 mb-5 bg-[#FDFAFB] border border-[#E8D5DB] rounded-2xl text-[14px] text-[#2D2926] placeholder:text-[#8C8280] outline-none focus:bg-white focus:border-[#C94F78] focus:ring-4 focus:ring-[#C94F78]/10 resize-none transition-all"
               />
 
               <div className="flex w-full gap-3">
-                <button 
+                <button
+                  type="button"
                   onClick={() => setReviewModalOpen(false)}
-                  className="flex-1 h-12 rounded-xl text-[12px] font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 transition-colors border border-slate-100"
+                  className="flex-1 h-12 rounded-2xl text-[14px] font-bold text-[#766B68] bg-white hover:bg-[#FAF7F5] transition-colors border border-[#E8D5DB]"
                 >
                   Nanti Saja
                 </button>
-                <button 
+                <button
+                  type="button"
                   onClick={submitReview}
                   disabled={submittingReview}
-                  className="flex-1 h-12 rounded-xl text-[12px] font-bold text-white shadow-lg shadow-amber-100 hover:scale-105 transition-all flex items-center justify-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500"
+                  className="flex-1 h-12 rounded-2xl text-[14px] font-bold text-white shadow-lg shadow-amber-100 hover:brightness-105 transition-all flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 disabled:opacity-70 disabled:cursor-wait"
                 >
+                  {submittingReview && <Loader2 className="w-4 h-4 animate-spin" />}
                   Kirim Ulasan
                 </button>
               </div>
@@ -534,6 +513,31 @@ export default function OrdersPage() {
           </div>
         );
       })()}
+    </div>
+  );
+}
+
+function StatusBadge({ cls, icon: Icon, label }: { cls: string; icon: React.ElementType; label: string }) {
+  return (
+    <span className={`inline-flex items-center gap-1.5 shrink-0 px-2.5 py-1 rounded-full border text-[12px] font-semibold whitespace-nowrap ${cls}`}>
+      <Icon className="w-3.5 h-3.5" aria-hidden="true" /> {label}
+    </span>
+  );
+}
+
+function OrderThumb({ src, alt, type, size }: { src?: string | null; alt: string; type?: string; size: "md" | "lg" }) {
+  const box = size === "lg" ? "w-20 h-20" : "w-[72px] h-[72px]";
+  const isTreatment = type === "Treatment Care & Beauty" || /treatment|facial/i.test(alt);
+  const Icon = isTreatment ? Scissors : Package;
+  return (
+    <div className={`${box} rounded-2xl border border-[#EEDFE3] overflow-hidden shrink-0 relative`}>
+      {src ? (
+        <Image src={src} alt={alt} fill sizes="80px" className="object-cover" />
+      ) : (
+        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#F8DCE6] via-[#FBEFF3] to-[#FDFBFB]">
+          <Icon className={size === "lg" ? "w-7 h-7 text-[#C94F78]" : "w-6 h-6 text-[#C94F78]"} aria-hidden="true" />
+        </div>
+      )}
     </div>
   );
 }

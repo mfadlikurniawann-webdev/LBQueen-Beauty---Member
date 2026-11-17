@@ -71,7 +71,7 @@ try {
   assert.equal((await anonymous.request.get(`${base}/orders`, { maxRedirects: 0 })).status(), 307, 'Orders open without login');
 
   const catalogResponse = await anonymous.request.get(`${base}/api/catalog?page=1`);
-  assert.match(catalogResponse.headers()['cache-control'], /no-store/);
+  assert.match(catalogResponse.headers()['cache-control'], /public, s-maxage=60/);
   const catalogFirst = await catalogResponse.json();
   const catalogSecond = await (await anonymous.request.get(`${base}/api/catalog?page=2`)).json();
   assert.equal(catalogFirst.products.length, 24);
@@ -86,6 +86,11 @@ try {
   assert.equal(catalogPromo.products[0].voucher_discount, 10000);
   assert.equal((await anonymous.request.get(`${base}/api/catalog?page=-1`)).status(), 400);
   assert.equal((await anonymous.request.get(`${base}/api/catalog?category=Barang%20Klinik`)).status(), 400);
+  assert.equal((await anonymous.request.get(`${base}/api/database/vouchers?select=*`)).status(), 400, 'Voucher codes can be listed');
+  assert.equal((await anonymous.request.get(`${base}/api/database/vouchers?select=*&code=eq.PROMO10`)).status(), 200);
+  assert.equal((await anonymous.request.get(`${base}/api/database/products?limit=abc`)).status(), 400);
+  await anonymous.request.get(`${base}/api/database/products?select=*&limit=5000`);
+  assert.equal(upstream.at(-1).query.limit, '100', 'Row cap not enforced');
   const rawProducts = await (await anonymous.request.get(`${base}/api/database/products?select=*`)).json();
   assert(!JSON.stringify(rawProducts).includes('purchase_price'), 'Purchase price exposed through gateway');
 

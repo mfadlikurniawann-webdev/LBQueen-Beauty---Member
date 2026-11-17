@@ -98,7 +98,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1,h2,h3,h4,h5,h6 { font-weight: 500; letter-spacing: -0.02em; }
+@layer base {
+  h1,h2,h3,h4,h5,h6 { font-weight: 600; letter-spacing: -0.02em; }
+}
 
 button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
 button:not(:disabled), a { touch-action: manipulation; }
@@ -171,7 +173,7 @@ button:disabled { cursor: not-allowed; }
     border-color: var(--lb-pink);
     box-shadow: 0 0 0 4px rgba(201,79,120,0.06);
   }
-  .input-form::placeholder { color: rgba(107,94,87,0.35); }
+  .input-form::placeholder { color: rgba(107,94,87,0.6); }
 
   /* Style standard date/time pickers */
   input[type="date"]::-webkit-calendar-picker-indicator,
@@ -329,4 +331,8 @@ button:disabled { cursor: not-allowed; }
   /* ── GLOW EFFECTS ── */
   .glow-pink { box-shadow: 0 0 40px rgba(201,79,120,0.20); }
   .glow-gold  { box-shadow: 0 0 40px rgba(212,175,55,0.25); }
+}
+
+@media print {
+  .no-print { display: none !important; }
 }

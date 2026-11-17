@@ -6,7 +6,7 @@ import { loadCatalog } from "@/lib/catalog";
 import { useDebounce } from "@/hooks/useDebounce";
 import { PageControls } from "@/components/PageControls";
 import {
-  ChevronLeft, Loader2, Plus, Minus, ShoppingBag, ArrowRight, Search as SearchIcon, AlertTriangle
+  ChevronLeft, Plus, Minus, ShoppingBag, ArrowRight, Search as SearchIcon, AlertTriangle, Scissors, BadgePercent
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,16 +25,30 @@ type Product = {
 
 const WA_NUMBER = "6282176171448";
 
+function ItemPlaceholder({ type, compact = false }: { type: string; compact?: boolean }) {
+  const Icon = type === "Treatment Care & Beauty" ? Scissors : ShoppingBag;
+  return (
+    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-[#F9E1E9] via-[#FCEFF3] to-[#FAF7F5]" aria-hidden="true">
+      <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-[#C94F78]/10 blur-xl" />
+      <div className="absolute -left-4 -bottom-4 w-20 h-20 rounded-full bg-[#D4AF37]/15 blur-xl" />
+      <div className={`relative ${compact ? "w-12 h-12" : "w-14 h-14"} rounded-full bg-white/90 border border-[#EEDFE3] shadow-sm flex items-center justify-center`}>
+        <Icon className={`${compact ? "w-5 h-5" : "w-6 h-6"} text-[#A83960]`} strokeWidth={1.75} />
+      </div>
+      {!compact && <span className="relative text-[11px] font-bold uppercase tracking-[0.12em] text-[#A83960]/80">LBQueen</span>}
+    </div>
+  );
+}
+
 export default function CategoryPage() {
   const params = useParams();
   const router = useRouter();
   const decodedType = decodeURIComponent(params.type as string);
-  
+
   const { cart, addToCart } = useCart();
   const [page, setPage] = useState(1);
   const [customer,       setCustomer]       = useState<any>(null);
   const [searchQuery,    setSearchQuery]    = useState("");
-  
+
   const [activeSubCat, updateSubCat] = useState<string | null>(null);
   const setActiveSubCat = (value: string | null) => { setPage(1); updateSubCat(value); };
   const [activeTab, updateTab] = useState<"semua" | "promo" | "set">("semua");
@@ -85,27 +99,35 @@ export default function CategoryPage() {
     router.push("/cart");
   };
 
+  const chipClass = (active: boolean) =>
+    `whitespace-nowrap px-4 min-h-10 rounded-full text-[13px] font-semibold capitalize transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20 ${
+      active
+        ? "bg-gradient-to-br from-[#C94F78] to-[#A83960] text-white shadow-md shadow-rose-200/60"
+        : "bg-white text-[#5F5552] border border-[#EEDFE3] hover:border-[#C94F78]/40 hover:text-[#A83960]"
+    }`;
+
   return (
     <div className="min-h-screen bg-transparent font-sans pb-6 max-w-7xl mx-auto md:px-8">
       {/* ── HEADER ── */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 px-5 pt-12 pb-4 flex items-center gap-4">
-        <button onClick={() => router.push("/")} className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-[#C94F78] transition-all">
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-[#EEDFE3] px-5 pt-12 pb-4 flex items-center gap-3.5">
+        <button type="button" aria-label="Kembali ke beranda" onClick={() => router.push("/")} className="w-11 h-11 shrink-0 rounded-2xl bg-[#FDF2F5] border border-[#EEDFE3] flex items-center justify-center text-[#A83960] hover:bg-[#C94F78] hover:text-white transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20">
           <ChevronLeft className="w-6 h-6" />
         </button>
-        <div>
-          <h1 className="text-lg font-bold text-gray-900 leading-tight">{decodedType}</h1>
-          <p className="text-[11px] font-semibold text-gray-400 capitalize tracking-widest">{products.length} Produk Ditemukan</p>
+        <div className="min-w-0">
+          <h1 className="text-[18px] font-bold text-[#2D2926] leading-tight tracking-tight line-clamp-2">{decodedType}</h1>
+          <p className="mt-0.5 text-[12px] font-medium text-[#766B68] tabular-nums">{products.length} Produk Ditemukan</p>
         </div>
       </header>
 
       <div className="px-5 mt-6">
         {/* Search */}
-        <div className="relative mb-6">
-           <SearchIcon className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
-           <input 
-             type="text" 
-             placeholder="Cari perawatan..." 
-             className="w-full bg-white border border-gray-100 rounded-2xl py-4 pl-12 pr-4 text-sm font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#C94F78] focus:ring-4 focus:ring-rose-50 transition-all"
+        <div className="relative mb-5">
+           <SearchIcon aria-hidden="true" className="w-5 h-5 text-[#A83960] absolute left-4 top-1/2 -translate-y-1/2" />
+           <input
+             type="text"
+             aria-label="Cari perawatan"
+             placeholder="Cari perawatan..."
+             className="w-full bg-white border border-[#EEDFE3] rounded-2xl py-4 pl-12 pr-4 text-[15px] font-medium text-[#2D2926] placeholder:text-[#8C8280] shadow-sm focus:outline-none focus:border-[#C94F78] focus:ring-4 focus:ring-rose-100 transition-all"
              value={searchQuery}
              onChange={(e) => { setPage(1); setSearchQuery(e.target.value); }}
            />
@@ -113,22 +135,22 @@ export default function CategoryPage() {
 
         {/* Sub Categories Chips */}
         {subCats.length > 0 && (
-          <div className="mb-6 flex gap-2 overflow-x-auto no-scrollbar py-1">
-             <button 
+          <div className="mb-4 -mx-5 px-5 flex gap-2 overflow-x-auto no-scrollbar py-1" aria-label="Sub kategori">
+             <button
+                type="button"
+                aria-pressed={!activeSubCat}
                 onClick={() => setActiveSubCat(null)}
-                className={`whitespace-nowrap px-4 py-2 rounded-full text-[11px] font-semibold capitalize tracking-tight transition-all ${
-                  !activeSubCat ? "bg-[#C94F78] text-white shadow-md shadow-rose-100" : "bg-white text-gray-400 border border-gray-100"
-                }`}
+                className={chipClass(!activeSubCat)}
              >
                 Semua
              </button>
              {subCats.map(sub => (
-               <button 
+               <button
+                 type="button"
                  key={sub}
+                 aria-pressed={activeSubCat === sub}
                  onClick={() => setActiveSubCat(activeSubCat === sub ? null : sub)}
-                 className={`whitespace-nowrap px-4 py-2 rounded-full text-[11px] font-semibold capitalize tracking-tight transition-all ${
-                   activeSubCat === sub ? "bg-[#C94F78] text-white shadow-md shadow-rose-100" : "bg-white text-gray-400 border border-gray-100"
-                 }`}
+                 className={chipClass(activeSubCat === sub)}
                >
                  {sub}
                </button>
@@ -137,71 +159,81 @@ export default function CategoryPage() {
         )}
 
         {/* STICKY TAB FILTER */}
-        <div className="sticky top-[88px] z-40 bg-[#FDFCFD]/90 backdrop-blur-md -mx-5 px-5 py-3 mb-6 flex items-center gap-2 overflow-x-auto no-scrollbar border-b border-gray-50/50">
+        <div className="sticky top-[88px] z-40 bg-[#FDFBFB]/90 backdrop-blur-md -mx-5 px-5 py-3 mb-5">
+          <div className="grid grid-cols-3 gap-1 rounded-2xl border border-[#EEDFE3] bg-white p-1 shadow-sm max-w-sm" role="group" aria-label="Filter katalog">
            {["semua", "promo", "set"].map((tab) => (
-             <button 
+             <button
+               type="button"
                key={tab}
+               aria-pressed={activeTab === tab}
                onClick={() => setActiveTab(tab as any)}
-               className={`whitespace-nowrap px-6 py-2 rounded-full text-[11px] font-semibold capitalize tracking-widest transition-all ${
-                 activeTab === tab 
-                   ? "bg-rose-50 text-[#C94F78] border border-rose-100" 
-                   : "bg-white text-gray-400 border border-gray-100"
+               className={`min-h-10 rounded-xl text-[13px] font-bold capitalize transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C94F78]/30 ${
+                 activeTab === tab
+                   ? "bg-[#FDF2F5] text-[#A83960] shadow-[inset_0_0_0_1px_rgba(201,79,120,0.25)]"
+                   : "text-[#5F5552] hover:text-[#A83960]"
                }`}
              >
                {tab}
              </button>
            ))}
+          </div>
         </div>
 
         {/* PRODUCT GRID */}
         {loading ? (
-          <div className="py-20 flex flex-col items-center gap-4">
-             <Loader2 className="w-8 h-8 text-[#C94F78] animate-spin" />
-             <p className="text-xs font-semibold text-gray-400 capitalize tracking-widest">Memuat...</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4" aria-busy="true">
+             <span className="sr-only">Memuat...</span>
+             {[1, 2, 3, 4].map(i => (
+               <div key={i} className="rounded-[24px] border border-[#EEDFE3] bg-white p-2.5">
+                 <div className="aspect-square rounded-[18px] bg-[#F3E7EA] animate-pulse" />
+                 <div className="mt-3 h-3 w-1/2 rounded-full bg-[#F3E7EA] animate-pulse" />
+                 <div className="mt-2 h-4 w-4/5 rounded-full bg-[#F3E7EA] animate-pulse" />
+                 <div className="mt-3 mb-1 h-4 w-2/3 rounded-full bg-[#F3E7EA] animate-pulse" />
+               </div>
+             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <div className="py-20 text-center flex flex-col items-center gap-4">
-             <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center">
-                <SearchIcon className="w-6 h-6 text-gray-200" />
+          <div className="py-14 px-6 text-center flex flex-col items-center bg-white border border-[#EEDFE3] rounded-[32px]">
+             <div className="w-16 h-16 bg-[#FDF2F5] rounded-full flex items-center justify-center mb-4">
+                <SearchIcon className="w-7 h-7 text-[#A83960]" aria-hidden="true" />
              </div>
-             <p className="text-sm font-semibold text-gray-300 capitalize tracking-widest">Produk tidak ditemukan</p>
+             <p className="text-[15px] font-bold text-[#2D2926]">Produk tidak ditemukan</p>
+             <p className="mt-1.5 max-w-[260px] text-[13px] leading-relaxed text-[#766B68]">Coba kata kunci lain atau ubah filter yang dipilih.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
              {filtered.map(product => {
                const hasPromo = (product.voucher_discount || 0) > 0;
                const displayPrice = product.selling_price - (product.voucher_discount || 0);
                return (
-                 <div key={product.id} onClick={() => handleOpenSelection(product)}
-                   className="bg-white rounded-[28px] border border-gray-50 p-2.5 flex flex-col group active:scale-[0.98] transition-all shadow-sm hover:shadow-md cursor-pointer">
-                    <div className="aspect-square rounded-[22px] overflow-hidden relative bg-rose-50 mb-3">
+                 <button type="button" key={product.id} onClick={() => handleOpenSelection(product)}
+                   className="text-left bg-white rounded-[24px] border border-[#EEDFE3] p-2.5 flex flex-col group active:scale-[0.98] transition-all shadow-[0_6px_18px_-10px_rgba(168,57,96,0.28)] hover:shadow-lg hover:shadow-rose-100 cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25">
+                    <div className="aspect-square rounded-[18px] overflow-hidden relative mb-3">
                       {product.image_url ? (
-                        <Image src={product.image_url} alt={product.name} fill className="object-cover" />
+                        <Image src={product.image_url} alt={product.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center p-6 opacity-20"><Image src="/lbqueen_logo.png" alt="LB" width={80} height={80} className="object-contain" style={{ width: 'auto', height: 'auto' }} /></div>
+                        <ItemPlaceholder type={product.type} />
                       )}
                       {hasPromo && (
-                         <div className="absolute top-2.5 left-2.5 bg-emerald-500 text-white text-[9px] font-semibold px-2.5 py-1 rounded-lg">PROMO</div>
+                         <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-700 shadow-sm">
+                           <BadgePercent className="w-3 h-3" aria-hidden="true" />
+                           Promo
+                         </span>
                       )}
+                      <span aria-hidden="true" className="absolute bottom-2 right-2 w-8 h-8 rounded-xl bg-white/95 flex items-center justify-center text-[#A83960] group-hover:bg-[#C94F78] group-hover:text-white transition-all shadow-sm">
+                         <Plus className="w-4 h-4" />
+                      </span>
                     </div>
-                    
-                    <div className="px-1 flex-1 flex flex-col justify-between">
-                      <div>
-                         <p className="text-[12px] font-semibold text-gray-800 line-clamp-2 mb-1 leading-tight h-8">{product.name}</p>
-                         <p className="text-[10px] font-semibold text-gray-400 mb-2 truncate capitalize tracking-tighter">{product.sub_category || "Umum"}</p>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                         <div>
-                            {hasPromo && <p className="text-[10px] text-gray-300 line-through leading-none mb-0.5">Rp {product.selling_price.toLocaleString("id-ID")}</p>}
-                            <p className="text-[14px] font-semibold text-[#C94F78]">Rp {displayPrice.toLocaleString("id-ID")}</p>
-                         </div>
-                         <div className="w-8 h-8 rounded-xl bg-rose-50 flex items-center justify-center text-[#C94F78] group-hover:bg-[#C94F78] group-hover:text-white transition-all shadow-sm">
-                            <Plus className="w-4 h-4" />
-                         </div>
-                      </div>
+
+                    <div className="px-1 pb-1 flex-1 flex flex-col">
+                       <p className="text-[11px] font-semibold text-[#A83960] uppercase tracking-[0.06em] truncate">{product.sub_category || "Umum"}</p>
+                       <p className="mt-1 text-[14px] font-semibold text-[#2D2926] line-clamp-2 leading-snug min-h-[2.75em]">{product.name}</p>
+                       <div className="mt-auto pt-2 tabular-nums">
+                          {hasPromo && <p className="text-[12px] font-medium text-[#766B68] line-through leading-none mb-1">Rp {product.selling_price.toLocaleString("id-ID")}</p>}
+                          <p className="text-[15px] font-bold text-[#A83960] leading-tight">Rp {displayPrice.toLocaleString("id-ID")}</p>
+                       </div>
                     </div>
-                 </div>
+                 </button>
                );
              })}
           </div>
@@ -209,47 +241,64 @@ export default function CategoryPage() {
       </div>
 
       {/* ── VARIANT SELECTION SHEET ── */}
-      {error && <div role="alert" className="p-5 text-center"><p>Katalog belum dapat dimuat.</p><button className="btn-pink mt-3" onClick={() => mutate()}>Coba lagi</button></div>}
+      {error && (
+        <div role="alert" className="mx-5 mt-6 rounded-[32px] border border-[#EEDFE3] bg-white p-6 text-center">
+          <div className="mx-auto mb-3 w-14 h-14 rounded-full bg-[#FDF2F5] flex items-center justify-center">
+            <AlertTriangle className="w-6 h-6 text-[#A83960]" aria-hidden="true" />
+          </div>
+          <p className="text-[15px] font-semibold text-[#2D2926]">Katalog belum dapat dimuat.</p>
+          <button type="button" className="btn-pink mt-4" onClick={() => mutate()}>Coba lagi</button>
+        </div>
+      )}
       <PageControls page={page} hasMore={!!data?.hasMore} loading={isValidating} onChange={setPage} />
-      {selectedProduct && (
+      {selectedProduct && (() => {
+        const basePrice = selectedVariant ? selectedVariant.price : selectedProduct.selling_price;
+        const discount = selectedProduct.voucher_discount || 0;
+        const blocked = selectedProduct.type === "Treatment Care & Beauty" && !isAgreed;
+        return (
         <div className="fixed inset-0 z-[100] flex flex-col justify-end">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSelectedProduct(null)} />
-          <div className="relative bg-white rounded-t-[40px] shadow-2xl max-h-[90vh] flex flex-col p-8 animate-in slide-in-from-bottom-20 duration-300">
-            <div className="flex justify-center mb-8">
-              <div className="w-16 h-1.5 bg-gray-100 rounded-full" />
+          <div role="dialog" aria-modal="true" aria-labelledby="category-sheet-title" className="relative w-full sm:max-w-xl sm:mx-auto bg-white rounded-t-[32px] shadow-2xl max-h-[90vh] flex flex-col px-5 pt-4 pb-6 sm:px-8 sm:pb-8 animate-in slide-in-from-bottom-20 duration-300">
+            <div className="flex justify-center mb-5">
+              <div className="w-14 h-1.5 bg-[#EEDFE3] rounded-full" />
             </div>
-            
-            <div className="flex gap-6 mb-8 pb-8 border-b border-gray-50">
-               <div className="w-32 h-32 rounded-[28px] overflow-hidden bg-rose-50 border border-rose-100 shrink-0 relative">
+
+            <div className="flex gap-4 sm:gap-5 mb-6 pb-6 border-b border-[#F3E4E9]">
+               <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-[24px] overflow-hidden border border-[#EEDFE3] shrink-0 relative">
                   {selectedProduct.image_url ? (
                     <Image src={selectedProduct.image_url} alt={selectedProduct.name} fill className="object-cover" />
-                  ) : <div className="w-full h-full flex items-center justify-center p-6 opacity-20"><Image src="/lbqueen_logo.png" alt="LB" width={80} height={80} className="object-contain" style={{ width: 'auto', height: 'auto' }} /></div>}
+                  ) : <ItemPlaceholder type={selectedProduct.type} compact />}
                </div>
-               <div className="flex-1 pt-2">
-                  <p className="text-[12px] font-semibold text-[#C94F78] capitalize tracking-widest mb-1">{selectedProduct.type}</p>
-                  <h3 className="text-lg font-semibold text-gray-900 leading-tight mb-4">{selectedProduct.name}</h3>
-                  <div className="flex items-baseline gap-2">
-                     <span className="text-xl font-semibold text-[#C94F78]">
-                        Rp {((selectedVariant ? selectedVariant.price : selectedProduct.selling_price) - (selectedProduct.voucher_discount || 0)).toLocaleString("id-ID")}
+               <div className="flex-1 min-w-0 pt-1">
+                  <span className="inline-block max-w-full truncate rounded-full bg-[#FDF2F5] px-2.5 py-0.5 text-[11px] font-semibold text-[#A83960] mb-2">{selectedProduct.type}</span>
+                  <h3 id="category-sheet-title" className="text-[17px] sm:text-lg font-bold text-[#2D2926] leading-snug mb-2 line-clamp-3">{selectedProduct.name}</h3>
+                  <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 tabular-nums">
+                     <span className="text-[20px] font-bold text-[#A83960]">
+                        Rp {(basePrice - discount).toLocaleString("id-ID")}
                      </span>
+                     {discount > 0 && (
+                       <span className="text-[13px] font-medium text-[#766B68] line-through">Rp {basePrice.toLocaleString("id-ID")}</span>
+                     )}
                   </div>
                </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto no-scrollbar space-y-8">
+            <div className="flex-1 overflow-y-auto no-scrollbar space-y-6">
                {/* Variants */}
                {selectedProduct.variants && selectedProduct.variants.length > 0 && (
                  <div>
-                    <h4 className="text-[12px] font-semibold text-gray-900 capitalize tracking-widest mb-4">Pilih Varian</h4>
-                    <div className="flex flex-wrap gap-3">
+                    <h4 className="text-[13px] font-bold text-[#2D2926] uppercase tracking-[0.08em] mb-3">Pilih Varian</h4>
+                    <div className="flex flex-wrap gap-2.5">
                        {selectedProduct.variants.map((v) => (
-                         <button 
+                         <button
+                           type="button"
                            key={v.id}
+                           aria-pressed={selectedVariant?.id === v.id}
                            onClick={() => setSelectedVariant(v)}
-                           className={`px-5 py-3 rounded-2xl text-[11px] font-semibold transition-all border ${
-                             selectedVariant?.id === v.id 
-                               ? "bg-[#C94F78] text-white border-[#C94F78] shadow-lg shadow-rose-100" 
-                               : "bg-white text-gray-400 border-gray-100"
+                           className={`px-4 min-h-11 rounded-2xl text-[13px] font-bold transition-all border-2 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20 ${
+                             selectedVariant?.id === v.id
+                               ? "bg-[#C94F78] text-white border-[#C94F78] shadow-lg shadow-rose-100"
+                               : "bg-white text-[#2D2926] border-[#EEDFE3] hover:border-[#C94F78]/40 hover:text-[#A83960]"
                            }`}
                          >
                            {v.variant_name}
@@ -260,58 +309,62 @@ export default function CategoryPage() {
                )}
 
                 {/* Quantity */}
-               <div className="flex items-center justify-between">
-                  <h4 className="text-[12px] font-semibold text-gray-900 capitalize tracking-widest">Jumlah</h4>
-                  <div className="flex items-center gap-6 bg-gray-50 rounded-2xl px-5 py-2.5 border border-gray-100">
-                     <button onClick={() => setSelectionQty(Math.max(1, selectionQty - 1))} className="text-gray-400 active:scale-125 transition-all"><Minus className="w-4 h-4" /></button>
-                     <span className="text-base font-semibold text-gray-900 w-6 text-center">{selectionQty}</span>
-                     <button onClick={() => setSelectionQty(Math.min(10, selectionQty + 1))} className="text-gray-400 active:scale-125 transition-all"><Plus className="w-4 h-4" /></button>
+               <div className="flex items-center justify-between gap-4">
+                  <h4 className="text-[13px] font-bold text-[#2D2926] uppercase tracking-[0.08em]">Jumlah</h4>
+                  <div className="flex items-center gap-2 bg-[#FDF7F9] rounded-2xl p-1.5 border border-[#EEDFE3]">
+                     <button type="button" aria-label="Kurangi jumlah" onClick={() => setSelectionQty(Math.max(1, selectionQty - 1))} className="w-10 h-10 rounded-xl bg-white border border-[#EEDFE3] flex items-center justify-center text-[#A83960] active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C94F78]/30"><Minus className="w-4 h-4" /></button>
+                     <span className="text-[17px] font-bold text-[#2D2926] w-8 text-center tabular-nums" aria-live="polite">{selectionQty}</span>
+                     <button type="button" aria-label="Tambah jumlah" onClick={() => setSelectionQty(Math.min(10, selectionQty + 1))} className="w-10 h-10 rounded-xl bg-[#C94F78] flex items-center justify-center text-white shadow-sm active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C94F78]/30"><Plus className="w-4 h-4" /></button>
                   </div>
                </div>
 
                {/* Treatment Reminder */}
                {selectedProduct.type === "Treatment Care & Beauty" && (
-                 <div className="bg-orange-50 rounded-[24px] p-4 border border-orange-100 shadow-sm flex flex-col gap-3">
+                 <div className="bg-[#FBF7ED] rounded-[24px] p-4 border border-[#D4AF37]/30 flex flex-col gap-3">
                     <div className="flex items-start gap-3">
-                       <AlertTriangle className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
-                       <p className="text-[11px] text-orange-800 leading-relaxed font-medium">
-                         <strong className="block mb-1 text-orange-900">Perhatian Sebelum Treatment!</strong>
+                       <div className="w-9 h-9 rounded-xl bg-[#D4AF37]/15 flex items-center justify-center shrink-0">
+                         <AlertTriangle className="w-5 h-5 text-[#8A6A0F]" aria-hidden="true" />
+                       </div>
+                       <p className="text-[13px] text-[#4A4340] leading-relaxed">
+                         <strong className="block mb-1 text-[14px] text-[#7A5C0B]">Perhatian Sebelum Treatment!</strong>
                          H-7 sebelum dan juga H+7 setelah treatment dilarang mengkonsumsi alkohol dan obat-obatan terlarang. Pasien harus jujur akan kondisi tubuh ke therapist. Jika berbohong risiko ditanggung sendiri.
                        </p>
                     </div>
-                    <label className="flex items-center gap-3 pt-2 border-t border-orange-200/50 cursor-pointer">
-                       <input 
-                         type="checkbox" 
-                         checked={isAgreed} 
+                    <label className="flex items-center gap-3 p-3 rounded-2xl bg-white border border-[#D4AF37]/25 cursor-pointer">
+                       <input
+                         type="checkbox"
+                         checked={isAgreed}
                          onChange={(e) => setIsAgreed(e.target.checked)}
-                         className="w-4 h-4 rounded border-orange-300 text-[#C94F78] focus:ring-[#C94F78] bg-white"
+                         className="w-5 h-5 shrink-0 rounded border-[#C9A43A] accent-[#C94F78] focus:ring-[#C94F78] bg-white"
                        />
-                       <span className="text-[11px] font-semibold text-orange-900">Saya mengerti & setuju</span>
+                       <span className="text-[13px] font-semibold text-[#5E4708]">Saya mengerti & setuju</span>
                     </label>
                  </div>
                )}
             </div>
 
             {/* Bottom Buttons */}
-            <div className="pt-8 mt-4 grid grid-cols-[1fr_2.5fr] gap-4">
-               <button onClick={handleAddToCart} className="h-[64px] border-2 border-[#C94F78] text-[#C94F78] rounded-[24px] font-semibold text-[12px] tracking-widest flex items-center justify-center gap-2 active:scale-[0.98] transition-all">
-                  <ShoppingBag className="w-5 h-5" /> CART
+            <div className="pt-5 mt-4 border-t border-[#F3E4E9] grid grid-cols-[1fr_2.2fr] gap-3">
+               <button type="button" onClick={handleAddToCart} className="h-[56px] border-2 border-[#C94F78] text-[#A83960] bg-white hover:bg-[#FDF2F5] rounded-2xl font-bold text-[13px] tracking-[0.06em] flex items-center justify-center gap-2 active:scale-[0.98] transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20">
+                  <ShoppingBag className="w-5 h-5" aria-hidden="true" /> CART
                </button>
-               <button 
-                 onClick={handleBuyNow} 
-                 disabled={selectedProduct.type === "Treatment Care & Beauty" && !isAgreed}
-                 className={`h-[64px] text-white rounded-[24px] font-semibold text-[12px] tracking-widest flex items-center justify-center gap-3 active:scale-[0.98] transition-all disabled:active:scale-100 ${
-                   (selectedProduct.type === "Treatment Care & Beauty" && !isAgreed) 
-                     ? "bg-gray-400 cursor-not-allowed shadow-none" 
-                     : "bg-[#C94F78] shadow-xl shadow-rose-100"
+               <button
+                 type="button"
+                 onClick={handleBuyNow}
+                 disabled={blocked}
+                 className={`h-[56px] rounded-2xl font-bold text-[13px] tracking-[0.06em] flex items-center justify-center gap-2 active:scale-[0.98] transition-all disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25 ${
+                   blocked
+                     ? "bg-[#F3ECEE] text-[#8C8280] border border-[#EEDFE3] cursor-not-allowed shadow-none"
+                     : "text-white bg-gradient-to-br from-[#C94F78] to-[#9B3055] shadow-xl shadow-rose-200/70"
                  }`}
                >
-                  BELI SEKARANG <ArrowRight className="w-5 h-5" />
+                  BELI SEKARANG <ArrowRight className="w-5 h-5" aria-hidden="true" />
                </button>
             </div>
           </div>
         </div>
-      )}
+        );
+      })()}
     </div>
   );
 }

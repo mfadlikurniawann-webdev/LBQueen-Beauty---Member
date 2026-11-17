@@ -22,6 +22,12 @@ Aplikasi pelanggan/member LBQueen Beauty Clinic untuk domain **https://lbqueen.i
 - Gateway `/api/database` hanya melayani **baca**: katalog (`products`, `product_variants`, `vouchers` aktif) dan data milik member yang login (`customers`, `customer_orders`). Tabel admin, transaksi, dan RPC laporan tidak tersedia. Kolom password dan `purchase_price` disaring.
 - Perubahan data hanya lewat server action: `loginCustomer`, `registerCustomer`, `updateCustomerPassword`, `checkoutOnline`, `submitOrderReview`.
 - Cookie sesi `lbqueen_customer` hanya berlaku di domain member. Sesi admin POS tidak berlaku di sini, dan sebaliknya.
+- Batas percobaan per IP dan per akun untuk login, daftar, ganti password, checkout, dan ulasan (`src/lib/rate-limit.ts`); honeypot anti-bot di form daftar.
+- Kode voucher hanya bisa dicek satu per satu; respons dibatasi 100 baris; katalog publik di-cache CDN Vercel agar lonjakan trafik tidak langsung membebani database.
+
+## Lapisan perlindungan di Vercel (disarankan)
+
+Proteksi DDoS jaringan sudah otomatis dari Vercel. Tambahan di Vercel → proyek → **Firewall**: aktifkan Bot Protection, buat aturan rate limit per IP untuk `/api/*` dan `/register` bila paket mendukung, dan nyalakan **Attack Challenge Mode** saat terjadi serangan. Pantau **Usage** Vercel dan Supabase.
 
 ## Menjalankan
 
