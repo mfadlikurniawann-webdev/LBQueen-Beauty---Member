@@ -18,17 +18,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
             retry: 1,
           },
         },
-      })
+      }),
   );
 
   return (
     <QueryClientProvider client={queryClient}>
       <SWRConfig value={{ dedupingInterval: 30000, revalidateOnFocus: false, errorRetryCount: 1 }}>
-      <PWAProvider>
-        <ToastProvider>
-          {children}
-        </ToastProvider>
-      </PWAProvider>
+        <PWAProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </PWAProvider>
       </SWRConfig>
     </QueryClientProvider>
   );

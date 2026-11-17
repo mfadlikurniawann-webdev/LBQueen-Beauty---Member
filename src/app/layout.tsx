@@ -18,7 +18,8 @@ export const viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://lbqueen.id"),
   title: "LBQueen: Pesan Treatment Online Terpercaya",
-  description: "Portal member LBQueen Beauty Clinic untuk pemesanan treatment dan produk kecantikan online",
+  description:
+    "Portal member LBQueen Beauty Clinic untuk pemesanan treatment dan produk kecantikan online",
   manifest: "/manifest.json",
   icons: {
     icon: "/lbqueen_logo.png",
@@ -41,15 +42,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="id"
-      className={`${inter.variable} h-full antialiased`}
-    >
+    <html lang="id" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <a className="skip-link" href="#main-content">Lewati ke konten</a>
-        <Providers>
-          {children}
-        </Providers>
+        <a className="skip-link" href="#main-content">
+          Lewati ke konten
+        </a>
+        <Providers>{children}</Providers>
         <SpeedInsights />
         <Analytics />
         <script

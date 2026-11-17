@@ -1,5 +1,13 @@
 # Architectural Decisions & Changes Log (LBQueen Member)
 
+## 2026-11-17: Penyelesaian refactor dan alur akun pelanggan
+
+- Komponen halaman member dipisahkan sesuai tanggung jawabnya (beranda, katalog, keranjang, pesanan, profil, autentikasi, dan nota), dengan utilitas format, konstanta, dan tipe bersama.
+- Profil pelanggan kini bersumber dari cookie sesi dan database melalui `/api/session`, dibagikan lewat `CustomerProvider`. Data diperbarui saat navigasi, kembali fokus, dan setiap 60 detik; localStorage tidak menentukan status login, poin, atau membership. Endpoint hanya memilih kolom profil publik dan tidak di-cache.
+- Akun reguler yang sudah login menampilkan akun aktif serta tautan WhatsApp untuk bertanya upgrade kepada admin. Status membership dikelola admin; target poin untuk kenaikan tier otomatis dihapus.
+- Voucher tersedia juga bagi akun reguler. Klaim poin tambahan dari ulasan dan status akun terverifikasi dihapus. Nota pelanggan tidak lagi mengambil identitas kasir dari penyimpanan browser aplikasi POS.
+- Tes browser memakai database mock untuk menguji akun reguler/member tanpa profil localStorage, pembaruan poin/tier dari server, pengabaian profil lokal setelah cookie sesi dihapus, dan privasi profil.
+
 ## 2026-11-17: Latensi navigasi
 
 - Header `x-vercel-id: sin1::iad1` menunjukkan fungsi (API, server action, proxy) berjalan di Washington DC, sementara pengguna dan Supabase berada di Asia Tenggara; respons API live 1,3–1,9 detik. `vercel.json` kini menetapkan `regions: ["sin1"]` (Singapura). Bila region Supabase bukan Singapura, samakan region ini dengan region database.

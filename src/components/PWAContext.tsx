@@ -2,8 +2,13 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
+interface InstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+}
+
 interface PWAContextType {
-  deferredPrompt: any;
+  deferredPrompt: InstallPromptEvent | null;
   isInstallable: boolean;
   install: () => Promise<void>;
   isInstalled: boolean;
@@ -12,31 +17,35 @@ interface PWAContextType {
 const PWAContext = createContext<PWAContextType | undefined>(undefined);
 
 export const PWAProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<InstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
-    // Check if already installed
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      setIsInstalled(true);
-    }
+    const displayMode = window.matchMedia("(display-mode: standalone)");
+    const syncInstalled = () => setIsInstalled(displayMode.matches);
+    const timer = window.setTimeout(syncInstalled, 0);
+    displayMode.addEventListener("change", syncInstalled);
 
-    const handler = (e: any) => {
+    const handler = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e);
+      setDeferredPrompt(e as InstallPromptEvent);
       setIsInstallable(true);
     };
 
     window.addEventListener("beforeinstallprompt", handler);
 
-    window.addEventListener('appinstalled', () => {
+    const installed = () => {
       setIsInstalled(true);
       setIsInstallable(false);
       setDeferredPrompt(null);
-    });
+    };
+    window.addEventListener("appinstalled", installed);
 
     return () => {
+      window.clearTimeout(timer);
+      displayMode.removeEventListener("change", syncInstalled);
+      window.removeEventListener("appinstalled", installed);
       window.removeEventListener("beforeinstallprompt", handler);
     };
   }, []);
@@ -45,7 +54,7 @@ export const PWAProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (!deferredPrompt) return;
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
+    if (outcome === "accepted") {
       setDeferredPrompt(null);
       setIsInstallable(false);
     }

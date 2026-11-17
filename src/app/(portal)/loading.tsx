@@ -12,7 +12,7 @@ export default function Loading() {
           </div>
         </div>
         <div className="px-4 sm:px-6 pt-6 grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {[0, 1, 2, 3].map(i => (
+          {[0, 1, 2, 3].map((i) => (
             <div key={i} className="rounded-[24px] bg-white border border-[#EEDFE3] p-3 space-y-3">
               <div className="aspect-square rounded-2xl bg-[#F6EAEE]" />
               <div className="h-3.5 w-4/5 rounded-full bg-[#F2E6E9]" />

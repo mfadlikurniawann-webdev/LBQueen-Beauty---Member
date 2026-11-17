@@ -6,10 +6,20 @@ export function watchWhileVisible(callback: () => void | Promise<unknown>, inter
     if (document.hidden || running || disposed || Date.now() - lastRefresh < interval) return;
     lastRefresh = Date.now();
     running = true;
-    try { await callback(); } catch {} finally { running = false; }
+    try {
+      await callback();
+    } catch {
+    } finally {
+      running = false;
+    }
   };
   const timer = window.setInterval(refresh, interval);
   window.addEventListener("focus", refresh);
   document.addEventListener("visibilitychange", refresh);
-  return () => { disposed = true; clearInterval(timer); window.removeEventListener("focus", refresh); document.removeEventListener("visibilitychange", refresh); };
+  return () => {
+    disposed = true;
+    clearInterval(timer);
+    window.removeEventListener("focus", refresh);
+    document.removeEventListener("visibilitychange", refresh);
+  };
 }
