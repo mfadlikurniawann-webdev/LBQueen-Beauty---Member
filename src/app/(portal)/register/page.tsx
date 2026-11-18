@@ -8,9 +8,24 @@ import { AuthShell } from "@/components/auth/AuthShell";
 import { INPUT_CLASS, LABEL_CLASS } from "@/components/auth/auth-styles";
 import { useCustomer } from "@/context/CustomerContext";
 import { PasswordToggle } from "@/components/PasswordToggle";
+import { nikError, passwordError, phoneError, usernameError } from "@/lib/validation";
 
 const REQUIRED = <span className="text-[#A83960]">*</span>;
 const OPTIONAL = <span className="normal-case tracking-normal font-medium">(Opsional)</span>;
+
+function FieldHint({ id, error, hint }: { id: string; error?: string | null; hint?: string }) {
+  if (error)
+    return (
+      <p
+        id={id}
+        role="alert"
+        className="mt-1.5 text-[12px] font-semibold text-red-600 leading-snug"
+      >
+        {error}
+      </p>
+    );
+  return hint ? <p className="mt-1.5 text-[12px] text-[#766B68] leading-snug">{hint}</p> : null;
+}
 
 export default function CustomerRegisterPage() {
   const router = useRouter();
@@ -38,7 +53,7 @@ export default function CustomerRegisterPage() {
     setError("");
 
     const name = form.name.trim();
-    const username = form.username.trim().toLowerCase().replace(/\s+/g, "");
+    const username = form.username.trim();
     const phone = form.phone.trim();
     const nik = form.nik.trim();
     const address = form.address.trim();
@@ -74,6 +89,15 @@ export default function CustomerRegisterPage() {
       setLoading(false);
     }
   };
+
+  const errors = {
+    username: form.username ? usernameError(form.username) : null,
+    phone: form.phone ? phoneError(form.phone) : null,
+    nik: form.nik ? nikError(form.nik) : null,
+    password: form.password ? passwordError(form.password, true) : null,
+  };
+  const invalid = (message: string | null, id: string) =>
+    message ? { "aria-invalid": true, "aria-describedby": id } : {};
 
   const field = (key: keyof typeof form) => ({
     value: form[key],
@@ -137,10 +161,20 @@ export default function CustomerRegisterPage() {
               id="reg-username"
               type="text"
               autoComplete="username"
-              placeholder="Username"
+              placeholder="cth: sitiaminah"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
+              maxLength={50}
               required
               {...field("username")}
+              {...invalid(errors.username, "reg-username-error")}
               className={INPUT_CLASS}
+            />
+            <FieldHint
+              id="reg-username-error"
+              error={errors.username}
+              hint="Huruf kecil, angka, atau _ tanpa spasi."
             />
           </div>
           <div>
@@ -154,8 +188,10 @@ export default function CustomerRegisterPage() {
               placeholder="Contoh: 08123456789"
               required
               {...field("phone")}
+              {...invalid(errors.phone, "reg-phone-error")}
               className={INPUT_CLASS}
             />
+            <FieldHint id="reg-phone-error" error={errors.phone} />
           </div>
         </div>
 
@@ -168,10 +204,13 @@ export default function CustomerRegisterPage() {
               id="reg-nik"
               type="text"
               inputMode="numeric"
-              placeholder="Nomor Induk Kependudukan"
+              placeholder="16 digit sesuai KTP"
+              maxLength={16}
               {...field("nik")}
+              {...invalid(errors.nik, "reg-nik-error")}
               className={INPUT_CLASS}
             />
+            <FieldHint id="reg-nik-error" error={errors.nik} />
           </div>
           <div>
             <label htmlFor="reg-password" className={LABEL_CLASS}>
@@ -184,8 +223,10 @@ export default function CustomerRegisterPage() {
                 minLength={8}
                 type={showPass ? "text" : "password"}
                 placeholder="Minimal 8 karakter"
+                maxLength={128}
                 required
                 {...field("password")}
+                {...invalid(errors.password, "reg-password-error")}
                 className={`${INPUT_CLASS} pr-14`}
               />
               <PasswordToggle
@@ -194,6 +235,7 @@ export default function CustomerRegisterPage() {
                 label="password"
               />
             </div>
+            <FieldHint id="reg-password-error" error={errors.password} />
           </div>
         </div>
 

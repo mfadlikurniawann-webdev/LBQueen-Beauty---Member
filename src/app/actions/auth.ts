@@ -5,6 +5,17 @@ import { createSession, verifySession } from "@/lib/session";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import { clientIp, consumeLimit } from "@/lib/rate-limit";
+import { sealPassword, vaultReady } from "@/lib/password-vault";
+import {
+  duplicateMessage,
+  nameError,
+  nikError,
+  normalizePhone,
+  normalizeUsername,
+  passwordError,
+  phoneError,
+  usernameError,
+} from "@/lib/validation";
 
 type Credentials = { password_hash?: string; password?: string; password_plain?: string };
 
@@ -21,7 +32,8 @@ async function matchesPassword(plain: string, user: Credentials) {
 function publicProfile(user: Record<string, unknown>) {
   return Object.fromEntries(
     Object.entries(user).filter(
-      ([key]) => !["password", "password_hash", "password_plain"].includes(key),
+      ([key]) =>
+        !["password", "password_hash", "password_plain", "password_encrypted"].includes(key),
     ),
   );
 }
@@ -43,37 +55,68 @@ const unavailable =
 
 const tooMany = "Terlalu banyak percobaan. Coba kembali dalam beberapa menit.";
 
+const likeEscape = (value: string) => value.replace(/[\\%_]/g, (c) => `\\${c}`);
+
+function phoneCandidates(phone: string, raw: string) {
+  const local = phone.slice(1);
+  return [...new Set([phone, `62${local}`, `+62${local}`, raw])];
+}
+
 export async function loginCustomer(identifier: string, passwordPlain: string) {
   const value = identifier.trim();
   if (!value || !passwordPlain) return { error: "Username/nomor HP dan password harus diisi." };
   if (value.length > 100 || passwordPlain.length > 128)
     return { error: "Akun tidak ditemukan atau password salah." };
-  if (!/^[\p{L}\p{N}_+@.\-]+$/u.test(value))
-    return { error: "Format username atau nomor HP tidak valid." };
+  const isPhone = /^\+?[0-9\s().-]{8,}$/.test(value);
+  const phone = isPhone ? normalizePhone(value) : "";
+  const username = isPhone ? "" : normalizeUsername(value);
+  if (isPhone && phoneError(phone))
+    return { error: "Format nomor HP tidak valid. Contoh: 08123456789." };
+  if (!isPhone && /\s/.test(username))
+    return {
+      error: `Username tidak boleh mengandung spasi. Coba "${username.replace(/\s+/g, "")}" atau masuk dengan nomor HP.`,
+    };
+  if (!isPhone && usernameError(username))
+    return { error: `${usernameError(username)} Anda juga bisa masuk dengan nomor HP.` };
   try {
     if (
       !(await consumeLimit("customer-ip", await clientIp(), 60)) ||
-      !(await consumeLimit("customer", value))
+      !(await consumeLimit("customer", phone || username))
     )
       return { error: tooMany };
     const db = serverDatabase();
-    const { data, error } = await db
-      .from("customers")
-      .select("*")
-      .or(`phone.eq.${value},username.eq.${value}`)
-      .limit(1);
-    if (error) return { error: unavailable };
-    const customer = data?.[0];
-    if (!customer || !(await matchesPassword(passwordPlain, customer)))
-      return { error: "Akun tidak ditemukan atau password salah." };
-    if (!customer.password_hash || !/^\$2[aby]\$/.test(customer.password_hash)) {
+    const query = () => db.from("customers").select("*").limit(5);
+    const lookups = isPhone
+      ? [query().in("phone", phoneCandidates(phone, value))]
+      : [query().ilike("username", likeEscape(username))];
+    if (isPhone && /^[0-9_]{3,50}$/.test(value)) lookups.push(query().eq("username", value));
+    const results = await Promise.all(lookups);
+    if (results.some((r) => r.error)) return { error: unavailable };
+    let customer: Record<string, unknown> | undefined;
+    for (const row of results.flatMap((r) => r.data || [])) {
+      if (await matchesPassword(passwordPlain, row)) {
+        customer = row;
+        break;
+      }
+    }
+    if (!customer) return { error: "Akun tidak ditemukan atau password salah." };
+    const hash = customer.password_hash as string | undefined;
+    const upgrade: Record<string, string | null> = {};
+    if (!hash || !/^\$2[aby]\$/.test(hash)) {
+      upgrade.password_hash = await bcrypt.hash(passwordPlain, 12);
+      upgrade.password_plain = null;
+    }
+    // Akun lama belum punya salinan terenkripsi; lengkapi saat password terbukti benar.
+    if (!customer.password_encrypted && vaultReady())
+      upgrade.password_encrypted = sealPassword(passwordPlain);
+    if (Object.keys(upgrade).length) {
       const { error: migrationError } = await db
         .from("customers")
-        .update({ password_hash: await bcrypt.hash(passwordPlain, 12), password_plain: null })
+        .update(upgrade)
         .eq("id", customer.id);
-      if (migrationError) return { error: unavailable };
+      if (migrationError && upgrade.password_hash) return { error: unavailable };
     }
-    await setSession(customer.id);
+    await setSession(customer.id as number);
     return { data: publicProfile(customer) };
   } catch {
     return { error: unavailable };
@@ -90,26 +133,17 @@ export async function registerCustomer(input: {
   website?: string;
 }) {
   if (input.website) return { error: "Pendaftaran tidak dapat diproses." };
-  if (
-    input.name.length > 100 ||
-    (input.nik?.length || 0) > 20 ||
-    (input.address?.length || 0) > 500 ||
-    input.passwordPlain.length > 128
-  )
-    return { error: "Data pendaftaran terlalu panjang." };
+  if ((input.address?.length || 0) > 500) return { error: "Alamat maksimal 500 karakter." };
+  const invalid =
+    nameError(input.name) ||
+    usernameError(input.username) ||
+    phoneError(input.phone) ||
+    nikError(input.nik || "") ||
+    passwordError(input.passwordPlain, true);
+  if (invalid) return { error: invalid };
   const name = input.name.trim();
-  const username = input.username.trim();
-  const phone = input.phone.trim();
-  if (
-    !name ||
-    !/^[a-zA-Z0-9_]{3,50}$/.test(username) ||
-    !/^\+?[0-9]{8,16}$/.test(phone) ||
-    input.passwordPlain.length < 8
-  )
-    return {
-      error:
-        "Isi nama, username (3–50 huruf/angka/underscore), nomor HP, dan password minimal 8 karakter.",
-    };
+  const username = normalizeUsername(input.username);
+  const phone = normalizePhone(input.phone);
   try {
     if (
       !(await consumeLimit("register-ip", await clientIp(), 300)) ||
@@ -117,6 +151,18 @@ export async function registerCustomer(input: {
     )
       return { error: tooMany };
     const db = serverDatabase();
+    const [byUsername, byPhone] = await Promise.all([
+      db.from("customers").select("id").ilike("username", likeEscape(username)).limit(1),
+      db
+        .from("customers")
+        .select("id")
+        .in("phone", phoneCandidates(phone, input.phone.trim()))
+        .limit(1),
+    ]);
+    if (byUsername.error || byPhone.error) return { error: unavailable };
+    if (byUsername.data?.length) return { error: "Username sudah dipakai. Gunakan username lain." };
+    if (byPhone.data?.length)
+      return { error: "Nomor HP sudah terdaftar. Silakan masuk atau hubungi kasir LBQueen." };
     const { data, error } = await db
       .from("customers")
       .insert({
@@ -126,13 +172,11 @@ export async function registerCustomer(input: {
         nik: input.nik?.trim() || null,
         address: input.address?.trim() || null,
         password_hash: await bcrypt.hash(input.passwordPlain, 12),
+        password_encrypted: sealPassword(input.passwordPlain),
       })
       .select()
       .single();
-    if (error)
-      return {
-        error: error.code === "23505" ? "Username atau nomor HP sudah terdaftar." : unavailable,
-      };
+    if (error) return { error: duplicateMessage(error) || unavailable };
     await setSession(data.id);
     return { data: publicProfile(data) };
   } catch {
@@ -143,8 +187,8 @@ export async function registerCustomer(input: {
 export async function updateCustomerPassword(oldPassword: string, newPassword: string) {
   const session = await verifySession((await cookies()).get("lbqueen_customer")?.value, "customer");
   if (!session) return { error: "Sesi berakhir. Silakan masuk kembali." };
-  if (newPassword.length < 8 || newPassword.length > 128)
-    return { error: "Password minimal 8 dan maksimal 128 karakter." };
+  const invalidPassword = passwordError(newPassword, true);
+  if (invalidPassword) return { error: invalidPassword };
   try {
     if (!(await consumeLimit("customer-password", session.id))) return { error: tooMany };
     const db = serverDatabase();
@@ -157,7 +201,11 @@ export async function updateCustomerPassword(oldPassword: string, newPassword: s
     if (!(await matchesPassword(oldPassword, data))) return { error: "Password lama salah." };
     const { error: updateError } = await db
       .from("customers")
-      .update({ password_hash: await bcrypt.hash(newPassword, 12), password_plain: null })
+      .update({
+        password_hash: await bcrypt.hash(newPassword, 12),
+        password_plain: null,
+        password_encrypted: sealPassword(newPassword),
+      })
       .eq("id", session.id);
     return updateError ? { error: "Password gagal diperbarui." } : { success: true };
   } catch {

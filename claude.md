@@ -1,5 +1,14 @@
 # Architectural Decisions & Changes Log (LBQueen Member)
 
+## 2026-11-18: Salinan password terenkripsi
+
+- Daftar, ganti password, dan login (bila salinan belum ada) mengisi `customers.password_encrypted` memakai `src/lib/password-vault.ts` dengan `PASSWORD_VIEW_KEY` yang sama dengan POS. Tanpa kunci, ganti password mengosongkan salinan agar superadmin tidak melihat password lama. Kolom ini dibuang dari respons gateway dan profil.
+
+## 2026-11-18: Login pelanggan toleran format
+
+- Login: username dicocokkan tanpa membedakan huruf besar/kecil (`ilike` dengan escape), nomor HP dinormalkan dan dicocokkan juga dalam bentuk `62…`/`+62…`; pesan khusus bila username berisi spasi. Input login mematikan auto-kapital/autokoreksi (iPad mengubah huruf pertama menjadi kapital).
+- Daftar: memakai aturan `src/lib/validation.ts` yang sama dengan POS, peringatan per kolom, cek username/nomor HP kembar sebelum insert.
+
 ## 2026-11-17: Penyelesaian refactor dan alur akun pelanggan
 
 - Komponen halaman member dipisahkan sesuai tanggung jawabnya (beranda, katalog, keranjang, pesanan, profil, autentikasi, dan nota), dengan utilitas format, konstanta, dan tipe bersama.

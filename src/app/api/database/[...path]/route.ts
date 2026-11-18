@@ -97,7 +97,13 @@ async function handle(request: NextRequest, context: { params: Promise<{ path: s
       const data = await response.json();
       const clean = JSON.parse(
         JSON.stringify(data, (key, value) =>
-          ["password", "password_hash", "password_plain", "purchase_price"].includes(key)
+          [
+            "password",
+            "password_hash",
+            "password_plain",
+            "password_encrypted",
+            "purchase_price",
+          ].includes(key)
             ? undefined
             : value,
         ),

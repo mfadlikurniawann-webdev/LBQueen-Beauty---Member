@@ -93,6 +93,10 @@ export default function CustomerLoginPage() {
             type="text"
             autoComplete="username"
             placeholder="Masukkan Username / Nomor HP"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
+            maxLength={100}
             required
             value={form.phone}
             onChange={(e) => setForm({ ...form, phone: e.target.value })}
