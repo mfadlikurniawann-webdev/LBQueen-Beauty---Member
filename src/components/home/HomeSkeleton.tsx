@@ -12,7 +12,7 @@ export function HomeSkeleton() {
           <div className="h-12 w-24 rounded-full bg-white/80 animate-pulse" />
           <div className="h-12 w-12 rounded-full bg-white/80 animate-pulse" />
         </div>
-        <div className="aspect-[1440/956] lg:aspect-auto lg:h-[440px] bg-[#F9D9E6] animate-pulse" />
+        <div className="aspect-[1440/956] lg:aspect-auto lg:h-[400px] bg-[#F9D9E6] animate-pulse" />
         <div className="flex gap-3 px-4 sm:px-8 -mt-7">
           {[1, 2, 3, 4].map((i) => (
             <div

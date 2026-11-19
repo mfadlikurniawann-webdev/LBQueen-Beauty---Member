@@ -74,6 +74,20 @@ function QuickTile({ tile }: { tile: Tile }) {
   );
 }
 
+function greeting() {
+  const hour = Number(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Jakarta",
+      hour: "numeric",
+      hourCycle: "h23",
+    }).format(new Date()),
+  );
+  if (hour < 11) return "Selamat pagi";
+  if (hour < 15) return "Selamat siang";
+  if (hour < 18) return "Selamat sore";
+  return "Selamat malam";
+}
+
 export function HomeHero({
   customer,
   searchQuery,
@@ -121,56 +135,69 @@ export function HomeHero({
 
   return (
     <section data-reveal aria-label="Beranda LBQueen" style={{ background: BANNER_BG }}>
-      <div
-        className="flex items-center gap-2.5 px-4 sm:px-8 lg:px-12 pt-4 pb-2"
-        style={{ paddingTop: "max(env(safe-area-inset-top, 0px), 16px)" }}
-      >
-        <label className="relative flex-1 min-w-0">
-          <span className="sr-only">Cari treatment atau produk</span>
-          <Search
-            className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#5F5552]"
-            aria-hidden="true"
-          />
-          <input
-            type="search"
-            placeholder="Cari treatment..."
-            value={searchQuery}
-            onChange={(e) => onSearch(e.target.value)}
-            className={cn(
-              "w-full h-12 rounded-full bg-white pl-12 pr-4 text-base text-[#2D2926] outline-none",
-              "placeholder:text-[#8C8280] shadow-[0_4px_14px_rgba(122,34,64,0.10)] border border-white",
-              "focus:border-[#C94F78]/40 focus:ring-4 focus:ring-[#C94F78]/10",
-            )}
-          />
-        </label>
-        <Link
-          href="/membership"
-          aria-label={`Status membership ${tier.name}`}
-          className="shrink-0 flex items-center gap-1.5 h-12 rounded-full pl-2.5 pr-3 border border-white/70 shadow-[0_4px_14px_rgba(122,34,64,0.10)]"
-          style={{ background: tier.chip }}
-        >
-          <Crown className="w-5 h-5 text-[#7A4B0B]" fill="#F5C842" aria-hidden="true" />
-          <span className="leading-none">
-            <span className="block text-[13px] font-bold text-[#4A2A06]">{tier.name}</span>
-            <span className="hidden min-[420px]:block text-[11px] font-semibold text-[#6B4A1A] mt-0.5">
-              {tier.id === "regular" ? "Akun" : "Member"}
-            </span>
-          </span>
-        </Link>
-        <Link
-          href="/profile"
-          aria-label="Profil saya"
-          className="shrink-0 w-12 h-12 rounded-full p-[3px] bg-gradient-to-br from-[#F5C842] to-[#C94F78] shadow-[0_4px_14px_rgba(122,34,64,0.18)]"
-        >
-          <span className="w-full h-full rounded-full bg-white flex items-center justify-center text-[18px] font-bold text-[#A83960]">
-            {customer.name?.charAt(0).toUpperCase()}
-          </span>
-        </Link>
+      <div className="lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-center lg:gap-6 lg:pl-12 lg:pt-6">
+        <div className="lg:pb-10">
+          <div className="hidden lg:block mb-6">
+            <p className="text-[14px] font-semibold text-[#A83960]">{greeting()}</p>
+            <h1 className="text-[34px] font-bold! text-[#2D2926] leading-tight tracking-tight mt-1">
+              Halo, {customer.name?.split(" ")[0]}
+            </h1>
+            <p className="text-[15px] text-[#5F5552] mt-2 max-w-sm">
+              Waktunya merawat diri. Pesan treatment dan produk favorit Anda di LBQueen.
+            </p>
+          </div>
+          <div
+            className="flex items-center gap-2.5 px-4 sm:px-8 lg:px-0 pt-4 pb-2"
+            style={{ paddingTop: "max(env(safe-area-inset-top, 0px), 16px)" }}
+          >
+            <label className="relative flex-1 min-w-0">
+              <span className="sr-only">Cari treatment atau produk</span>
+              <Search
+                className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#5F5552]"
+                aria-hidden="true"
+              />
+              <input
+                type="search"
+                placeholder="Cari treatment..."
+                value={searchQuery}
+                onChange={(e) => onSearch(e.target.value)}
+                className={cn(
+                  "w-full h-12 rounded-full bg-white pl-12 pr-4 text-base text-[#2D2926] outline-none",
+                  "placeholder:text-[#8C8280] shadow-[0_4px_14px_rgba(122,34,64,0.10)] border border-white",
+                  "focus:border-[#C94F78]/40 focus:ring-4 focus:ring-[#C94F78]/10",
+                )}
+              />
+            </label>
+            <Link
+              href="/membership"
+              aria-label={`Status membership ${tier.name}`}
+              className="shrink-0 flex items-center gap-1.5 h-12 rounded-full pl-2.5 pr-3 border border-white/70 shadow-[0_4px_14px_rgba(122,34,64,0.10)]"
+              style={{ background: tier.chip }}
+            >
+              <Crown className="w-5 h-5 text-[#7A4B0B]" fill="#F5C842" aria-hidden="true" />
+              <span className="leading-none">
+                <span className="block text-[13px] font-bold text-[#4A2A06]">{tier.name}</span>
+                <span className="hidden min-[420px]:block text-[11px] font-semibold text-[#6B4A1A] mt-0.5">
+                  {tier.id === "regular" ? "Akun" : "Member"}
+                </span>
+              </span>
+            </Link>
+            <Link
+              href="/profile"
+              aria-label="Profil saya"
+              className="lg:hidden shrink-0 w-12 h-12 rounded-full p-[3px] bg-gradient-to-br from-[#F5C842] to-[#C94F78] shadow-[0_4px_14px_rgba(122,34,64,0.18)]"
+            >
+              <span className="w-full h-full rounded-full bg-white flex items-center justify-center text-[18px] font-bold text-[#A83960]">
+                {customer.name?.charAt(0).toUpperCase()}
+              </span>
+            </Link>
+          </div>
+        </div>
+
+        <BannerCarousel />
       </div>
 
-      <BannerCarousel />
-
-      <div className="relative -mt-7 lg:-mt-10 pb-1">
+      <div className="relative -mt-7 lg:-mt-6 pb-1">
         <div className="flex gap-3 overflow-x-auto no-scrollbar snap-x px-4 sm:px-8 lg:px-12 pt-3 pb-4">
           {tiles.map((tile) => (
             <QuickTile key={tile.label} tile={tile} />

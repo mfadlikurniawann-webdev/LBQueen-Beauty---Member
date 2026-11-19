@@ -47,7 +47,7 @@ export function BannerCarousel({ className }: { className?: string }) {
         {BRAND_BANNERS.map((banner, i) => (
           <div
             key={banner.src}
-            className="relative w-full shrink-0 snap-center aspect-[1440/956] lg:aspect-auto lg:h-[440px]"
+            className="relative w-full shrink-0 snap-center aspect-[1440/956] lg:aspect-auto lg:h-[400px]"
             aria-roledescription="slide"
             aria-label={`${i + 1} dari ${BRAND_BANNERS.length}`}
           >
@@ -56,13 +56,13 @@ export function BannerCarousel({ className }: { className?: string }) {
               alt={banner.alt}
               fill
               priority={i === 0}
-              sizes="(min-width: 1280px) 1280px, 100vw"
+              sizes="(min-width: 1024px) 760px, 100vw"
               className="object-contain"
             />
           </div>
         ))}
       </div>
-      <div className="absolute bottom-9 lg:bottom-12 right-5 flex gap-1.5">
+      <div className="absolute bottom-9 lg:bottom-8 right-5 lg:right-12 flex gap-1.5">
         {BRAND_BANNERS.map((banner, i) => (
           <button
             key={banner.src}

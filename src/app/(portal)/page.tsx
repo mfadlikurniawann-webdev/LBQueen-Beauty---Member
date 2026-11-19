@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
 import { PageControls } from "@/components/PageControls";
-import { ProductDetailModal } from "@/components/catalog/ProductDetailModal";
+import { ProductDetailSheet } from "@/components/catalog/ProductDetailSheet";
 import { CatalogUnavailable } from "@/components/home/CatalogUnavailable";
 import { ClinicInfoCard } from "@/components/home/ClinicInfoCard";
 import { HomeCatalog } from "@/components/home/HomeCatalog";
@@ -119,7 +119,7 @@ export default function CustomerPortalPage() {
         {!searching && <ClinicInfoCard />}
       </div>
 
-      <ProductDetailModal selection={selection} />
+      <ProductDetailSheet selection={selection} />
     </div>
   );
 }

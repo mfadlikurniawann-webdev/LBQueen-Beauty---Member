@@ -78,7 +78,7 @@ export function CategoryFilters({
         </div>
       )}
 
-      <div className="sticky top-[76px] z-40 bg-[#FBF9F9]/90 backdrop-blur-md -mx-5 px-5 py-3 mb-5">
+      <div className="sticky top-[76px] lg:top-[144px] z-30 bg-[#FBF9F9]/90 backdrop-blur-md -mx-5 px-5 py-3 mb-5">
         <div
           className={cn(
             `grid ${section.tabs.length === 2 ? "grid-cols-2" : "grid-cols-3"} gap-1 rounded-2xl`,

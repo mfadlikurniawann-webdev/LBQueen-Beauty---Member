@@ -1,45 +1,32 @@
 import Image from "next/image";
-import { Heart, ShieldCheck, Star, Ticket } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft, CalendarHeart, Gem, ShieldCheck, Ticket } from "lucide-react";
+import { BannerCarousel } from "@/components/home/BannerCarousel";
+import { BANNER_BG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const BENEFITS = [
-  { icon: Star, text: "Akses Katalog Treatment Eksklusif" },
-  { icon: Heart, text: "Program Loyalty & Reward Poin" },
-  { icon: Ticket, text: "Promo & Diskon Khusus Member" },
-  { icon: ShieldCheck, text: "Riwayat Perawatan Tersimpan" },
+  { icon: CalendarHeart, text: "Booking treatment online" },
+  { icon: Gem, text: "Program loyalty & poin" },
+  { icon: Ticket, text: "Promo & voucher pilihan" },
+  { icon: ShieldCheck, text: "Riwayat perawatan tersimpan" },
 ];
 
-const LeftBg = () => (
-  <svg
-    className="absolute inset-0 w-full h-full pointer-events-none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <defs>
-      <radialGradient id="cl1" cx="75%" cy="10%" r="55%">
-        <stop offset="0%" stopColor="rgba(255,255,255,0.13)" />
-        <stop offset="100%" stopColor="transparent" />
-      </radialGradient>
-      <radialGradient id="cl2" cx="15%" cy="90%" r="50%">
-        <stop offset="0%" stopColor="rgba(212,175,55,0.16)" />
-        <stop offset="100%" stopColor="transparent" />
-      </radialGradient>
-    </defs>
-    <rect width="100%" height="100%" fill="url(#cl1)" />
-    <rect width="100%" height="100%" fill="url(#cl2)" />
-    <circle cx="85%" cy="12%" r="85" fill="rgba(255,255,255,0.06)" />
-    <circle cx="85%" cy="12%" r="50" fill="rgba(255,255,255,0.07)" />
-    <circle cx="15%" cy="88%" r="100" fill="rgba(212,175,55,0.07)" />
-    <circle cx="15%" cy="88%" r="60" fill="rgba(212,175,55,0.08)" />
-    <ellipse
-      cx="50%"
-      cy="50%"
-      rx="230"
-      ry="75"
-      fill="rgba(255,255,255,0.025)"
-      transform="rotate(-15 50% 50%)"
-    />
-  </svg>
-);
+function Brand() {
+  return (
+    <span className="flex items-center gap-2.5">
+      <span className="w-10 h-10 rounded-2xl bg-white overflow-hidden flex items-center justify-center shadow-sm">
+        <Image src="/lbqueen_logo.png" alt="" width={40} height={40} className="object-contain" />
+      </span>
+      <span className="leading-none">
+        <span className="block text-[17px] font-bold text-[#A83960]">LBQueen</span>
+        <span className="block text-[11px] font-semibold uppercase tracking-[0.12em] text-[#766B68] mt-1">
+          Care & Beauty Clinic
+        </span>
+      </span>
+    </span>
+  );
+}
 
 function BrandPanel({
   title,
@@ -52,54 +39,28 @@ function BrandPanel({
 }) {
   return (
     <div
-      className="hidden lg:flex flex-col items-center justify-center w-[42%] relative overflow-hidden"
-      style={{
-        background: "linear-gradient(160deg, #D4608A 0%, #C94F78 35%, #9B3055 70%, #7A2240 100%)",
-      }}
+      className="hidden lg:flex flex-col w-[46%] relative overflow-hidden px-10 py-10"
+      style={{ background: BANNER_BG }}
     >
-      <LeftBg />
-
-      <div className="relative z-10 flex flex-col items-center text-center px-10 max-w-[400px]">
-        <div
-          className={cn(
-            "w-[88px] h-[88px] rounded-[24px] bg-white flex items-center justify-center overflow-hidden",
-            "mb-6 shadow-xl",
-          )}
-          style={{ boxShadow: "0 12px 40px rgba(45,41,38,0.20)" }}
-        >
-          <Image
-            src="/lbqueen_logo.png"
-            alt="LBQueen"
-            width={72}
-            height={72}
-            className="object-contain"
-            style={{ width: "auto", height: "auto" }}
-          />
-        </div>
-
-        <h1 className="text-[26px] font-bold! text-white mb-1.5 tracking-tight">{title}</h1>
-        <p className="text-white/80 text-[14px] font-medium mb-10">{subtitle}</p>
-
-        <ul className="w-full space-y-2.5">
+      <Brand />
+      <div className="flex-1 flex flex-col justify-center -mx-10">
+        <BannerCarousel />
+      </div>
+      <div>
+        <h1 className="text-[24px] font-bold! text-[#2D2926] tracking-tight">{title}</h1>
+        <p className="text-[14px] text-[#5F5552] mt-1">{subtitle}</p>
+        <ul className="grid grid-cols-2 gap-2.5 mt-5">
           {BENEFITS.map(({ icon: Icon, text }) => (
             <li
               key={text}
-              className="flex items-center gap-3 px-4 py-3 rounded-2xl border text-left"
-              style={{
-                background: "rgba(255,255,255,0.12)",
-                borderColor: "rgba(255,255,255,0.18)",
-                backdropFilter: "blur(8px)",
-              }}
+              className="flex items-center gap-2.5 rounded-2xl bg-white/80 px-3 py-2.5"
             >
-              <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
-                <Icon className="w-4 h-4 text-white" aria-hidden="true" />
-              </div>
-              <span className="text-[13px] font-medium text-white">{text}</span>
+              <Icon className="w-5 h-5 shrink-0 text-[#C94F78]" aria-hidden="true" />
+              <span className="text-[13px] font-semibold text-[#2D2926]">{text}</span>
             </li>
           ))}
         </ul>
-
-        <p className="text-white/65 text-[11px] font-semibold mt-10 uppercase tracking-[0.12em]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#8C8280] mt-6">
           {footer}
         </p>
       </div>
@@ -123,36 +84,28 @@ export function AuthShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex" style={{ background: "#F7F2F0" }}>
+    <div className="min-h-dvh flex bg-white">
       <BrandPanel title={title} subtitle={subtitle} footer={footer} />
 
-      <div
-        className={cn(
-          "flex-1 flex items-center justify-center px-5 py-10 sm:p-8 lg:p-16 bg-white",
-          bodyClassName,
-        )}
-      >
-        <div className={contentClassName}>
-          <div className="lg:hidden flex flex-col items-center mb-8">
-            <div
-              className={cn(
-                "w-16 h-16 rounded-2xl bg-white border border-[#EEDFE3] flex items-center justify-center",
-                "overflow-hidden mb-3 shadow-md",
-              )}
-            >
-              <Image
-                src="/lbqueen_logo.png"
-                alt="LBQueen"
-                width={48}
-                height={48}
-                className="object-contain"
-                style={{ width: "auto", height: "auto" }}
-              />
-            </div>
-            <p className="font-bold text-[17px] text-[#A83960]">LBQueen</p>
-            <p className="text-[12px] font-medium text-[#766B68]">Care & Beauty</p>
-          </div>
-          {children}
+      <div className={cn("flex-1 flex flex-col lg:items-center lg:justify-center", bodyClassName)}>
+        <div
+          className="lg:hidden flex items-center gap-2 px-4 pb-6 rounded-b-[28px]"
+          style={{
+            paddingTop: "max(env(safe-area-inset-top, 0px), 16px)",
+            background: `linear-gradient(180deg, #FFD3E3 0%, ${BANNER_BG} 100%)`,
+          }}
+        >
+          <Link
+            href="/"
+            aria-label="Kembali ke beranda"
+            className="w-11 h-11 -ml-1 rounded-full flex items-center justify-center text-[#2D2926] hover:bg-white/60"
+          >
+            <ArrowLeft className="w-6 h-6" strokeWidth={2.4} />
+          </Link>
+          <Brand />
+        </div>
+        <div className="flex-1 flex justify-center px-5 pt-7 pb-10 sm:px-8 lg:flex-none lg:p-16 w-full">
+          <div className={contentClassName}>{children}</div>
         </div>
       </div>
     </div>

@@ -21,7 +21,7 @@ export function AuthActions({
         type="submit"
         disabled={loading}
         className={cn(
-          "w-full h-[52px] rounded-2xl text-white font-bold text-[15px] flex items-center justify-center",
+          "w-full h-[52px] rounded-full text-white font-bold text-[15px] flex items-center justify-center",
           "gap-2 transition-all active:scale-[0.98] hover:brightness-105 disabled:opacity-80",
           "disabled:cursor-wait cursor-pointer",
         )}
@@ -43,7 +43,7 @@ export function AuthActions({
       <Link
         href={href}
         className={cn(
-          "w-full h-[52px] rounded-2xl font-bold text-[14px] flex items-center justify-center gap-1.5",
+          "w-full h-[52px] rounded-full font-bold text-[14px] flex items-center justify-center gap-1.5",
           "transition-all active:scale-[0.98] border border-[#EEDFE3] bg-white text-[#766B68]",
           "hover:bg-[#FDF2F5] hover:border-[#F0CBD8]",
         )}

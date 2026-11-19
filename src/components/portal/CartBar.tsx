@@ -14,8 +14,10 @@ export function CartBar() {
   );
   return (
     <div
-      className="fixed left-0 right-0 z-40 flex justify-center pointer-events-none px-3 sm:px-4"
-      style={{ bottom: "calc(max(env(safe-area-inset-bottom, 0px), 12px) + 80px)" }}
+      className={cn(
+        "fixed left-0 right-0 z-40 flex justify-center pointer-events-none px-3 sm:px-4",
+        "bottom-[calc(max(env(safe-area-inset-bottom,0px),12px)+80px)] lg:bottom-6",
+      )}
     >
       <Link
         href="/cart"

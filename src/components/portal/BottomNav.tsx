@@ -2,7 +2,7 @@ import Link from "next/link";
 import { BadgePercent, ClipboardList, Home, UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const NAV_ITEMS = [
+export const NAV_ITEMS = [
   { icon: Home, label: "Beranda", href: "/" },
   { icon: BadgePercent, label: "Promo", href: "/promo" },
   { icon: ClipboardList, label: "Pesanan", href: "/orders" },
@@ -19,7 +19,7 @@ export function BottomNav({ pathname }: { pathname: string }) {
   return (
     <nav
       aria-label="Navigasi pelanggan"
-      className="fixed left-0 right-0 z-50 flex justify-center pointer-events-none px-3 sm:px-4"
+      className="lg:hidden fixed left-0 right-0 z-50 flex justify-center pointer-events-none px-3 sm:px-4"
       style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 12px)" }}
     >
       <div

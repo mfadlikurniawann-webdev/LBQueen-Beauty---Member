@@ -17,6 +17,7 @@ import { useToast } from "@/components/Toast";
 import { useCart } from "@/context/CartContext";
 import { PRIMARY_GRADIENT, WA_NUMBER } from "@/lib/constants";
 import { useCustomer } from "@/context/CustomerContext";
+import { formatRupiah } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 export default function CartPage() {
@@ -95,7 +96,7 @@ export default function CartPage() {
 
   if (cart.length === 0) {
     return (
-      <div className="min-h-screen bg-[#FDFBFB]">
+      <div className="min-h-screen">
         <PageHero title="Keranjang" subtitle="Lengkapi pesanan Anda" onBack={() => router.back()} />
         <EmptyCart onShop={() => router.push("/")} />
       </div>
@@ -105,14 +106,14 @@ export default function CartPage() {
   const confirmBlocked = hasTreatment && (!isAgreed || !bookingDate || !bookingTime);
 
   return (
-    <div className="min-h-screen bg-[#FDFBFB] animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="min-h-screen animate-in fade-in duration-500">
       <PageHero
         title="Keranjang"
         subtitle={`${totalItems} item siap dipesan`}
         onBack={() => router.back()}
       />
 
-      <div className="px-4 md:px-8 pt-5 pb-8">
+      <div className="px-4 md:px-8 pt-2 pb-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-3">
             {cart.map((item, idx) => (
@@ -125,7 +126,7 @@ export default function CartPage() {
             ))}
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4 lg:sticky lg:top-[88px] lg:self-start">
             <VoucherCard voucher={voucher} />
             <OrderSummary subtotal={cartTotal} discount={discount} total={finalTotal} />
             <PaymentMethodCard method={paymentMethod} onChange={setPaymentMethod} />
@@ -141,43 +142,58 @@ export default function CartPage() {
 
             {hasTreatment && <TreatmentNotice agreed={isAgreed} onChange={setIsAgreed} />}
 
-            <div className="pt-1">
-              <button
-                type="button"
-                onClick={handleWAOrder}
-                disabled={processing || confirmBlocked}
-                aria-describedby={confirmBlocked ? "confirm-hint" : undefined}
-                className={cn(
-                  "w-full min-h-14 rounded-2xl font-bold text-[15px] flex items-center justify-center",
-                  "gap-3 px-6 py-3 transition-all",
-                  confirmBlocked
-                    ? "bg-[#EDE4E6] text-[#766B68] border border-[#E0D2D6] shadow-none"
-                    : "text-white active:scale-[0.98] disabled:cursor-wait disabled:opacity-90",
-                )}
-                style={
-                  confirmBlocked
-                    ? undefined
-                    : {
-                        background: PRIMARY_GRADIENT,
-                        boxShadow: "0 10px 26px rgba(201,79,120,0.30)",
-                      }
-                }
-              >
-                {processing ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <ShoppingBag className="w-5 h-5" />
-                )}
-                Konfirmasi & Buat Pesanan
-              </button>
-              {confirmBlocked && (
-                <p
-                  id="confirm-hint"
-                  className="text-[12px] text-[#766B68] text-center mt-2.5 leading-relaxed"
-                >
-                  Pilih tanggal & jam treatment, lalu centang persetujuan untuk melanjutkan.
-                </p>
+            <div
+              className={cn(
+                "fixed inset-x-0 bottom-0 z-40 bg-white border-t border-[#F0E4E8] px-4 pt-3",
+                "shadow-[0_-10px_30px_-18px_rgba(122,34,64,0.35)]",
+                "lg:static lg:z-auto lg:bg-transparent lg:border-0 lg:p-0 lg:shadow-none",
               )}
+              style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 14px)" }}
+            >
+              <div className="mx-auto max-w-lg lg:max-w-none">
+                <div className="flex items-baseline justify-between gap-3 mb-2.5 lg:hidden">
+                  <span className="text-[13px] font-semibold text-[#5F5552]">Total pembayaran</span>
+                  <span className="text-[19px] font-bold text-[#2D2926] tabular-nums">
+                    {formatRupiah(finalTotal)}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleWAOrder}
+                  disabled={processing || confirmBlocked}
+                  aria-describedby={confirmBlocked ? "confirm-hint" : undefined}
+                  className={cn(
+                    "w-full h-[52px] rounded-full font-bold text-[15px] flex items-center justify-center",
+                    "gap-2.5 px-6 transition-all",
+                    confirmBlocked
+                      ? "bg-[#F1EBED] text-[#8C8280]"
+                      : "text-white active:scale-[0.98] disabled:cursor-wait disabled:opacity-90",
+                  )}
+                  style={
+                    confirmBlocked
+                      ? undefined
+                      : {
+                          background: PRIMARY_GRADIENT,
+                          boxShadow: "0 10px 26px -10px rgba(168,57,96,0.7)",
+                        }
+                  }
+                >
+                  {processing ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <ShoppingBag className="w-5 h-5" />
+                  )}
+                  Konfirmasi & Buat Pesanan
+                </button>
+                {confirmBlocked && (
+                  <p
+                    id="confirm-hint"
+                    className="text-[12px] text-[#766B68] text-center mt-2 leading-snug"
+                  >
+                    Pilih tanggal & jam treatment, lalu centang persetujuan.
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>

@@ -6,7 +6,7 @@ import useSWR from "swr";
 import { BadgePercent, ChevronRight, Crown, Ticket } from "lucide-react";
 import { PageControls } from "@/components/PageControls";
 import { ProductCard } from "@/components/catalog/ProductCard";
-import { ProductDetailModal } from "@/components/catalog/ProductDetailModal";
+import { ProductDetailSheet } from "@/components/catalog/ProductDetailSheet";
 import { CatalogLoadError } from "@/components/category/CatalogLoadError";
 import { EmptyVouchers, VoucherTicket } from "@/components/home/MemberVouchers";
 import { SectionHeading } from "@/components/home/SectionHeading";
@@ -173,7 +173,7 @@ export default function PromoPage() {
         />
       </div>
 
-      <ProductDetailModal selection={selection} />
+      <ProductDetailSheet selection={selection} />
     </div>
   );
 }
