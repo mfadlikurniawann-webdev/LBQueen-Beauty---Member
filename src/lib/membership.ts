@@ -54,14 +54,14 @@ export function tierOf(customer: Pick<Customer, "is_member" | "membership_type">
 }
 
 export const MEMBER_BENEFITS = [
-  { title: "Kumpulkan poin di tiap transaksi", desc: "Poin tercatat otomatis di akun Anda." },
-  { title: "Promo & diskon khusus member", desc: "Potongan harga pilihan untuk member." },
-  { title: "Akses katalog treatment eksklusif", desc: "Treatment pilihan dari tim LBQueen." },
-  { title: "Riwayat perawatan tersimpan", desc: "Pantau pesanan dan treatment Anda." },
+  { title: "Poin di setiap transaksi" },
+  { title: "Voucher khusus member" },
+  { title: "Treatment eksklusif" },
+  { title: "Riwayat perawatan tersimpan" },
 ];
 
 export const REGULAR_BENEFITS = [
-  { title: "Voucher untuk semua akun", desc: "Pakai kode promo saat checkout." },
-  { title: "Pesan treatment & produk online", desc: "Jadwalkan treatment dari aplikasi." },
-  { title: "Riwayat pesanan tersimpan", desc: "Pantau status pesanan kapan saja." },
+  { title: "Voucher sesuai membership" },
+  { title: "Pesan treatment & produk online" },
+  { title: "Riwayat pesanan tersimpan" },
 ];

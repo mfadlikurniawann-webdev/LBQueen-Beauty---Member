@@ -106,6 +106,45 @@ products.push(
     name: `QA Product ${String(index + 3).padStart(3, "0")}`,
   })),
 );
+Object.assign(products[1], {
+  images: [
+    "/banner_eyelash.png",
+    "/beauty_carousel_2_1778829728230.png",
+    "/beauty_carousel_3_1778829748066.png",
+  ],
+  variant_label: "Ukuran",
+  description:
+    "Pembersih wajah lembut untuk pemakaian harian.\n\nCara pakai: basahi wajah, pijat perlahan selama 30 detik, lalu bilas.",
+  variants: [
+    {
+      id: 21,
+      product_id: 2,
+      variant_name: "50 ml",
+      price: 85000,
+      stock: 5,
+      image_url: "/banner_eyelash.png",
+      sort_order: 0,
+    },
+    {
+      id: 22,
+      product_id: 2,
+      variant_name: "100 ml",
+      price: 140000,
+      stock: 0,
+      image_url: null,
+      sort_order: 1,
+    },
+    {
+      id: 23,
+      product_id: 2,
+      variant_name: "Paket 2 pcs",
+      price: 160000,
+      stock: 3,
+      image_url: "/beauty_carousel_1_1778829705862.png",
+      sort_order: 2,
+    },
+  ],
+});
 const upstream = [];
 const mock = http.createServer((request, response) => {
   const url = new URL(request.url, "http://localhost");
@@ -135,7 +174,7 @@ const mock = http.createServer((request, response) => {
     if (table === "products" && url.searchParams.get("select")?.includes("promotions:vouchers")) {
       data = data.map(({ purchase_price, stock, unit, ...row }) => ({
         ...row,
-        variants: [],
+        variants: row.variants || [],
         promotions:
           row.id === 1
             ? [{ product_id: 1, type: "nominal", discount_amount: 10000, min_transaction: 0 }]
@@ -194,6 +233,7 @@ server.stderr.on("data", (chunk) => {
 
 const outDir = path.resolve(process.argv[2] || ".scratch/screenshots");
 const MOBILE = { width: 390, height: 844 };
+const TABLET = { width: 820, height: 1180 };
 const DESKTOP = { width: 1440, height: 900 };
 const CART = [
   {
@@ -272,11 +312,21 @@ async function visit(page, url, ready, viewport = MOBILE) {
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(600);
 }
+const failures = [];
 async function both(page, name, url, ready) {
-  await visit(page, url, ready, MOBILE);
-  await shoot(page, `${name}-mobile`, MOBILE);
-  await visit(page, url, ready, DESKTOP);
-  await shoot(page, `${name}-desktop`, DESKTOP);
+  for (const [label, viewport] of [
+    ["mobile", MOBILE],
+    ["tablet", TABLET],
+    ["desktop", DESKTOP],
+  ]) {
+    try {
+      await visit(page, url, ready, viewport);
+      await shoot(page, `${name}-${label}`, viewport);
+    } catch (error) {
+      failures.push(`${name}-${label}: ${error.message.split(/\r?\n/)[0]}`);
+      await shoot(page, `${name}-${label}-GAGAL`, viewport, { full: false }).catch(() => {});
+    }
+  }
 }
 try {
   for (let i = 0; i < 100; i++) {
@@ -288,6 +338,20 @@ try {
   }
   await mkdir(outDir, { recursive: true });
   browser = await chromium.launch({ channel: "msedge", headless: true });
+  // Regresi keamanan: format non-JSON ditolak, voucher pribadi wajib login, kolom rahasia tersaring.
+  for (const [label, path, init, status] of [
+    ["accept csv", "/api/database/products?select=*", { headers: { accept: "text/csv" } }, 406],
+    ["voucher tanpa login", "/api/vouchers", {}, 401],
+    ["embed customers", "/api/database/products?select=*,customers(*)", {}, 400],
+  ]) {
+    const response = await fetch(base + path, init);
+    if (response.status !== status)
+      throw new Error(`${label}: status ${response.status}, harusnya ${status}`);
+  }
+  const catalogRows = await (await fetch(`${base}/api/database/products?select=*`)).json();
+  if (JSON.stringify(catalogRows).includes("purchase_price"))
+    throw new Error("purchase_price bocor dari gateway member");
+  console.log("Cek keamanan gateway member: lulus");
 
   const guest = await (await browser.newContext({ viewport: MOBILE })).newPage();
   await both(guest, "01-selamat-datang", "/", (p) =>
@@ -298,7 +362,7 @@ try {
 
   const memberContext = await browser.newContext({ viewport: MOBILE });
   await memberContext.addCookies([
-    { name: "lbqueen_customer", value: await createSession(1, "customer", 60), url: base },
+    { name: "lbqueen_customer", value: await createSession(1, "customer", 900), url: base },
   ]);
   await memberContext.addInitScript(
     (cart) => localStorage.setItem("lbqueen_cart", JSON.stringify(cart)),
@@ -315,12 +379,31 @@ try {
   await member.getByRole("dialog").waitFor();
   await member.waitForTimeout(500);
   await shoot(member, "05-detail-produk-mobile", MOBILE, { full: false });
+  await member.setViewportSize(TABLET);
+  await member.waitForTimeout(400);
+  await shoot(member, "05-detail-produk-tablet", TABLET, { full: false });
   await member.setViewportSize(DESKTOP);
   await member.waitForTimeout(400);
   await shoot(member, "05-detail-produk-desktop", DESKTOP, { full: false });
   await member.keyboard.press("Escape");
+  await visit(member, "/category/produk", (p) => p.getByText("Daily Cleanser").first().waitFor());
+  await member
+    .getByRole("button", { name: /Daily Cleanser/ })
+    .first()
+    .click();
+  await member.getByRole("dialog").waitFor();
+  await member.getByRole("radio", { name: /Paket 2 pcs/ }).click();
+  await member.waitForTimeout(700);
+  await shoot(member, "05b-detail-variasi-mobile", MOBILE, { full: false });
+  await member.setViewportSize(TABLET);
+  await member.waitForTimeout(500);
+  await shoot(member, "05b-detail-variasi-tablet", TABLET, { full: false });
+  await member.setViewportSize(DESKTOP);
+  await member.waitForTimeout(500);
+  await shoot(member, "05b-detail-variasi-desktop", DESKTOP, { full: false });
+  await member.keyboard.press("Escape");
   await both(member, "06-promo", "/promo", (p) =>
-    p.getByRole("heading", { name: "Voucher Tersedia" }).waitFor(),
+    p.getByRole("heading", { name: "Voucher Saya" }).waitFor(),
   );
   await both(member, "07-kategori-layanan", "/category/layanan", (p) =>
     p.getByText("Facial Care").first().waitFor(),
@@ -344,7 +427,7 @@ try {
 
   const regularContext = await browser.newContext({ viewport: MOBILE });
   await regularContext.addCookies([
-    { name: "lbqueen_customer", value: await createSession(2, "customer", 60), url: base },
+    { name: "lbqueen_customer", value: await createSession(2, "customer", 900), url: base },
   ]);
   const regular = await regularContext.newPage();
   await both(regular, "14-beranda-akun-reguler", "/", home);
@@ -353,6 +436,10 @@ try {
   );
 
   console.log(`Saved ${shots.length} screenshots to ${outDir}`);
+  if (failures.length) {
+    console.error(["Gagal:", ...failures].join("\n"));
+    process.exitCode = 1;
+  }
 } finally {
   await browser?.close();
   server.kill();

@@ -3,10 +3,12 @@ import { Rupiah } from "@/components/Rupiah";
 export function PriceStack({
   price,
   discount,
+  from = false,
   className = "min-w-0 tabular-nums",
 }: {
   price: number;
   discount: number;
+  from?: boolean;
   className?: string;
 }) {
   return (
@@ -17,6 +19,7 @@ export function PriceStack({
         </p>
       )}
       <p className="text-[15px] font-bold text-[#A83960] leading-tight">
+        {from && <span className="text-[11px] font-semibold text-[#766B68]">Mulai </span>}
         <Rupiah value={Math.max(0, price - discount)} />
       </p>
     </div>

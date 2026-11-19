@@ -7,11 +7,14 @@ export function BannerCarousel({
   className,
   intervalMs = 6000,
   dots = true,
+  peek = false,
   onIndexChange,
 }: {
   className?: string;
   intervalMs?: number;
   dots?: boolean;
+  /** Slide lebih kecil dengan slide berikutnya mengintip (gaya marketplace) di ponsel. */
+  peek?: boolean;
   onIndexChange?: (index: number) => void;
 }) {
   const track = useRef<HTMLDivElement>(null);
@@ -26,8 +29,13 @@ export function BannerCarousel({
   useEffect(() => {
     const el = track.current;
     if (!el) return;
+    const step = () => {
+      const slide = el.firstElementChild as HTMLElement | null;
+      const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
+      return Math.max(1, (slide?.offsetWidth || el.clientWidth) + gap);
+    };
     const onScroll = () => {
-      const index = Math.round(el.scrollLeft / Math.max(1, el.clientWidth));
+      const index = Math.min(BRAND_BANNERS.length - 1, Math.round(el.scrollLeft / step()));
       setActive(index);
       notify.current?.(index);
     };
@@ -36,8 +44,8 @@ export function BannerCarousel({
       return () => el.removeEventListener("scroll", onScroll);
     const timer = window.setInterval(() => {
       if (paused.current || document.hidden) return;
-      const next = (Math.round(el.scrollLeft / el.clientWidth) + 1) % BRAND_BANNERS.length;
-      el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
+      const next = (Math.round(el.scrollLeft / step()) + 1) % BRAND_BANNERS.length;
+      el.scrollTo({ left: next * step(), behavior: "smooth" });
     }, intervalMs);
     return () => {
       el.removeEventListener("scroll", onScroll);
@@ -45,13 +53,18 @@ export function BannerCarousel({
     };
   }, [intervalMs]);
 
-  const goTo = (index: number) =>
-    track.current?.scrollTo({ left: index * track.current.clientWidth, behavior: "smooth" });
+  const goTo = (index: number) => {
+    const el = track.current;
+    const slide = el?.firstElementChild as HTMLElement | null;
+    if (!el || !slide) return;
+    const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
+    el.scrollTo({ left: index * (slide.offsetWidth + gap), behavior: "smooth" });
+  };
 
   return (
     <div
       className={cn("relative", className)}
-      style={{ background: BANNER_BG }}
+      style={peek ? undefined : { background: BANNER_BG }}
       onPointerEnter={() => (paused.current = true)}
       onPointerLeave={() => (paused.current = false)}
       onTouchStart={() => (paused.current = true)}
@@ -59,14 +72,23 @@ export function BannerCarousel({
     >
       <div
         ref={track}
-        className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar"
+        className={cn(
+          "flex overflow-x-auto snap-x snap-mandatory no-scrollbar",
+          peek && "gap-3 md:gap-0 scroll-px-0",
+        )}
         aria-roledescription="carousel"
         aria-label="Banner LBQueen"
       >
         {BRAND_BANNERS.map((banner, i) => (
           <div
             key={banner.src}
-            className="relative w-full shrink-0 snap-center aspect-[1440/956]"
+            className={cn(
+              "relative shrink-0 aspect-[1440/956]",
+              peek
+                ? "w-[78%] sm:w-[56%] md:w-full snap-start overflow-hidden rounded-[20px] md:rounded-none border-[3px] border-white md:border-0 shadow-[0_12px_26px_-16px_rgba(90,24,52,0.55)] md:shadow-none"
+                : "w-full snap-center",
+            )}
+            style={peek ? { background: BANNER_BG } : undefined}
             aria-roledescription="slide"
             aria-label={`${i + 1} dari ${BRAND_BANNERS.length}`}
           >
@@ -75,14 +97,21 @@ export function BannerCarousel({
               alt={banner.alt}
               fill
               priority={i === 0}
-              sizes="(min-width: 1024px) 760px, 100vw"
+              sizes={peek ? "(min-width: 768px) 760px, 80vw" : "(min-width: 1024px) 760px, 100vw"}
               className="object-contain"
             />
           </div>
         ))}
       </div>
       {dots && (
-        <div className="absolute bottom-2 right-3 flex gap-1.5">
+        <div
+          className={cn(
+            "flex gap-1.5",
+            peek
+              ? "justify-center mt-1 md:absolute md:mt-0 md:bottom-2 md:right-3"
+              : "absolute bottom-2 right-3",
+          )}
+        >
           {BRAND_BANNERS.map((banner, i) => (
             <button
               key={banner.src}

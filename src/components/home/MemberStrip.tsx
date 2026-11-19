@@ -18,7 +18,7 @@ export function MemberStrip() {
           rel="noopener noreferrer"
           className="mt-0.5 inline-flex items-center gap-0.5 text-[13px] font-semibold text-[#A83960]"
         >
-          Tanya upgrade ke admin
+          Ajukan upgrade membership
           <ChevronRight className="w-4 h-4" aria-hidden="true" />
         </a>
       </div>

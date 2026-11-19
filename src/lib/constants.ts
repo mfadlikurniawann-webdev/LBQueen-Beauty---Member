@@ -4,8 +4,6 @@ export const PRIMARY_GRADIENT = "linear-gradient(135deg,#C94F78,#9B3055)";
 export const HERO_GRADIENT = "linear-gradient(160deg,#C94F78 0%,#9B3055 55%,#7A2240 100%)";
 export const BANNER_BG = "#FFECF4";
 
-export const CLINIC_ADDRESS =
-  "Jl. Hos Cokroaminoto No.17, Kebon Jeruk, Tanjungkarang Timur, Bandar Lampung";
 export const CLINIC_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
   "LBQueen Care & Beauty Clinic, Jl. Hos Cokroaminoto No.17, Tanjungkarang Timur, Bandar Lampung",
 )}`;

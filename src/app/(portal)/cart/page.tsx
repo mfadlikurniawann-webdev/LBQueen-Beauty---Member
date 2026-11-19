@@ -41,7 +41,7 @@ export default function CartPage() {
     (a, i) => a + Math.max(0, i.price - (i.voucher_discount || 0)) * i.qty,
     0,
   );
-  const voucher = useCartVoucher(cart, cartTotal);
+  const voucher = useCartVoucher(cart, cartTotal, customer ?? null);
   const appliedVoucher = voucher.applied;
   const discount = voucher.discount;
   const finalTotal = Math.max(0, cartTotal - discount);
@@ -115,8 +115,8 @@ export default function CartPage() {
       />
 
       <div className="px-4 md:px-8 pt-2 pb-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_340px] lg:grid-cols-[minmax(0,1fr)_400px] gap-6">
+          <div className="space-y-3">
             {cart.map((item, idx) => (
               <CartItemCard
                 key={`${item.id}-${item.variant_id || idx}`}
@@ -127,7 +127,7 @@ export default function CartPage() {
             ))}
           </div>
 
-          <div className="space-y-4 lg:sticky lg:top-[88px] lg:self-start">
+          <div className="space-y-4 md:sticky md:top-[88px] md:self-start">
             <VoucherCard voucher={voucher} />
             <OrderSummary subtotal={cartTotal} discount={discount} total={finalTotal} />
             <PaymentMethodCard method={paymentMethod} onChange={setPaymentMethod} />
@@ -147,12 +147,12 @@ export default function CartPage() {
               className={cn(
                 "fixed inset-x-0 bottom-0 z-40 bg-white border-t border-[#F0E4E8] px-4 pt-3",
                 "shadow-[0_-10px_30px_-18px_rgba(122,34,64,0.35)]",
-                "lg:static lg:z-auto lg:bg-transparent lg:border-0 lg:p-0 lg:shadow-none",
+                "md:static md:z-auto md:bg-transparent md:border-0 md:p-0 md:shadow-none",
               )}
               style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 14px)" }}
             >
-              <div className="mx-auto max-w-lg lg:max-w-none">
-                <div className="flex items-baseline justify-between gap-3 mb-2.5 lg:hidden">
+              <div className="mx-auto max-w-lg md:max-w-none">
+                <div className="flex items-baseline justify-between gap-3 mb-2.5 md:hidden">
                   <span className="text-[13px] font-semibold text-[#5F5552]">Total pembayaran</span>
                   <span className="text-[19px] font-bold text-[#2D2926] tabular-nums">
                     {formatRupiah(finalTotal)}

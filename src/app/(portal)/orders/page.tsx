@@ -171,7 +171,7 @@ export default function OrdersPage() {
               Belum Ada Pesanan
             </h2>
             <p className="text-[14px] text-[#766B68] leading-relaxed mt-1.5 max-w-[280px]">
-              Pesanan yang Anda buat akan tampil di sini beserta statusnya.
+              Pesanan Anda akan tampil di sini.
             </p>
           </div>
         ) : (

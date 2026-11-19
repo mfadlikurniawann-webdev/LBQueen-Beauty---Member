@@ -81,7 +81,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           name: product.name,
           price: variant ? variant.price : product.selling_price,
           qty: Math.min(10, qty),
-          image_url: product.image_url,
+          image_url: variant?.image_url || product.image_url,
           is_consultation: false,
           voucher_discount: product.promotions
             ? productDiscount(variant ? variant.price : product.selling_price, product.promotions)

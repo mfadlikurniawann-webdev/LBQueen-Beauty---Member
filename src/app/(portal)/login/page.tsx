@@ -141,10 +141,6 @@ export default function CustomerLoginPage() {
           linkLabel="Daftar dulu"
         />
       </form>
-
-      <p className="mt-6 text-center text-[13px] text-[#8C8280]">
-        Akun juga bisa dibuatkan oleh kasir di klinik.
-      </p>
     </AuthShell>
   );
 }

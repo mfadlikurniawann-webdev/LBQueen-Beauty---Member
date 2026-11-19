@@ -1,7 +1,8 @@
-import { BrandMark } from "@/components/BrandMark";
 import Link from "next/link";
 import { ShoppingCart } from "lucide-react";
+import { BrandMark } from "@/components/BrandMark";
 import type { Customer } from "@/lib/customer";
+import { useCartBump } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS, isNavActive } from "./BottomNav";
 
@@ -14,9 +15,10 @@ export function TopNav({
   customer: Customer;
   totalItems: number;
 }) {
+  const cartRef = useCartBump<HTMLAnchorElement>();
   return (
-    <header className="hidden lg:block sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-[#F0E4E8]">
-      <div className="h-[68px] px-12 flex items-center gap-8">
+    <header className="hidden md:block sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-[#F0E4E8]">
+      <div className="h-[68px] px-6 lg:px-12 flex items-center gap-4 lg:gap-8">
         <Link
           href="/"
           className="flex items-center gap-2.5 shrink-0"
@@ -33,7 +35,7 @@ export function TopNav({
                 href={href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "h-10 px-4 rounded-full flex items-center gap-2 text-[14px] transition-colors",
+                  "h-10 px-3 lg:px-4 rounded-full flex items-center gap-2 text-[14px] transition-colors",
                   active
                     ? "bg-[#FFE3EE] text-[#A83960] font-bold"
                     : "text-[#5F5552] font-semibold hover:bg-[#FBF3F6]",
@@ -51,6 +53,8 @@ export function TopNav({
         </nav>
         <div className="ml-auto flex items-center gap-3">
           <Link
+            ref={cartRef}
+            data-cart-target
             href="/cart"
             aria-label={totalItems > 0 ? `Keranjang, ${totalItems} item` : "Keranjang"}
             className="relative w-11 h-11 rounded-full bg-[#FFF3F7] border border-[#F6D9E4] flex items-center justify-center text-[#A83960]"

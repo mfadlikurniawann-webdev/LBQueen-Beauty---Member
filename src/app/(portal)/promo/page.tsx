@@ -9,7 +9,7 @@ import { ProductCard } from "@/components/catalog/ProductCard";
 import { ProductDetailSheet } from "@/components/catalog/ProductDetailSheet";
 import { CatalogLoadError } from "@/components/category/CatalogLoadError";
 import { IconChip } from "@/components/IconChip";
-import { EmptyVouchers, VoucherTicket } from "@/components/home/MemberVouchers";
+import { EmptyVouchers, VoucherTicket } from "@/components/promo/VoucherTicket";
 import { SectionHeading } from "@/components/home/SectionHeading";
 import { PageHero } from "@/components/portal/PageHero";
 import { useCustomer } from "@/context/CustomerContext";
@@ -17,6 +17,7 @@ import { useProductSelection } from "@/hooks/useProductSelection";
 import { loadCatalog } from "@/lib/catalog";
 import { TREATMENT_TYPE } from "@/lib/constants";
 import { tierOf } from "@/lib/membership";
+import { loadMyVouchers } from "@/lib/vouchers";
 import { cn } from "@/lib/utils";
 
 const FILTERS = [
@@ -38,7 +39,10 @@ export default function PromoPage() {
     { keepPreviousData: true, revalidateOnFocus: false },
   );
   const products = data?.products ?? [];
-  const vouchers = data?.allVouchers ?? [];
+  const myVouchers = useSWR(customer ? ["my-vouchers", customer.id] : null, loadMyVouchers, {
+    revalidateOnFocus: false,
+  });
+  const vouchers = myVouchers.data ?? [];
 
   const changePage = (next: number) => {
     setPage(next);
@@ -49,7 +53,7 @@ export default function PromoPage() {
 
   return (
     <div className="min-h-screen">
-      <PageHero title="Promo" subtitle="Voucher dan potongan harga pilihan" />
+      <PageHero title="Promo" subtitle="Voucher dan potongan harga" />
 
       <div className="px-4 sm:px-8 lg:px-12 space-y-7 pb-6">
         <div className="rounded-[22px] bg-white border border-[#F0E4E8] p-4 shadow-[0_10px_30px_-18px_rgba(122,34,64,0.4)]">
@@ -60,7 +64,9 @@ export default function PromoPage() {
                 <span className="block text-[15px] font-bold text-[#2D2926] leading-tight truncate tabular-nums">
                   {vouchers.length} voucher
                 </span>
-                <span className="block text-[13px] font-semibold text-[#A83960]">Pakai, yuk!</span>
+                <span className="block text-[13px] font-semibold text-[#A83960]">
+                  Lihat voucher
+                </span>
               </span>
             </a>
             <Link
@@ -89,8 +95,8 @@ export default function PromoPage() {
         </div>
 
         <section id="voucher-tersedia" className="scroll-mt-6">
-          <SectionHeading title="Voucher Tersedia" />
-          {isLoading && !data ? (
+          <SectionHeading title="Voucher Saya" />
+          {myVouchers.isLoading ? (
             <div className="h-[118px] rounded-[20px] bg-[#F3E7EA] animate-pulse" />
           ) : vouchers.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

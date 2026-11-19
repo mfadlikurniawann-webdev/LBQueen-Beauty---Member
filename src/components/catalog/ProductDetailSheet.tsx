@@ -1,14 +1,15 @@
-import { useEffect } from "react";
-import Image from "next/image";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AlertTriangle, Minus, Plus, ShoppingCart, X } from "lucide-react";
 import type { ProductSelection } from "@/hooks/useProductSelection";
+import { discountFor, priceRange, productImages, type CatalogProduct } from "@/lib/catalog";
 import { TREATMENT_TYPE } from "@/lib/constants";
 import { formatRupiah } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { ProductPlaceholder } from "./ProductPlaceholder";
+import { ProductGallery } from "./ProductGallery";
 import { VariantOptions } from "./VariantOptions";
 
 const MAX_QTY = 10;
+const DESCRIPTION_PREVIEW = 280;
 const STEP = cn(
   "w-10 h-10 rounded-full flex items-center justify-center active:scale-95 transition-all",
   "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25",
@@ -30,9 +31,8 @@ function TreatmentReminder({
           <strong className="block mb-0.5 text-[14px] text-[#7A5C0B]">
             Perhatian sebelum treatment
           </strong>
-          H-7 sebelum dan H+7 setelah treatment dilarang mengonsumsi alkohol dan obat-obatan
-          terlarang. Pasien harus jujur akan kondisi tubuh ke therapist. Jika berbohong, risiko
-          ditanggung sendiri.
+          Hindari alkohol dan obat-obatan terlarang H-7 hingga H+7 treatment. Sampaikan kondisi
+          kesehatan Anda kepada therapist.
         </p>
       </div>
       <label className="flex items-center gap-3 rounded-2xl bg-white border border-[#F1DFA6] px-3 min-h-12 cursor-pointer">
@@ -48,8 +48,156 @@ function TreatmentReminder({
   );
 }
 
+function PriceBlock({
+  product,
+  selection,
+}: {
+  product: CatalogProduct;
+  selection: ProductSelection;
+}) {
+  const { variant } = selection;
+  const range = priceRange(product);
+  const base = variant ? Number(variant.price) : range.min;
+  const discount = variant ? discountFor(product, base) : range.discountMin;
+  const finalPrice = Math.max(0, base - discount);
+  const showRange = !variant && range.finalMin !== range.finalMax;
+  const percent = base > 0 && discount > 0 ? Math.round((discount / base) * 100) : 0;
+  return (
+    <div className="rounded-2xl bg-[#FFF5F8] px-4 py-3 flex flex-wrap items-center gap-x-3 gap-y-1 tabular-nums">
+      {discount > 0 && !showRange && (
+        <span className="text-[14px] text-[#8C8280] line-through">{formatRupiah(base)}</span>
+      )}
+      <span className="text-[24px] md:text-[28px] font-bold text-[#C2185B] leading-tight">
+        {showRange
+          ? `${formatRupiah(range.finalMin)} - ${formatRupiah(range.finalMax)}`
+          : formatRupiah(finalPrice)}
+      </span>
+      {percent > 0 && !showRange && (
+        <span className="rounded-md bg-[#E0263F] px-1.5 py-0.5 text-[12px] font-bold text-white">
+          -{percent}%
+        </span>
+      )}
+    </div>
+  );
+}
+
+function Description({ text }: { text: string }) {
+  const [expanded, setExpanded] = useState(false);
+  const long = text.length > DESCRIPTION_PREVIEW;
+  return (
+    <section className="pt-4 border-t border-dashed border-[#EEDFE3]">
+      <h4 className="text-[15px] font-bold text-[#2D2926] mb-2">Deskripsi</h4>
+      <p className="text-[14px] text-[#4A4340] leading-relaxed whitespace-pre-line break-words">
+        {long && !expanded ? `${text.slice(0, DESCRIPTION_PREVIEW).trimEnd()}…` : text}
+      </p>
+      {long && (
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          className="mt-1.5 text-[13px] font-bold text-[#A83960] hover:underline"
+        >
+          {expanded ? "Tampilkan lebih sedikit" : "Lihat selengkapnya"}
+        </button>
+      )}
+    </section>
+  );
+}
+
+function Actions({
+  selection,
+  unit,
+  maxQty,
+  blocked,
+  className,
+}: {
+  selection: ProductSelection;
+  unit: number | null;
+  maxQty: number;
+  blocked: boolean;
+  className?: string;
+}) {
+  const { qty, setQty, variant } = selection;
+  const stockLabel =
+    variant && selection.product?.type !== TREATMENT_TYPE ? `Stok ${variant.stock}` : null;
+  return (
+    <div className={cn("space-y-3", className)}>
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-[14px] font-semibold text-[#5F5552]">
+          Jumlah
+          {stockLabel && (
+            <span className="ml-2 text-[12px] font-medium text-[#766B68]">{stockLabel}</span>
+          )}
+        </span>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            aria-label="Kurangi jumlah"
+            disabled={qty <= 1}
+            onClick={() => setQty(Math.max(1, qty - 1))}
+            className={cn(STEP, "border-2 border-[#E6D3DA] text-[#A83960]")}
+          >
+            <Minus className="w-4 h-4" />
+          </button>
+          <span className="w-6 text-center text-[17px] font-bold tabular-nums" aria-live="polite">
+            <span key={qty} className="inline-block animate-in zoom-in-75 fade-in duration-200">
+              {qty}
+            </span>
+          </span>
+          <button
+            type="button"
+            aria-label="Tambah jumlah"
+            disabled={qty >= maxQty}
+            onClick={() => setQty(Math.min(maxQty, qty + 1))}
+            className={cn(STEP, "border-2 border-[#C94F78] text-[#A83960]")}
+          >
+            <Plus className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+      <div className="grid grid-cols-[auto_1fr] gap-2.5">
+        <button
+          type="button"
+          onClick={selection.add}
+          aria-label="Masukkan keranjang"
+          className={cn(
+            "h-[52px] px-4 rounded-full border-2 border-[#C94F78] text-[#A83960] bg-white",
+            "flex items-center justify-center gap-2 text-[14px] font-bold hover:bg-[#FFF3F7] active:scale-[0.98]",
+          )}
+        >
+          <ShoppingCart className="w-5 h-5" aria-hidden="true" />
+          <span className="hidden min-[420px]:inline">Keranjang</span>
+        </button>
+        <button
+          type="button"
+          onClick={selection.buyNow}
+          disabled={blocked}
+          className={cn(
+            "h-[52px] px-5 rounded-full text-[15px] font-bold flex items-center justify-between gap-2 whitespace-nowrap",
+            "active:scale-[0.98] transition-all",
+            blocked
+              ? "bg-[#F1EBED] text-[#8C8280] cursor-not-allowed"
+              : "text-white bg-gradient-to-r from-[#C94F78] to-[#9B3055] shadow-[0_10px_24px_-10px_rgba(168,57,96,0.7)]",
+          )}
+        >
+          <span>
+            Pesan<span className="hidden min-[400px]:inline md:hidden lg:inline"> sekarang</span>
+          </span>
+          {unit !== null && <span className="tabular-nums">{formatRupiah(unit * qty)}</span>}
+        </button>
+      </div>
+      {blocked && (
+        <p className="text-center text-[12px] text-[#766B68]">
+          Centang persetujuan treatment untuk memesan.
+        </p>
+      )}
+    </div>
+  );
+}
+
 export function ProductDetailSheet({ selection }: { selection: ProductSelection }) {
-  const { product, variant, setVariant, qty, setQty, agreed, setAgreed, close } = selection;
+  const { product, variant, setVariant, agreed, setAgreed, close, needVariant, closing } =
+    selection;
+  const variantRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!product) return;
@@ -63,18 +211,39 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
     };
   }, [product, close]);
 
+  useEffect(() => {
+    if (needVariant) variantRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [needVariant]);
+
+  const images = useMemo(() => {
+    if (!product) return [];
+    const extra = (product.variants || []).map((v) => v.image_url).filter(Boolean) as string[];
+    return [...new Set([...productImages(product), ...extra])];
+  }, [product]);
+
   if (!product) return null;
-  const basePrice = variant ? variant.price : product.selling_price;
-  const discount = product.voucher_discount || 0;
-  const unit = Math.max(0, basePrice - discount);
   const isTreatment = product.type === TREATMENT_TYPE;
+  const variants = product.variants || [];
   const blocked = isTreatment && !agreed;
+  const basePrice = variant
+    ? Number(variant.price)
+    : variants.length
+      ? null
+      : Number(product.selling_price);
+  const unit = basePrice === null ? null : Math.max(0, basePrice - discountFor(product, basePrice));
+  const maxQty = variant && !isTreatment ? Math.max(1, Math.min(MAX_QTY, variant.stock)) : MAX_QTY;
+  const range = priceRange(product);
+  const savings = variant ? discountFor(product, Number(variant.price)) : range.discountMin;
+  const actionProps = { selection, unit, maxQty, blocked };
 
   return (
-    <div className="fixed inset-0 z-[110] flex flex-col justify-end sm:justify-center sm:p-6">
+    <div className="fixed inset-0 z-[110] flex flex-col justify-end md:justify-center md:p-6">
       <div
-        className="absolute inset-0 bg-[#1B1416]/60 backdrop-blur-[2px]"
-        onClick={close}
+        className={cn(
+          "absolute inset-0 bg-[#1B1416]/60 backdrop-blur-[2px] duration-200",
+          closing ? "animate-out fade-out fill-mode-forwards" : "animate-in fade-in",
+        )}
+        onClick={() => close()}
         aria-hidden="true"
       />
       <div
@@ -82,147 +251,97 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
         aria-modal="true"
         aria-labelledby="product-sheet-title"
         className={cn(
-          "relative w-full sm:max-w-[480px] sm:mx-auto bg-white rounded-t-[28px] sm:rounded-[28px]",
-          "max-h-[92dvh] flex flex-col overflow-hidden shadow-2xl",
-          "animate-in slide-in-from-bottom-10 sm:zoom-in-95 duration-300",
+          "relative w-full md:max-w-[960px] md:mx-auto bg-white rounded-t-[28px] md:rounded-[28px]",
+          "max-h-[94dvh] md:max-h-[88dvh] flex flex-col overflow-hidden shadow-2xl",
+          closing
+            ? "animate-out fade-out slide-out-to-bottom-10 md:slide-out-to-bottom-0 md:zoom-out-95 duration-200 fill-mode-forwards"
+            : "animate-in fade-in slide-in-from-bottom-10 md:slide-in-from-bottom-0 md:zoom-in-95 duration-300 ease-out",
         )}
       >
-        <div className="flex-1 overflow-y-auto no-scrollbar">
-          <div className="relative p-3 pb-0">
-            <div className="relative aspect-[16/10] rounded-[22px] overflow-hidden bg-[#FBEFF3]">
-              {product.image_url ? (
-                <Image
-                  src={product.image_url}
-                  alt={product.name}
-                  fill
-                  sizes="480px"
-                  className="object-cover"
-                />
-              ) : (
-                <ProductPlaceholder type={product.type} />
-              )}
-              {discount > 0 && (
-                <span className="absolute left-3 bottom-3 rounded-full bg-[#E0263F] px-3 py-1 text-[12px] font-bold text-white">
-                  Hemat {formatRupiah(discount)}
-                </span>
-              )}
-            </div>
-            <button
-              type="button"
-              aria-label="Tutup"
-              onClick={close}
-              className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/95 flex items-center justify-center text-[#2D2926] shadow-md"
-            >
-              <X className="w-5 h-5" />
-            </button>
+        <button
+          type="button"
+          aria-label="Tutup"
+          onClick={() => close()}
+          className="absolute top-3 right-3 z-20 w-10 h-10 rounded-full bg-white/95 flex items-center justify-center text-[#2D2926] shadow-md hover:bg-white"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar md:grid md:grid-cols-2 lg:grid-cols-[minmax(0,460px)_minmax(0,1fr)] md:gap-6 lg:gap-8 md:p-6">
+          <div className="md:sticky md:top-0 md:self-start">
+            <ProductGallery
+              images={images}
+              alt={product.name}
+              type={product.type}
+              focusUrl={variant?.image_url}
+              badge={
+                savings > 0 ? (
+                  <span className="absolute left-3 bottom-3 rounded-full bg-[#E0263F] px-3 py-1 text-[12px] font-bold text-white">
+                    Hemat {formatRupiah(savings)}
+                  </span>
+                ) : null
+              }
+            />
           </div>
 
-          <div className="px-5 pt-4 pb-5 space-y-5">
-            <div>
+          <div className="px-5 pt-4 pb-5 md:p-0 space-y-4 min-w-0">
+            <div className="md:pr-12">
               <p className="text-[12px] font-semibold text-[#A83960]">
                 {product.sub_category || (isTreatment ? "Layanan" : "Produk")}
               </p>
               <h3
                 id="product-sheet-title"
-                className="text-[20px] font-bold! text-[#2D2926] leading-snug mt-0.5"
+                className="text-[20px] md:text-[22px] font-bold! text-[#2D2926] leading-snug mt-0.5"
               >
                 {product.name}
               </h3>
-              <div className="flex flex-wrap items-baseline gap-x-2 mt-1.5 tabular-nums">
-                <span className="text-[20px] font-bold text-[#2D2926]">{formatRupiah(unit)}</span>
-                {discount > 0 && (
-                  <span className="text-[14px] text-[#8C8280] line-through">
-                    {formatRupiah(basePrice)}
-                  </span>
-                )}
-              </div>
             </div>
 
-            {product.variants && product.variants.length > 0 && (
-              <div className="pt-4 border-t border-dashed border-[#EEDFE3]">
-                <h4 className="text-[15px] font-bold text-[#2D2926] mb-3">Pilih varian</h4>
+            <PriceBlock product={product} selection={selection} />
+
+            {variants.length > 0 && (
+              <div ref={variantRef} className="space-y-2.5">
+                <div className="flex items-baseline justify-between gap-3">
+                  <h4 className="text-[15px] font-bold text-[#2D2926]">
+                    {product.variant_label?.trim() || "Variasi"}
+                  </h4>
+                  {variant && (
+                    <span className="text-[12px] text-[#766B68] truncate">
+                      Dipilih: <strong className="text-[#2D2926]">{variant.variant_name}</strong>
+                    </span>
+                  )}
+                </div>
                 <VariantOptions
-                  variants={product.variants}
+                  variants={variants}
                   selected={variant}
                   onSelect={setVariant}
-                  tone="sheet"
+                  tracksStock={!isTreatment}
                 />
+                {needVariant && (
+                  <p role="alert" className="text-[13px] font-semibold text-[#E0263F]">
+                    Silakan pilih {(product.variant_label?.trim() || "variasi").toLowerCase()}{" "}
+                    terlebih dahulu.
+                  </p>
+                )}
               </div>
             )}
 
             {isTreatment && <TreatmentReminder agreed={agreed} onChange={setAgreed} />}
+
+            <Actions
+              {...actionProps}
+              className="hidden md:block pt-4 border-t border-dashed border-[#EEDFE3]"
+            />
+
+            {product.description?.trim() && <Description text={product.description.trim()} />}
           </div>
         </div>
 
         <div
-          className="border-t border-[#F0E4E8] bg-white px-4 pt-3 space-y-3"
+          className="md:hidden border-t border-[#F0E4E8] bg-white px-4 pt-3"
           style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 16px)" }}
         >
-          <div className="flex items-center justify-between gap-3">
-            <span className="text-[14px] font-semibold text-[#5F5552]">Jumlah</span>
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                aria-label="Kurangi jumlah"
-                disabled={qty <= 1}
-                onClick={() => setQty(Math.max(1, qty - 1))}
-                className={cn(STEP, "border-2 border-[#E6D3DA] text-[#A83960]")}
-              >
-                <Minus className="w-4 h-4" />
-              </button>
-              <span
-                className="w-6 text-center text-[17px] font-bold tabular-nums"
-                aria-live="polite"
-              >
-                {qty}
-              </span>
-              <button
-                type="button"
-                aria-label="Tambah jumlah"
-                disabled={qty >= MAX_QTY}
-                onClick={() => setQty(Math.min(MAX_QTY, qty + 1))}
-                className={cn(STEP, "border-2 border-[#C94F78] text-[#A83960]")}
-              >
-                <Plus className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-          <div className="grid grid-cols-[auto_1fr] gap-2.5">
-            <button
-              type="button"
-              onClick={selection.add}
-              aria-label="Tambah ke keranjang"
-              className={cn(
-                "h-[52px] px-4 rounded-full border-2 border-[#C94F78] text-[#A83960] bg-white",
-                "flex items-center justify-center gap-2 text-[14px] font-bold hover:bg-[#FFF3F7] active:scale-[0.98]",
-              )}
-            >
-              <ShoppingCart className="w-5 h-5" aria-hidden="true" />
-              <span className="hidden min-[420px]:inline">Keranjang</span>
-            </button>
-            <button
-              type="button"
-              onClick={selection.buyNow}
-              disabled={blocked}
-              className={cn(
-                "h-[52px] px-5 rounded-full text-[15px] font-bold flex items-center justify-between gap-2 whitespace-nowrap",
-                "active:scale-[0.98] transition-all",
-                blocked
-                  ? "bg-[#F1EBED] text-[#8C8280] cursor-not-allowed"
-                  : "text-white bg-gradient-to-r from-[#C94F78] to-[#9B3055] shadow-[0_10px_24px_-10px_rgba(168,57,96,0.7)]",
-              )}
-            >
-              <span>
-                Pesan<span className="hidden min-[400px]:inline"> sekarang</span>
-              </span>
-              <span className="tabular-nums">{formatRupiah(unit * qty)}</span>
-            </button>
-          </div>
-          {blocked && (
-            <p className="text-center text-[12px] text-[#766B68]">
-              Centang persetujuan treatment untuk memesan.
-            </p>
-          )}
+          <Actions {...actionProps} />
         </div>
       </div>
     </div>

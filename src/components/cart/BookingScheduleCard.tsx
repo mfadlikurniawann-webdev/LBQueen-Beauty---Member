@@ -62,10 +62,7 @@ export function BookingScheduleCard({
   return (
     <div className={`${CARD} p-5 flex flex-col gap-4`}>
       <div>
-        <SectionTitle>Jadwal Booking Treatment</SectionTitle>
-        <p className="text-[13px] text-[#766B68] mt-1">
-          Silakan pilih jadwal untuk perawatan Anda.
-        </p>
+        <SectionTitle>Jadwal Treatment</SectionTitle>
       </div>
       <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-3">
         <BookingField

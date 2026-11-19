@@ -9,7 +9,7 @@ export function CatalogUnavailable({ onRetry }: { onRetry: () => void }) {
       <ShoppingBag className="mx-auto mb-4 h-8 w-8 text-[#A83960]" />
       <h1 className="text-xl font-semibold">Katalog belum tersedia</h1>
       <p className="mt-3 mb-6 text-sm text-[#766B68]">
-        Kami belum dapat menghubungi database. Silakan coba kembali beberapa saat lagi.
+        Katalog belum dapat dimuat. Silakan coba lagi.
       </p>
       <button onClick={onRetry} className="btn-pink">
         Coba lagi

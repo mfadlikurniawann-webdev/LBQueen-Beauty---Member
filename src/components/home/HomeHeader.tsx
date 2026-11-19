@@ -1,35 +1,39 @@
-import { BrandMark } from "@/components/BrandMark";
 import Link from "next/link";
-import { MessageCircle, Search, ShoppingCart } from "lucide-react";
-import { waLink } from "@/lib/constants";
+import { Crown, Search } from "lucide-react";
+import type { Customer } from "@/lib/customer";
+import { tierOf } from "@/lib/membership";
 import { cn } from "@/lib/utils";
-
-const ICON_BUTTON =
-  "relative w-11 h-11 shrink-0 rounded-full flex items-center justify-center text-white hover:bg-white/15 transition-colors";
 
 export const HEADER_GRADIENT = "linear-gradient(90deg,#D9668D 0%,#C94F78 50%,#A83960 100%)";
 
+const initials = (name?: string) =>
+  (name || "?")
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w.charAt(0).toUpperCase())
+    .join("");
+
+/** Bar atas beranda: pencarian, lencana tier membership, dan avatar profil pelanggan. */
 export function HomeHeader({
+  customer,
   searchQuery,
   onSearch,
-  cartCount,
 }: {
+  customer: Customer;
   searchQuery: string;
   onSearch: (value: string) => void;
-  cartCount: number;
 }) {
+  const tier = tierOf(customer);
   return (
     <header
-      className="sticky top-0 z-40 lg:static px-4 sm:px-8 lg:px-12 pb-3 lg:pb-4"
+      className="sticky top-0 z-40 md:static px-4 sm:px-8 lg:px-12 pb-3 md:pb-4"
       style={{
         background: HEADER_GRADIENT,
         paddingTop: "max(env(safe-area-inset-top, 0px), 12px)",
       }}
     >
-      <div className="flex items-center gap-1.5 lg:gap-3">
-        <Link href="/" aria-label="LBQueen, ke beranda" className="lg:hidden shrink-0 mr-1">
-          <BrandMark size={40} className="ring-2 ring-white/70" />
-        </Link>
+      <div className="flex items-center gap-2 md:gap-3">
         <label className="relative flex-1 min-w-0">
           <span className="sr-only">Cari treatment atau produk</span>
           <Search
@@ -43,31 +47,39 @@ export function HomeHeader({
             onChange={(e) => onSearch(e.target.value)}
             className={cn(
               "w-full h-11 rounded-full bg-white pl-11 pr-4 text-[15px] text-[#2D2926] outline-none",
-              "placeholder:text-[#8C8280] focus:ring-4 focus:ring-white/30",
+              "placeholder:text-[#8C8280] focus:ring-4 focus:ring-white/30 transition-shadow",
             )}
           />
         </label>
         <Link
-          href="/cart"
-          aria-label={cartCount > 0 ? `Keranjang, ${cartCount} item` : "Keranjang"}
-          className={cn(ICON_BUTTON, "lg:hidden")}
-        >
-          <ShoppingCart className="w-6 h-6" aria-hidden="true" />
-          {cartCount > 0 && (
-            <span className="absolute top-0.5 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-[#FFD84D] text-[#5A1834] text-[11px] font-extrabold flex items-center justify-center tabular-nums">
-              {cartCount > 9 ? "9+" : cartCount}
-            </span>
+          href="/membership"
+          aria-label={`Membership ${tier.name}`}
+          className={cn(
+            "md:hidden shrink-0 h-11 pl-2 pr-3 rounded-full flex items-center gap-1.5",
+            "bg-gradient-to-b from-[#FFE9A8] to-[#F6C94E] border-2 border-[#FFF4CF]",
+            "shadow-[0_6px_14px_-8px_rgba(90,24,52,0.6)] active:scale-95 transition-transform",
           )}
-        </Link>
-        <a
-          href={waLink("Halo admin LBQueen, saya ingin bertanya.")}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Chat admin LBQueen"
-          className={cn(ICON_BUTTON, "lg:hidden")}
         >
-          <MessageCircle className="w-6 h-6" aria-hidden="true" />
-        </a>
+          <span className="w-7 h-7 rounded-full bg-[#7A5410] flex items-center justify-center">
+            <Crown className="w-4 h-4 text-[#FFE38A]" aria-hidden="true" />
+          </span>
+          <span className="leading-[1.05] text-[#5A3B06]">
+            <span className="block text-[13px] font-extrabold">{tier.name}</span>
+            <span className="block text-[11px] font-bold">Member</span>
+          </span>
+        </Link>
+        <Link
+          href="/profile"
+          aria-label="Profil saya"
+          className={cn(
+            "md:hidden shrink-0 w-11 h-11 rounded-full p-[2px] bg-gradient-to-b from-[#FFE9A8] to-[#F6C94E]",
+            "active:scale-95 transition-transform",
+          )}
+        >
+          <span className="w-full h-full rounded-full bg-gradient-to-br from-[#D9648C] to-[#7E2449] text-white text-[14px] font-bold flex items-center justify-center ring-2 ring-white">
+            {initials(customer.name)}
+          </span>
+        </Link>
       </div>
     </header>
   );

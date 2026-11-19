@@ -38,11 +38,11 @@ function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-[#F7F4F5] flex flex-col items-center">
-      <div className="w-full max-w-7xl min-h-dvh relative flex flex-col bg-[#FBF9F9] lg:border-x lg:border-[#EEDFE3]">
+      <div className="w-full max-w-7xl min-h-dvh relative flex flex-col bg-[#FBF9F9] md:border-x md:border-[#EEDFE3]">
         {customer && <TopNav pathname={pathname} customer={customer} totalItems={totalItems} />}
         <main
           id="main-content"
-          className="flex-1 min-w-0 pb-[var(--main-pad)] lg:pb-[var(--main-pad-lg)]"
+          className="flex-1 min-w-0 pb-[var(--main-pad)] md:pb-[var(--main-pad-lg)]"
           style={
             {
               "--main-pad": `calc(env(safe-area-inset-bottom, 0px) + ${mobilePad}px)`,

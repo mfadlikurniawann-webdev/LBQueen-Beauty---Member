@@ -122,7 +122,7 @@ export function PaymentMethodCard({
             />
           </div>
           <p className="text-[12px] text-[#766B68] font-medium text-center leading-relaxed max-w-[240px]">
-            Pindai barcode QRIS di atas menggunakan aplikasi m-banking atau e-wallet pilihan Anda.
+            Pindai QRIS dengan m-banking atau e-wallet.
           </p>
         </div>
       )}

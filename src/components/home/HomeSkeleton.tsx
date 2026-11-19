@@ -17,7 +17,7 @@ export function HomeSkeleton() {
         </div>
       </div>
       <div className="px-4 sm:px-8 -mt-20 space-y-4">
-        <div className="aspect-[1440/956] lg:h-[300px] lg:aspect-auto rounded-[22px] bg-[#F9D9E6] animate-pulse border-[3px] border-white" />
+        <div className="aspect-[1440/956] md:h-[260px] lg:h-[300px] md:aspect-auto rounded-[22px] bg-[#F9D9E6] animate-pulse border-[3px] border-white" />
         <div className="rounded-[24px] bg-white border border-[#F0E4E8] p-4 space-y-4">
           <div className={`h-12 rounded-2xl ${PULSE}`} />
           <div className="grid grid-cols-4 gap-4">

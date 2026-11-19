@@ -33,11 +33,13 @@ export async function GET(request: NextRequest) {
     let query = db
       .from("products")
       .select(
-        `id,name,type,selling_price,image_url,product_code,is_set,sub_category,variants:product_variants(id,product_id,variant_name,price,stock),promotions:vouchers${promo ? "!inner" : ""}(product_id,type,discount_amount,min_transaction)`,
+        `id,name,type,selling_price,image_url,images,description,variant_label,product_code,is_set,sub_category,variants:product_variants(id,product_id,variant_name,price,stock,image_url,sort_order),promotions:vouchers${promo ? "!inner" : ""}(product_id,type,discount_amount,min_transaction,membership_types)`,
       )
       .in("type", categories)
       .eq("variants.is_active", true)
       .eq("promotions.is_active", true)
+      // Promo otomatis hanya dari voucher tanpa batasan membership (sama dengan create_online_order).
+      .eq("promotions.membership_types", "{}")
       .order("name")
       .order("id")
       .range((page - 1) * pageSize, page * pageSize);
@@ -50,26 +52,19 @@ export async function GET(request: NextRequest) {
     if (mode === "set") query = query.eq("is_set", true);
     if (subcategory) query = query.eq("sub_category", subcategory);
     if (search) query = query.ilike("name", `%${search.replace(/[%_\\]/g, "\\$&")}%`);
-    const [result, vouchers] = await Promise.all([
-      query,
-      db
-        .from("vouchers")
-        .select("id,name,code,type,discount_amount,min_transaction,product_id")
-        .eq("is_active", true)
-        .order("created_at", { ascending: false })
-        .order("id", { ascending: false })
-        .limit(10),
-    ]);
-    if (result.error || vouchers.error) throw new Error("catalog unavailable");
+    const result = await query;
+    if (result.error) throw new Error("catalog unavailable");
     const rows = result.data || [];
     return Response.json(
       {
         products: rows.slice(0, pageSize).map((p) => ({
           ...p,
+          variants: [...(p.variants || [])].sort(
+            (a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0) || a.id - b.id,
+          ),
           voucher_discount: productDiscount(p.selling_price, p.promotions || []),
         })),
         hasMore: rows.length > pageSize,
-        allVouchers: vouchers.data || [],
       },
       { headers: cached },
     );

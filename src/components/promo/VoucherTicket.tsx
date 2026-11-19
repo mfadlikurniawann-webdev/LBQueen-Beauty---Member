@@ -1,19 +1,13 @@
 import { useState } from "react";
 import { Check, Copy, Ticket } from "lucide-react";
-import type { CatalogVoucher } from "@/lib/catalog";
 import { IconChip } from "@/components/IconChip";
 import { formatRupiah } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { SectionHeading } from "./SectionHeading";
+import { membershipLabel, type MyVoucher } from "@/lib/vouchers";
 
-export function VoucherTicket({
-  voucher,
-  className,
-}: {
-  voucher: CatalogVoucher;
-  className?: string;
-}) {
+export function VoucherTicket({ voucher, className }: { voucher: MyVoucher; className?: string }) {
   const [copied, setCopied] = useState(false);
+  const scope = membershipLabel(voucher.membership_types);
   const amount =
     voucher.type === "nominal"
       ? formatRupiah(voucher.discount_amount)
@@ -42,6 +36,16 @@ export function VoucherTicket({
           Potongan {amount}
         </p>
         <p className="text-[12px] font-bold text-[#A83960] mt-0.5 truncate">{voucher.code}</p>
+        {(scope || voucher.products?.name) && (
+          <p className="text-[12px] text-[#766B68] truncate">
+            {[
+              scope && `Khusus ${scope}`,
+              voucher.products?.name && `Untuk ${voucher.products.name}`,
+            ]
+              .filter(Boolean)
+              .join(" · ")}
+          </p>
+        )}
         {voucher.min_transaction > 0 && (
           <p className="text-[12px] text-[#766B68] truncate tabular-nums">
             Min. belanja {formatRupiah(voucher.min_transaction)}
@@ -70,31 +74,11 @@ export function EmptyVouchers() {
     <div className="w-full rounded-[20px] border border-[#F0E4E8] bg-white p-4 flex items-center gap-3.5">
       <IconChip icon={Ticket} tone="gold" size="md" />
       <div>
-        <p className="text-[14px] text-[#2D2926] font-semibold">Promo segera hadir</p>
+        <p className="text-[14px] text-[#2D2926] font-semibold">Belum ada voucher</p>
         <p className="text-[12px] text-[#766B68] mt-0.5">
-          Promo untuk pelanggan akan tampil di sini.
+          Voucher untuk membership Anda akan tampil di sini.
         </p>
       </div>
     </div>
-  );
-}
-
-export function MemberVouchers({ vouchers }: { vouchers: CatalogVoucher[] }) {
-  return (
-    <section>
-      <SectionHeading
-        title="Promo Tersedia"
-        action={vouchers.length > 0 ? { label: "Lihat semua", href: "/promo" } : undefined}
-      />
-      {vouchers.length > 0 ? (
-        <div className="flex gap-3 overflow-x-auto no-scrollbar snap-x -mx-4 sm:-mx-8 lg:-mx-12 px-4 sm:px-8 lg:px-12 pb-2 pt-2">
-          {vouchers.map((v) => (
-            <VoucherTicket key={v.id} voucher={v} className="snap-start shrink-0 w-[300px]" />
-          ))}
-        </div>
-      ) : (
-        <EmptyVouchers />
-      )}
-    </section>
   );
 }

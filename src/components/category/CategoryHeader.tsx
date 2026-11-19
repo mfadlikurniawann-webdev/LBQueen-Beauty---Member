@@ -9,7 +9,7 @@ export function CategoryHeader({ section, page }: { section: Section; page: numb
   return (
     <header
       className={cn(
-        "sticky top-0 lg:top-[68px] z-40 bg-white/95 backdrop-blur-md border-b border-[#F0E4E8] px-4 sm:px-5 pb-3",
+        "sticky top-0 md:top-[68px] z-40 bg-white/95 backdrop-blur-md border-b border-[#F0E4E8] px-4 sm:px-5 pb-3",
         "flex items-center gap-3 h-[76px]",
       )}
       style={{ paddingTop: "max(env(safe-area-inset-top, 0px), 12px)" }}

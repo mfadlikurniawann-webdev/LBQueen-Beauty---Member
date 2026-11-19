@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CalendarHeart, Crown, Gift, Info, Sparkles, Star, Ticket } from "lucide-react";
+import { CalendarHeart, Crown, Gift, Sparkles, Star, Ticket } from "lucide-react";
 import { IconChip } from "@/components/IconChip";
 import { PageHero } from "@/components/portal/PageHero";
 import { useCustomer } from "@/context/CustomerContext";
@@ -128,7 +128,7 @@ export default function MembershipPage() {
                       </>
                     ) : (
                       <p className="text-[13px] font-semibold opacity-90">
-                        Ditetapkan oleh admin LBQueen
+                        Ditetapkan admin
                       </p>
                     )}
                   </div>
@@ -157,11 +157,6 @@ export default function MembershipPage() {
             </button>
           ))}
         </div>
-
-        <p className="mx-auto mt-3 max-w-sm px-6 flex items-start justify-center gap-1.5 text-center text-[12px] text-[#766B68]">
-          <Info className="w-4 h-4 shrink-0 mt-px" aria-hidden="true" />
-          Status tier dikelola admin. Poin tidak otomatis mengubah tier.
-        </p>
       </div>
 
       <div className="px-4 sm:px-8 max-w-2xl mx-auto pb-6">
@@ -178,7 +173,6 @@ export default function MembershipPage() {
               />
               <span className="min-w-0">
                 <span className="block text-[15px] font-semibold text-[#2D2926]">{b.title}</span>
-                <span className="block text-[13px] text-[#766B68] mt-0.5">{b.desc}</span>
               </span>
             </li>
           ))}
@@ -194,7 +188,7 @@ export default function MembershipPage() {
           className="mt-5 w-full h-[52px] rounded-full flex items-center justify-center gap-2 text-[15px] font-bold text-white bg-gradient-to-r from-[#C94F78] to-[#9B3055] shadow-[0_10px_24px_-12px_rgba(168,57,96,0.7)]"
         >
           <CalendarHeart className="w-5 h-5" aria-hidden="true" />
-          {current.id === "regular" ? "Tanya upgrade ke admin" : "Tanya admin soal membership"}
+          {current.id === "regular" ? "Ajukan upgrade membership" : "Hubungi admin"}
         </a>
       </div>
     </div>

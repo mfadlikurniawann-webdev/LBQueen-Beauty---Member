@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { BadgePercent, Plus } from "lucide-react";
-import type { CatalogProduct } from "@/lib/catalog";
+import { priceRange, productImages, type CatalogProduct } from "@/lib/catalog";
 import { TREATMENT_TYPE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { PriceStack } from "./PriceStack";
@@ -33,7 +33,11 @@ export function ProductCard({
   layout: keyof typeof LAYOUTS;
 }) {
   const styles = LAYOUTS[layout];
-  const discount = product.voucher_discount || 0;
+  const range = priceRange(product);
+  const discount = range.discountMin;
+  const hasRange = range.finalMin !== range.finalMax;
+  const variantCount = product.variants?.length || 0;
+  const photoCount = productImages(product).length;
   const isHome = layout === "home";
   const fallbackLabel = isHome ? (product.type === TREATMENT_TYPE ? "Layanan" : "Produk") : "Umum";
   const Name = isHome ? "h4" : "p";
@@ -90,14 +94,22 @@ export function ProductCard({
         <Name className="mt-1 text-[14px] font-semibold text-[#2D2926] line-clamp-2 leading-snug min-h-[2.75em]">
           {product.name}
         </Name>
+        {(variantCount > 1 || photoCount > 1) && (
+          <p className="mt-1 text-[11px] font-medium text-[#766B68] truncate">
+            {[variantCount > 1 && `${variantCount} variasi`, photoCount > 1 && `${photoCount} foto`]
+              .filter(Boolean)
+              .join(" · ")}
+          </p>
+        )}
         {isHome ? (
           <div className="mt-auto pt-2.5">
-            <PriceStack price={product.selling_price} discount={discount} />
+            <PriceStack price={range.min} discount={discount} from={hasRange} />
           </div>
         ) : (
           <PriceStack
-            price={product.selling_price}
+            price={range.min}
             discount={discount}
+            from={hasRange}
             className="mt-auto pt-2 tabular-nums"
           />
         )}

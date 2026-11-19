@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { ItemThumb } from "@/components/portal/ItemThumb";
 import type { CartItem } from "@/context/CartContext";
 import { Rupiah } from "@/components/Rupiah";
+import { prefersReducedMotion } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { isTreatmentItem } from "./cart-utils";
 import { CARD } from "./ui";
@@ -17,10 +19,22 @@ export function CartItemCard({
   onRemove: () => void;
   onQty: (qty: number) => void;
 }) {
+  const [leaving, setLeaving] = useState(false);
+  // Baris memudar & bergeser dulu, baru dihapus dari keranjang.
+  const remove = () => {
+    if (leaving) return;
+    setLeaving(true);
+    window.setTimeout(onRemove, prefersReducedMotion() ? 0 : 220);
+  };
   const hasItemDiscount = (item.voucher_discount || 0) > 0;
   const lineTotal = (item.price - (item.voucher_discount || 0)) * item.qty;
   return (
-    <div className={`${CARD} p-4 flex gap-3.5`}>
+    <div
+      className={cn(
+        `${CARD} p-4 flex gap-3.5 transition-all duration-200 animate-in fade-in slide-in-from-bottom-2`,
+        leaving && "lbq-leave",
+      )}
+    >
       <ItemThumb
         src={item.image_url}
         alt={item.name}
@@ -35,7 +49,7 @@ export function CartItemCard({
           <button
             type="button"
             aria-label="Hapus Item"
-            onClick={onRemove}
+            onClick={remove}
             className={cn(
               "w-8 h-8 -mt-1 -mr-1 shrink-0 rounded-xl flex items-center justify-center text-[#766B68]",
               "hover:text-rose-600 hover:bg-rose-50 transition-colors",
@@ -69,7 +83,7 @@ export function CartItemCard({
             <button
               type="button"
               aria-label="Kurangi Jumlah"
-              onClick={() => (item.qty === 1 ? onRemove() : onQty(item.qty - 1))}
+              onClick={() => (item.qty === 1 ? remove() : onQty(item.qty - 1))}
               className={`${STEP} text-[#766B68] hover:bg-white hover:text-[#C94F78]`}
             >
               <Minus className="w-3.5 h-3.5" />
@@ -78,7 +92,12 @@ export function CartItemCard({
               className="text-[14px] font-bold text-[#2D2926] min-w-6 text-center tabular-nums"
               aria-live="polite"
             >
-              {item.qty}
+              <span
+                key={item.qty}
+                className="inline-block animate-in zoom-in-75 fade-in duration-200"
+              >
+                {item.qty}
+              </span>
             </span>
             <button
               type="button"

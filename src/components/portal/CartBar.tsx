@@ -3,10 +3,12 @@ import { ChevronRight, ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { PRIMARY_GRADIENT } from "@/lib/constants";
 import { formatRupiah } from "@/lib/format";
+import { useCartBump } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 export function CartBar() {
   const { cart, totalItems } = useCart();
+  const ref = useCartBump<HTMLAnchorElement>();
   if (totalItems === 0) return null;
   const total = cart.reduce(
     (sum, i) => sum + Math.max(0, i.price - (i.voucher_discount || 0)) * i.qty,
@@ -16,10 +18,12 @@ export function CartBar() {
     <div
       className={cn(
         "fixed left-0 right-0 z-40 flex justify-center pointer-events-none px-3 sm:px-4",
-        "bottom-[calc(max(env(safe-area-inset-bottom,0px),12px)+80px)] lg:bottom-6",
+        "bottom-[calc(max(env(safe-area-inset-bottom,0px),12px)+80px)] md:bottom-6",
       )}
     >
       <Link
+        ref={ref}
+        data-cart-target
         href="/cart"
         aria-label={`Lihat keranjang, ${totalItems} item, ${formatRupiah(total)}`}
         className={cn(

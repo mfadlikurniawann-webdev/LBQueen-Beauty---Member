@@ -9,7 +9,7 @@ import { BrandMark } from "@/components/BrandMark";
 const SLIDES = [
   {
     title: "Selamat datang di LBQueen!",
-    desc: "Klinik perawatan kulit dan kecantikan, kini dalam genggamanmu.",
+    desc: "Klinik perawatan kulit dan kecantikan dalam satu aplikasi.",
   },
   {
     title: "Pesan treatment favoritmu",

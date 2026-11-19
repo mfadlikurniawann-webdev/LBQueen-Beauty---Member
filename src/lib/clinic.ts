@@ -1,8 +1,3 @@
-export const CLINIC_HOURS = [
-  { days: "Senin – Kamis", time: "09.00 – 21.00 WIB" },
-  { days: "Jumat – Sabtu", time: "10.00 – 21.00 WIB" },
-];
-
 const OPEN_HOUR: Record<number, number> = { 1: 9, 2: 9, 3: 9, 4: 9, 5: 10, 6: 10 };
 const CLOSE_HOUR = 21;
 

@@ -1,18 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, Plus } from "lucide-react";
-import type { CatalogProduct } from "@/lib/catalog";
+import { priceRange, type CatalogProduct } from "@/lib/catalog";
 import { formatRupiah } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { ProductPlaceholder } from "@/components/catalog/ProductPlaceholder";
 
 function RailCard({ product, onOpen }: { product: CatalogProduct; onOpen: () => void }) {
-  const discount = product.voucher_discount || 0;
-  const price = Math.max(0, product.selling_price - discount);
-  const percent =
-    discount > 0 && product.selling_price > 0
-      ? Math.max(1, Math.round((discount / product.selling_price) * 100))
-      : 0;
+  const range = priceRange(product);
+  const base = range.min;
+  const discount = range.discountMin;
+  const price = range.finalMin;
+  const hasRange = range.finalMin !== range.finalMax;
+  const percent = discount > 0 && base > 0 ? Math.max(1, Math.round((discount / base) * 100)) : 0;
   return (
     <button
       type="button"
@@ -52,13 +52,12 @@ function RailCard({ product, onOpen }: { product: CatalogProduct; onOpen: () => 
           {product.name}
         </span>
         <span className="block mt-1.5 text-[15px] font-extrabold text-[#2D2926] tabular-nums">
+          {hasRange && <span className="text-[11px] font-semibold text-[#766B68]">Mulai </span>}
           {formatRupiah(price)}
         </span>
         {discount > 0 ? (
           <span className="flex items-center gap-1.5 mt-0.5 text-[11px] tabular-nums">
-            <span className="text-[#8C8280] line-through">
-              {formatRupiah(product.selling_price)}
-            </span>
+            <span className="text-[#8C8280] line-through">{formatRupiah(base)}</span>
           </span>
         ) : (
           <span className="block mt-0.5 text-[11px] font-semibold text-[#A83960] truncate">

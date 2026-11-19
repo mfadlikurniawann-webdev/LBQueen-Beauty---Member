@@ -17,7 +17,7 @@ export function EmptyCart({ onShop }: { onShop: () => void }) {
         Keranjang Kosong
       </h2>
       <p className="text-[14px] text-[#766B68] leading-relaxed mb-8 max-w-[280px]">
-        Sepertinya Anda belum memilih treatment atau produk kami.
+        Belum ada treatment atau produk di keranjang.
       </p>
       <button
         type="button"

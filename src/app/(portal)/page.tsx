@@ -7,13 +7,11 @@ import { PageControls } from "@/components/PageControls";
 import { ProductDetailSheet } from "@/components/catalog/ProductDetailSheet";
 import { ActiveOrderCard } from "@/components/home/ActiveOrderCard";
 import { CatalogUnavailable } from "@/components/home/CatalogUnavailable";
-import { ClinicInfoCard } from "@/components/home/ClinicInfoCard";
 import { HomeCatalog } from "@/components/home/HomeCatalog";
 import { HomeHeader } from "@/components/home/HomeHeader";
 import { HomeHero } from "@/components/home/HomeHero";
 import { HomeSkeleton } from "@/components/home/HomeSkeleton";
 import { MemberStrip } from "@/components/home/MemberStrip";
-import { MemberVouchers } from "@/components/home/MemberVouchers";
 import { MenuPanel } from "@/components/home/MenuPanel";
 import { OnboardingView } from "@/components/home/OnboardingView";
 import { ProductRail } from "@/components/home/ProductRail";
@@ -22,15 +20,17 @@ import { useCart } from "@/context/CartContext";
 import { useCustomer } from "@/context/CustomerContext";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useProductSelection } from "@/hooks/useProductSelection";
-import { loadCatalog, type CatalogProduct } from "@/lib/catalog";
+import { loadCatalog, priceRange, type CatalogProduct } from "@/lib/catalog";
+import { loadMyVouchers } from "@/lib/vouchers";
 import { TREATMENT_TYPE } from "@/lib/constants";
 
 const RAIL_OPTIONS = { revalidateOnFocus: false, keepPreviousData: true };
 
 function bestSaving(products: CatalogProduct[]) {
   return products.reduce((max, p) => {
-    if (!p.voucher_discount || !p.selling_price) return max;
-    return Math.max(max, Math.round((p.voucher_discount / p.selling_price) * 100));
+    const { min, discountMin } = priceRange(p);
+    if (!discountMin || !min) return max;
+    return Math.max(max, Math.round((discountMin / min) * 100));
   }, 0);
 }
 
@@ -67,8 +67,12 @@ export default function CustomerPortalPage() {
     RAIL_OPTIONS,
   );
 
+  const myVouchers = useSWR(
+    customer ? ["my-vouchers", customer.id] : null,
+    loadMyVouchers,
+    RAIL_OPTIONS,
+  );
   const products = data?.products || [];
-  const allVouchers = data?.allVouchers || [];
 
   useEffect(() => {
     [...CATALOG_SHORTCUTS, "/promo", "/cart", "/orders", "/profile", "/membership"].forEach(
@@ -98,8 +102,8 @@ export default function CustomerPortalPage() {
   return (
     <div className="min-h-screen animate-in fade-in duration-500">
       <HomeHeader
+        customer={customer}
         searchQuery={searchQuery}
-        cartCount={totalItems}
         onSearch={(value) => {
           setPage(1);
           setSearchQuery(value);
@@ -124,10 +128,10 @@ export default function CustomerPortalPage() {
         </div>
       ) : (
         <>
-          <HomeHero name={customer.name}>
+          <HomeHero customer={customer}>
             <MenuPanel
               customer={customer}
-              voucherCount={allVouchers.length}
+              voucherCount={myVouchers.data?.length ?? 0}
               cartCount={totalItems}
             />
           </HomeHero>
@@ -143,7 +147,6 @@ export default function CustomerPortalPage() {
               products={products}
               onOpen={selection.open}
             />
-            <MemberVouchers vouchers={allVouchers} />
             <ProductRail
               title="Treatment Klinik"
               subtitle="Perawatan pilihan di klinik LBQueen"
@@ -160,7 +163,6 @@ export default function CustomerPortalPage() {
               loading={skincare.isLoading}
               onOpen={selection.open}
             />
-            <ClinicInfoCard />
           </div>
         </>
       )}

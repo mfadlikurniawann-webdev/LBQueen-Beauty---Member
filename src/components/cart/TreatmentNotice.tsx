@@ -16,7 +16,8 @@ export function TreatmentNotice({
         <div className="min-w-0">
           <p className="text-[13px] font-bold text-amber-900">Perhatian Sebelum Treatment</p>
           <p className="text-[13px] text-amber-800 leading-relaxed mt-0.5">
-            H-7 & H+7 dilarang konsumsi alkohol. Jujur pada kondisi tubuh ke therapist.
+            Hindari alkohol dan obat-obatan terlarang H-7 hingga H+7 treatment. Sampaikan kondisi
+            kesehatan Anda kepada therapist.
           </p>
         </div>
       </div>

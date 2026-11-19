@@ -19,7 +19,7 @@ export function BottomNav({ pathname }: { pathname: string }) {
   return (
     <nav
       aria-label="Navigasi pelanggan"
-      className="lg:hidden fixed left-0 right-0 z-50 flex justify-center pointer-events-none px-3 sm:px-4"
+      className="md:hidden fixed left-0 right-0 z-50 flex justify-center pointer-events-none px-3 sm:px-4"
       style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 12px)" }}
     >
       <div

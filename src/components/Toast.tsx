@@ -39,7 +39,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       <div
         aria-live="polite"
         className={cn(
-          "fixed bottom-28 lg:bottom-6 left-4 right-4 sm:left-auto sm:right-6 z-[200] flex flex-col",
+          "fixed bottom-28 md:bottom-6 left-4 right-4 sm:left-auto sm:right-6 z-[200] flex flex-col",
           "gap-3 max-w-sm",
         )}
       >

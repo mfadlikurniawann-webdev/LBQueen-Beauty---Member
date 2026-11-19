@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 /* ─────────────────────────────────────────────────────
    LBQUEEN DESIGN SYSTEM v3 — Gradient + Vector Premium
@@ -443,4 +444,32 @@ button:disabled {
   .no-print {
     display: none !important;
   }
+}
+
+/* ── MOTION ──
+   Animasi masuk/keluar (animate-in, fade-in, slide-in-from-*, zoom-in-*) berasal dari tw-animate-css.
+   Di bawah ini gerakan khusus: "bump" saat item masuk keranjang dan baris keranjang yang keluar. */
+@keyframes lbq-bump {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.12);
+  }
+  60% {
+    transform: scale(0.96);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.lbq-bump {
+  animation: lbq-bump 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.lbq-leave {
+  opacity: 0;
+  transform: translateX(24px) scale(0.98);
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease;
 }

@@ -7,6 +7,14 @@ export const dynamic = "force-dynamic";
 const catalog = new Set(["products", "product_variants", "vouchers"]);
 const owned = new Set(["customers", "customer_orders"]);
 const maxRows = 100;
+const JSON_ACCEPT = /^application\/(json|vnd\.pgrst\.object\+json)(\s*;.*)?$/i;
+const SECRET_KEYS = [
+  "password",
+  "password_hash",
+  "password_plain",
+  "password_encrypted",
+  "purchase_price",
+];
 
 const fail = (message: string, status: number) =>
   Response.json({ message, code: "LBQUEEN_ACCESS" }, { status });
@@ -19,6 +27,10 @@ async function handle(request: NextRequest, context: { params: Promise<{ path: s
   if (request.method !== "GET" && request.method !== "HEAD")
     return fail("Perubahan data hanya tersedia melalui alur aplikasi.", 405);
 
+  // Hanya JSON: format lain (mis. text/csv) akan melewati penyaring kolom rahasia.
+  const accept = request.headers.get("accept");
+  if (accept && accept !== "*/*" && !JSON_ACCEPT.test(accept))
+    return fail("Format data tidak didukung.", 406);
   const query = new URLSearchParams(request.nextUrl.search);
   if (catalog.has(table)) {
     if (table === "products") {
@@ -83,37 +95,21 @@ async function handle(request: NextRequest, context: { params: Promise<{ path: s
         catalog.has(table) && response.ok
           ? "public, s-maxage=30, stale-while-revalidate=120"
           : "private, no-store",
+      Vary: "Accept",
     });
     for (const name of ["content-type", "content-range", "range-unit", "preference-applied"]) {
       const value = response.headers.get(name);
       if (value) outgoing.set(name, value);
     }
-    if (
-      response.ok &&
-      response.headers.get("content-type")?.includes("application/json") &&
-      request.method !== "HEAD" &&
-      response.status !== 204
-    ) {
-      const data = await response.json();
-      const clean = JSON.parse(
-        JSON.stringify(data, (key, value) =>
-          [
-            "password",
-            "password_hash",
-            "password_plain",
-            "password_encrypted",
-            "purchase_price",
-          ].includes(key)
-            ? undefined
-            : value,
-        ),
-      );
-      return Response.json(clean, { status: response.status, headers: outgoing });
-    }
-    return new Response(
-      request.method === "HEAD" || response.status === 204 ? null : response.body,
-      { status: response.status, headers: outgoing },
+    if (request.method === "HEAD" || response.status === 204)
+      return new Response(null, { status: response.status, headers: outgoing });
+    if (!/json/i.test(response.headers.get("content-type") || ""))
+      return fail("Respons database tidak valid.", 502);
+    const data = await response.json();
+    const clean = JSON.parse(
+      JSON.stringify(data, (name, value) => (SECRET_KEYS.includes(name) ? undefined : value)),
     );
+    return Response.json(clean, { status: response.status, headers: outgoing });
   } catch {
     return fail(
       "Database belum dapat dihubungi. Silakan coba kembali atau hubungi pengelola.",
