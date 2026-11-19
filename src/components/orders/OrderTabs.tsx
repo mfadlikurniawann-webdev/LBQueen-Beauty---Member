@@ -1,4 +1,3 @@
-import { PRIMARY_GRADIENT } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { ORDER_TABS } from "./order-utils";
 
@@ -11,7 +10,8 @@ export function OrderTabs({
 }) {
   return (
     <div
-      className="flex gap-2 mb-5 -mx-4 px-4 md:mx-0 md:px-0 pb-1 overflow-x-auto no-scrollbar"
+      className="flex gap-5 -mx-4 px-4 sm:-mx-8 sm:px-8 overflow-x-auto no-scrollbar border-b border-[#F0E4E8] mb-4"
+      role="group"
       aria-label="Filter status pesanan"
     >
       {ORDER_TABS.map((t) => {
@@ -23,14 +23,20 @@ export function OrderTabs({
             aria-pressed={isActive}
             onClick={() => onChange(t.id)}
             className={cn(
-              "h-10 px-4 rounded-2xl text-[13px] whitespace-nowrap transition-all shrink-0 border",
+              "relative shrink-0 h-11 text-[15px] whitespace-nowrap transition-colors",
               isActive
-                ? "font-bold text-white border-transparent shadow-[0_6px_16px_rgba(201,79,120,0.25)]"
-                : "font-semibold bg-white text-[#766B68] border-[#EEDFE3] hover:text-[#A83960] hover:border-[#E3C3CE]",
+                ? "font-bold text-[#2D2926]"
+                : "font-medium text-[#8C8280] hover:text-[#5F5552]",
             )}
-            style={isActive ? { background: PRIMARY_GRADIENT } : undefined}
           >
             {t.label}
+            <span
+              className={cn(
+                "absolute left-0 right-0 -bottom-px h-[3px] rounded-full transition-colors",
+                isActive ? "bg-[#C94F78]" : "bg-transparent",
+              )}
+              aria-hidden="true"
+            />
           </button>
         );
       })}

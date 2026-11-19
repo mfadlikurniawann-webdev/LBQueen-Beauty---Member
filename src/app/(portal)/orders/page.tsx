@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Loader2, ShoppingBag } from "lucide-react";
+import Link from "next/link";
+import { ChevronRight, CircleHelp, Loader2, ShoppingBag, ShoppingCart } from "lucide-react";
 import { PageControls } from "@/components/PageControls";
 import { OrderCard } from "@/components/orders/OrderCard";
 import { OrderDetailModal } from "@/components/orders/OrderDetailModal";
@@ -11,14 +11,16 @@ import { TAB_STATUS, type Order, type OrderProduct } from "@/components/orders/o
 import { ReviewModal } from "@/components/orders/ReviewModal";
 import { useOrderReview } from "@/components/orders/useOrderReview";
 import { PageHero } from "@/components/portal/PageHero";
+import { useCart } from "@/context/CartContext";
 import { useCustomer } from "@/context/CustomerContext";
+import { waLink } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
 import { watchWhileVisible } from "@/lib/watch-visible";
 import { cn } from "@/lib/utils";
 
 export default function OrdersPage() {
-  const router = useRouter();
   const { customer } = useCustomer();
+  const { totalItems } = useCart();
   const [orders, setOrders] = useState<Order[]>([]);
   const [productsMap, setProductsMap] = useState<Record<number, OrderProduct>>({});
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -105,13 +107,37 @@ export default function OrdersPage() {
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 min-h-screen bg-[#FDFBFB]">
       <PageHero
-        title="Pesanan Saya"
+        title="Pesanan"
         subtitle="Riwayat dan status pesanan"
-        onBack={() => router.back()}
+        actions={
+          <a
+            href={waLink("Halo admin LBQueen, saya butuh bantuan terkait pesanan.")}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Bantuan pesanan"
+            className="w-11 h-11 rounded-full bg-[#2D2926] text-white flex items-center justify-center"
+          >
+            <CircleHelp className="w-5 h-5" aria-hidden="true" />
+          </a>
+        }
       />
 
-      <div className="px-4 md:px-8 pt-5 pb-4">
+      <div className="px-4 sm:px-8 pb-4 max-w-3xl mx-auto">
         <OrderTabs active={activeTab} onChange={setActiveTab} />
+
+        <Link
+          href="/cart"
+          className="mb-4 flex items-center gap-3 rounded-[18px] border border-[#E6D3DA] bg-white px-4 h-14"
+        >
+          <ShoppingCart className="w-5 h-5 text-[#3B6FD8]" aria-hidden="true" />
+          <span className="flex-1 text-[15px] text-[#3F3734]">Keranjang belanja</span>
+          {totalItems > 0 && (
+            <span className="rounded-full bg-[#C94F78] px-2.5 py-0.5 text-[12px] font-bold text-white tabular-nums">
+              {totalItems} item
+            </span>
+          )}
+          <ChevronRight className="w-5 h-5 text-[#5F5552]" aria-hidden="true" />
+        </Link>
 
         {loadError && (
           <p
@@ -148,7 +174,7 @@ export default function OrdersPage() {
             </p>
           </div>
         ) : (
-          <div className="space-y-3.5">
+          <div className="space-y-3">
             {filtered.map((o) => (
               <OrderCard
                 key={o.id}

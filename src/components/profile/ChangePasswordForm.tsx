@@ -3,6 +3,7 @@ import { CheckCircle2, Loader2, Lock, ShieldCheck } from "lucide-react";
 import { updateCustomerPassword } from "@/app/actions/auth";
 import { PasswordToggle } from "@/components/PasswordToggle";
 import { PRIMARY_GRADIENT } from "@/lib/constants";
+import { PASSWORD_MIN } from "@/lib/validation";
 import { cn } from "@/lib/utils";
 
 const INPUT_CLASS = cn(
@@ -14,7 +15,13 @@ const LABEL_CLASS =
   "block text-[12px] font-bold text-[#766B68] uppercase tracking-[0.08em] mb-2 ml-1";
 const NOTICE = "mb-5 px-4 py-3 text-[13px] font-semibold rounded-2xl border";
 
-export function ChangePasswordForm({ customerId }: { customerId?: number }) {
+export function ChangePasswordForm({
+  customerId,
+  embedded = false,
+}: {
+  customerId?: number;
+  embedded?: boolean;
+}) {
   const [loading, setLoading] = useState(false);
   const [showOldPass, setShowOldPass] = useState(false);
   const [showNewPass, setShowNewPass] = useState(false);
@@ -54,8 +61,14 @@ export function ChangePasswordForm({ customerId }: { customerId?: number }) {
   };
 
   return (
-    <div className="bg-white rounded-[32px] p-5 sm:p-8 shadow-xl shadow-rose-100/30 border border-[#EEDFE3]">
-      <div className="flex items-center gap-4 mb-6">
+    <div
+      className={
+        embedded
+          ? "px-4 pb-5 pt-1"
+          : "bg-white rounded-[32px] p-5 sm:p-8 shadow-xl shadow-rose-100/30 border border-[#EEDFE3]"
+      }
+    >
+      <div className={embedded ? "hidden" : "flex items-center gap-4 mb-6"}>
         <div
           className={cn(
             "w-12 h-12 shrink-0 rounded-2xl bg-[#FDF2F5] flex items-center justify-center",
@@ -130,7 +143,7 @@ export function ChangePasswordForm({ customerId }: { customerId?: number }) {
             />
           </div>
           <p id="new-password-hint" className="text-[12px] text-[#766B68] mt-2 ml-1">
-            Gunakan minimal 6 karakter kombinasi huruf & angka.
+            Gunakan minimal {PASSWORD_MIN} karakter, kombinasi huruf & angka.
           </p>
         </div>
 

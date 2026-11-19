@@ -6,26 +6,28 @@ import { useRouter } from "next/navigation";
 import { PageControls } from "@/components/PageControls";
 import { ProductDetailModal } from "@/components/catalog/ProductDetailModal";
 import { CatalogUnavailable } from "@/components/home/CatalogUnavailable";
-import { CategoryShortcuts, HOME_CATEGORIES } from "@/components/home/CategoryShortcuts";
+import { ClinicInfoCard } from "@/components/home/ClinicInfoCard";
 import { HomeCatalog } from "@/components/home/HomeCatalog";
 import { HomeHero } from "@/components/home/HomeHero";
 import { HomeSkeleton } from "@/components/home/HomeSkeleton";
-import { JoinMemberCard } from "@/components/home/JoinMemberCard";
-import { MembershipStatus } from "@/components/home/MembershipStatus";
+import { MemberStrip } from "@/components/home/MemberStrip";
 import { MemberVouchers } from "@/components/home/MemberVouchers";
 import { OnboardingView } from "@/components/home/OnboardingView";
-import { PROMO_SLIDES, PromoCarousel } from "@/components/home/PromoCarousel";
+import { PointsCard } from "@/components/home/PointsCard";
+import { CATALOG_SHORTCUTS, ServiceGrid } from "@/components/home/ServiceGrid";
+import { useCart } from "@/context/CartContext";
+import { useCustomer } from "@/context/CustomerContext";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useProductSelection } from "@/hooks/useProductSelection";
 import { loadCatalog } from "@/lib/catalog";
-import { useCustomer } from "@/context/CustomerContext";
+import { tierOf } from "@/lib/membership";
 
 export default function CustomerPortalPage() {
   const router = useRouter();
   const { customer, loading: customerLoading, error: customerError } = useCustomer();
+  const { totalItems } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
-  const [activeSlide, setActiveSlide] = useState(0);
   const selection = useProductSelection(customer, { loginToAdd: true });
   const changePage = (next: number) => {
     setPage(next);
@@ -45,26 +47,16 @@ export default function CustomerPortalPage() {
   } = useSWR(
     ["/api/catalog", debouncedSearch, page],
     ([, search, page]) => loadCatalog({ search, category: search ? "semua" : "promo", page }),
-    {
-      revalidateOnFocus: false,
-      keepPreviousData: true,
-    },
+    { revalidateOnFocus: false, keepPreviousData: true },
   );
 
   const products = data?.products || [];
   const allVouchers = data?.allVouchers || [];
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const interval = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % PROMO_SLIDES.length);
-    }, 7000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    HOME_CATEGORIES.forEach((cat) => router.prefetch(`/category/${cat.id}`));
-    ["/cart", "/orders", "/profile"].forEach((path) => router.prefetch(path));
+    [...CATALOG_SHORTCUTS, "/promo", "/cart", "/orders", "/profile", "/membership"].forEach(
+      (path) => router.prefetch(path),
+    );
   }, [router]);
 
   if ((loading && customer) || customerLoading) return <HomeSkeleton />;
@@ -80,10 +72,12 @@ export default function CustomerPortalPage() {
 
   if (catalogError) return <CatalogUnavailable onRetry={() => mutate()} />;
 
+  const searching = !!searchQuery;
+
   return (
-    <div className="portal-home min-h-screen bg-[#FDFBFB] animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="min-h-screen animate-in fade-in duration-500">
       <HomeHero
-        name={customer?.name}
+        customer={customer}
         searchQuery={searchQuery}
         onSearch={(value) => {
           setPage(1);
@@ -91,40 +85,39 @@ export default function CustomerPortalPage() {
         }}
       />
 
-      <PromoCarousel activeSlide={activeSlide} />
-
-      <CategoryShortcuts />
-
-      <div className="portal-section">
-        {!customer || !customer.is_member ? (
-          <JoinMemberCard />
-        ) : (
-          <div>
-            <MembershipStatus
-              tier={customer.membership_type || "Member"}
+      <div className="px-4 sm:px-8 lg:px-12 space-y-7 lg:space-y-9">
+        {!searching && (
+          <>
+            <PointsCard
               points={customer.points}
+              voucherCount={allVouchers.length}
+              cartCount={totalItems}
             />
-          </div>
+            <ServiceGrid voucherCount={allVouchers.length} cartCount={totalItems} />
+            <MemberStrip isMember={customer.is_member} tierName={tierOf(customer).name} />
+            <MemberVouchers vouchers={allVouchers} />
+          </>
         )}
-        <MemberVouchers vouchers={allVouchers} />
-      </div>
 
-      <HomeCatalog
-        products={products}
-        page={page}
-        loading={loading}
-        searching={!!searchQuery}
-        onOpen={selection.open}
-      />
-
-      {(page > 1 || data?.hasMore) && (
-        <PageControls
+        <HomeCatalog
+          products={products}
           page={page}
-          hasMore={!!data?.hasMore}
-          loading={isValidating}
-          onChange={changePage}
+          loading={loading}
+          searching={searching}
+          onOpen={selection.open}
         />
-      )}
+
+        {(page > 1 || data?.hasMore) && (
+          <PageControls
+            page={page}
+            hasMore={!!data?.hasMore}
+            loading={isValidating}
+            onChange={changePage}
+          />
+        )}
+
+        {!searching && <ClinicInfoCard />}
+      </div>
 
       <ProductDetailModal selection={selection} />
     </div>

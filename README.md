@@ -13,8 +13,8 @@ Aplikasi pelanggan/member LBQueen Beauty Clinic untuk domain **https://lbqueen.i
 
 | Rute | Akses |
 | --- | --- |
-| `/`, `/category/[type]`, `/login`, `/register` | Publik |
-| `/cart`, `/orders`, `/profile`, `/invoice/[id]` | Wajib login member |
+| `/`, `/promo`, `/category/[type]`, `/login`, `/register` | Publik |
+| `/cart`, `/orders`, `/profile`, `/membership`, `/invoice/[id]` | Wajib login member |
 | `/customer-portal/*` | Redirect permanen (308) ke rute baru tanpa prefix |
 
 ## Batas akses ke database

@@ -1,70 +1,182 @@
-import { Search } from "lucide-react";
-import { HERO_GRADIENT } from "@/lib/constants";
+import Link from "next/link";
+import {
+  CalendarHeart,
+  Clock3,
+  Crown,
+  MapPin,
+  MessageCircleHeart,
+  Search,
+  type LucideIcon,
+} from "lucide-react";
+import { clinicStatus } from "@/lib/clinic";
+import { BANNER_BG, CLINIC_MAPS_URL, waLink } from "@/lib/constants";
+import type { Customer } from "@/lib/customer";
+import { tierOf } from "@/lib/membership";
 import { cn } from "@/lib/utils";
+import { BannerCarousel } from "./BannerCarousel";
 
-function getGreeting() {
-  const h = new Date().getHours();
-  if (h < 12) return "Selamat Pagi";
-  if (h < 15) return "Selamat Siang";
-  if (h < 18) return "Selamat Sore";
-  return "Selamat Malam";
+type Tile = {
+  label: string;
+  badge: string;
+  icon: LucideIcon;
+  color: string;
+  href: string;
+  external?: boolean;
+};
+
+function QuickTile({ tile }: { tile: Tile }) {
+  const Icon = tile.icon;
+  const body = (
+    <>
+      <span
+        className="absolute -top-2.5 left-2 rounded-full bg-[#2D2926] px-2 py-0.5 text-[11px] font-bold text-white"
+        aria-hidden="true"
+      >
+        {tile.badge}
+      </span>
+      <Icon
+        className="w-8 h-8 mt-1"
+        style={{ color: tile.color }}
+        strokeWidth={1.9}
+        aria-hidden="true"
+      />
+      <span className="text-[13px] font-semibold leading-tight text-[#2D2926] text-center whitespace-pre-line">
+        {tile.label}
+      </span>
+    </>
+  );
+  const cls = cn(
+    "relative snap-start shrink-0 w-[112px] h-[112px] rounded-[20px] bg-white border-2 flex flex-col",
+    "items-center justify-center gap-2 px-2 shadow-[0_8px_20px_-12px_rgba(122,34,64,0.45)] active:scale-95",
+    "transition-transform",
+  );
+  const label = `${tile.label.replace("\n", " ")}, ${tile.badge}`;
+  return tile.external ? (
+    <a
+      href={tile.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className={cls}
+      style={{ borderColor: tile.color + "55" }}
+    >
+      {body}
+    </a>
+  ) : (
+    <Link
+      href={tile.href}
+      aria-label={label}
+      className={cls}
+      style={{ borderColor: tile.color + "55" }}
+    >
+      {body}
+    </Link>
+  );
 }
 
 export function HomeHero({
-  name,
+  customer,
   searchQuery,
   onSearch,
 }: {
-  name?: string;
+  customer: Customer;
   searchQuery: string;
   onSearch: (value: string) => void;
 }) {
+  const tier = tierOf(customer);
+  const status = clinicStatus();
+  const tiles: Tile[] = [
+    {
+      label: "Booking\nTreatment",
+      badge: "WA",
+      icon: CalendarHeart,
+      color: "#C94F78",
+      href: waLink(`Halo LBQueen, saya ${customer.name} ingin booking treatment.`),
+      external: true,
+    },
+    {
+      label: "Konsultasi\nKulit",
+      badge: "Chat",
+      icon: MessageCircleHeart,
+      color: "#9B3055",
+      href: waLink(`Halo LBQueen, saya ${customer.name} ingin konsultasi perawatan kulit.`),
+      external: true,
+    },
+    {
+      label: "Jam\nBuka",
+      badge: status === "buka" ? "Buka" : status === "tutup" ? "Tutup" : "Info",
+      icon: Clock3,
+      color: "#B8861A",
+      href: "#info-klinik",
+    },
+    {
+      label: "Lokasi\nKlinik",
+      badge: "Maps",
+      icon: MapPin,
+      color: "#3F7A5E",
+      href: CLINIC_MAPS_URL,
+      external: true,
+    },
+  ];
+
   return (
-    <div
-      data-reveal
-      className={cn(
-        "relative overflow-hidden px-5 sm:px-8 lg:px-12 pt-24 lg:pt-28 pb-8 lg:pb-12 mb-8",
-        "rounded-b-[32px] shadow-sm",
-      )}
-      style={{ background: HERO_GRADIENT }}
-    >
-      <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
-      <div className="absolute bottom-0 left-0 w-24 h-24 bg-[#D4AF37]/10 rounded-full blur-2xl -ml-12 -mb-12"></div>
-      <div className="absolute top-0 left-0 w-64 h-64 bg-white/20 rounded-full blur-[80px] -ml-32 -mt-32"></div>
-
-      <div className="relative z-10">
-        <div className="mb-6">
-          <h2 className="text-[26px] lg:text-4xl font-semibold text-white tracking-tight leading-tight drop-shadow-sm">
-            {getGreeting()},<br />
-            <span className="text-[#F5E3C0]">{name ? name.split(" ")[0] : "Guest"}!</span>
-          </h2>
-          <p className="text-white/90 text-[14px] leading-relaxed mt-3 max-w-md">
-            Waktu untuk merawat diri. Temukan perawatan pilihan Anda.
-          </p>
-        </div>
-
-        <div
-          className={cn(
-            "relative w-full max-w-2xl rounded-2xl overflow-hidden bg-white shadow-lg shadow-[#7A2240]/20",
-            "ring-1 ring-white/60 transition-shadow focus-within:ring-4 focus-within:ring-white/40",
-          )}
-        >
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <Search aria-hidden="true" className="h-[18px] w-[18px] text-[#A83960]" />
-          </div>
+    <section data-reveal aria-label="Beranda LBQueen" style={{ background: BANNER_BG }}>
+      <div
+        className="flex items-center gap-2.5 px-4 sm:px-8 lg:px-12 pt-4 pb-2"
+        style={{ paddingTop: "max(env(safe-area-inset-top, 0px), 16px)" }}
+      >
+        <label className="relative flex-1 min-w-0">
+          <span className="sr-only">Cari treatment atau produk</span>
+          <Search
+            className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#5F5552]"
+            aria-hidden="true"
+          />
           <input
             type="search"
-            aria-label="Cari treatment atau produk"
-            placeholder="Cari treatment atau produk..."
+            placeholder="Cari treatment..."
             value={searchQuery}
             onChange={(e) => onSearch(e.target.value)}
             className={cn(
-              "block w-full pl-12 pr-4 py-4 text-base bg-transparent outline-none text-[#2D2926]",
-              "placeholder:text-[#8C8280]",
+              "w-full h-12 rounded-full bg-white pl-12 pr-4 text-base text-[#2D2926] outline-none",
+              "placeholder:text-[#8C8280] shadow-[0_4px_14px_rgba(122,34,64,0.10)] border border-white",
+              "focus:border-[#C94F78]/40 focus:ring-4 focus:ring-[#C94F78]/10",
             )}
           />
+        </label>
+        <Link
+          href="/membership"
+          aria-label={`Status membership ${tier.name}`}
+          className="shrink-0 flex items-center gap-1.5 h-12 rounded-full pl-2.5 pr-3 border border-white/70 shadow-[0_4px_14px_rgba(122,34,64,0.10)]"
+          style={{ background: tier.chip }}
+        >
+          <Crown className="w-5 h-5 text-[#7A4B0B]" fill="#F5C842" aria-hidden="true" />
+          <span className="leading-none">
+            <span className="block text-[13px] font-bold text-[#4A2A06]">{tier.name}</span>
+            <span className="hidden min-[420px]:block text-[11px] font-semibold text-[#6B4A1A] mt-0.5">
+              {tier.id === "regular" ? "Akun" : "Member"}
+            </span>
+          </span>
+        </Link>
+        <Link
+          href="/profile"
+          aria-label="Profil saya"
+          className="shrink-0 w-12 h-12 rounded-full p-[3px] bg-gradient-to-br from-[#F5C842] to-[#C94F78] shadow-[0_4px_14px_rgba(122,34,64,0.18)]"
+        >
+          <span className="w-full h-full rounded-full bg-white flex items-center justify-center text-[18px] font-bold text-[#A83960]">
+            {customer.name?.charAt(0).toUpperCase()}
+          </span>
+        </Link>
+      </div>
+
+      <BannerCarousel />
+
+      <div className="relative -mt-7 lg:-mt-10 pb-1">
+        <div className="flex gap-3 overflow-x-auto no-scrollbar snap-x px-4 sm:px-8 lg:px-12 pt-3 pb-4">
+          {tiles.map((tile) => (
+            <QuickTile key={tile.label} tile={tile} />
+          ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

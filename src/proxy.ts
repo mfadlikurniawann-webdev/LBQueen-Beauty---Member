@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifySession } from "@/lib/session";
 
-const protectedRoutes = ["/cart", "/orders", "/profile", "/invoice"];
+const protectedRoutes = ["/cart", "/orders", "/profile", "/membership", "/invoice"];
 const categorySlugs = new Set(["promo", "layanan", "produk"]);
 const legacyCategories: Record<string, string> = {
   "Treatment Care & Beauty": "layanan",
@@ -45,6 +45,7 @@ export const config = {
     "/cart/:path*",
     "/orders/:path*",
     "/profile/:path*",
+    "/membership/:path*",
     "/invoice/:path*",
     "/category/:path*",
     "/customer-portal/:path*",

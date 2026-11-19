@@ -1,5 +1,13 @@
 # Architectural Decisions & Changes Log (LBQueen Member)
 
+## 2026-11-19: Tata letak bergaya Gojek
+
+- Atas permintaan pemilik, tampilan member mengikuti alur aplikasi Gojek; ini menggantikan catatan 2026-11-17 bahwa banner promo dan tombol kategori beranda tidak diubah. Navigasi bawah: Beranda, Promo (`/promo`), Pesanan, Profil, berupa bar mengambang dengan pil aktif. Keranjang dibuka dari bar keranjang mengambang (muncul di beranda/promo/kategori bila ada item), kartu poin, grid layanan, dan profil.
+- Beranda: bar atas (pencarian, chip tier ke `/membership`, avatar ke profil), carousel banner brand (`public/banners/*.webp`, latar `#FFECF4` sama dengan banner), kartu jalan pintas (booking/konsultasi WhatsApp, jam buka, lokasi), kartu poin (Voucher/Pesanan/Keranjang), grid 8 layanan (Layanan, Produk, Promo tetap membuka `/category/*`), strip membership (akun reguler tetap menampilkan "Akun Anda sudah aktif" dan tautan upgrade WhatsApp), voucher, katalog promo berpaginasi, dan info klinik.
+- `/promo`: ringkasan voucher/membership, voucher dengan tombol salin kode, filter Semua/Layanan/Produk (diproses server lewat `/api/catalog`), katalog promo berpaginasi. `/membership` (wajib login, ditambahkan ke `proxy.ts`): carousel kartu tier Reguler/Silver/Gold/Platinum dan daftar benefit; tidak ada target poin karena tier ditetapkan admin.
+- Jam buka (Senin–Kamis 09.00–21.00, Jumat–Sabtu 10.00–21.00 WIB) dan alamat diambil dari materi banner klinik (`src/lib/clinic.ts`, `src/lib/constants.ts`). Hari Minggu tidak tercantum di materi tersebut sehingga status buka/tutup tidak ditampilkan pada hari Minggu.
+- Build lokal dengan webpack gagal bila path folder mengandung `#` (`#LBQueen`); jalankan dari drive pengganti, mis. `subst Q: "D:\...\#LBQueen"` lalu `npm run build` di `Q:\LBQueen`.
+
 ## 2026-11-18: Salinan password terenkripsi
 
 - Daftar, ganti password, dan login (bila salinan belum ada) mengisi `customers.password_encrypted` memakai `src/lib/password-vault.ts` dengan `PASSWORD_VIEW_KEY` yang sama dengan POS. Tanpa kunci, ganti password mengosongkan salinan agar superadmin tidak melihat password lama. Kolom ini dibuang dari respons gateway dan profil.

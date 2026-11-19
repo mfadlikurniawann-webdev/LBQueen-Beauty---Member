@@ -19,17 +19,16 @@ export function HomeCatalog({
 }) {
   const EmptyIcon = searching ? Search : BadgePercent;
   return (
-    <div id="katalog-beranda" className="scroll-mt-24 px-[var(--portal-gutter)] pb-6">
-      <div className="flex justify-between items-center gap-3 mb-4">
-        {searching ? (
-          <h3 className="text-[18px] font-bold text-[#2D2926] tracking-tight">Hasil Pencarian</h3>
-        ) : (
-          <SectionHeading title="Promo Spesial" />
-        )}
+    <div id="katalog-beranda" className="scroll-mt-6 pb-6">
+      <div className="flex items-center gap-3">
+        <SectionHeading
+          title={searching ? "Hasil Pencarian" : "Promo Spesial"}
+          className="flex-1 min-w-0"
+        />
         {products.length > 0 && (
           <span
             className={cn(
-              "shrink-0 rounded-full bg-[#FDF2F5] px-3 py-1 text-[12px] font-semibold text-[#A83960]",
+              "mb-3.5 shrink-0 rounded-full bg-[#FFE3EE] px-3 py-1 text-[12px] font-semibold text-[#A83960]",
               "tabular-nums",
             )}
           >

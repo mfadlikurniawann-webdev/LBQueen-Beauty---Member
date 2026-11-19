@@ -1,5 +1,4 @@
-import { ChevronLeft } from "lucide-react";
-import { HERO_GRADIENT } from "@/lib/constants";
+import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function PageHero({
@@ -7,41 +6,47 @@ export function PageHero({
   subtitle,
   onBack,
   tall = false,
+  actions,
 }: {
   title: string;
-  subtitle: string;
-  onBack: () => void;
+  subtitle?: string;
+  onBack?: () => void;
   tall?: boolean;
+  actions?: React.ReactNode;
 }) {
   return (
     <div
-      className={cn(
-        "relative overflow-hidden px-5 sm:px-8 pt-10 rounded-b-[40px] shadow-lg shadow-rose-100/30",
-        tall ? "pb-14" : "pb-12",
-      )}
-      style={{ background: HERO_GRADIENT }}
+      className={cn("relative px-4 sm:px-8", tall ? "pb-16 rounded-b-[32px]" : "pb-4")}
+      style={{
+        paddingTop: "max(env(safe-area-inset-top, 0px), 20px)",
+        background: tall
+          ? "linear-gradient(160deg,#FFC9DC 0%,#FFE3EE 55%,#FCEFC9 100%)"
+          : "linear-gradient(180deg,#FFE3EE 0%,rgba(255,236,244,0) 100%)",
+      }}
     >
-      <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16" />
-      <div className="absolute bottom-0 left-0 w-24 h-24 bg-[#D4AF37]/10 rounded-full blur-2xl -ml-12 -mb-12" />
-      <div className="absolute top-0 left-0 w-64 h-64 bg-white/20 rounded-full blur-[80px] -ml-32 -mt-32" />
-      <div className="relative z-10 flex items-center gap-4">
-        <button
-          type="button"
-          aria-label="Kembali"
-          onClick={onBack}
-          className={cn(
-            "w-11 h-11 shrink-0 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center",
-            "text-white border border-white/25 hover:bg-white/25 transition-colors",
-          )}
-        >
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-        <div className="min-w-0">
-          <h1 className="text-[22px] font-bold! text-white tracking-tight leading-tight">
+      <div className="flex items-center gap-3 min-h-12">
+        {onBack && (
+          <button
+            type="button"
+            aria-label="Kembali"
+            onClick={onBack}
+            className={cn(
+              "w-11 h-11 shrink-0 -ml-1 rounded-full flex items-center justify-center text-[#2D2926]",
+              "hover:bg-white/70 active:scale-95 transition-all",
+            )}
+          >
+            <ArrowLeft className="w-6 h-6" strokeWidth={2.4} />
+          </button>
+        )}
+        <div className="min-w-0 flex-1">
+          <h1 className="text-[24px] font-bold! text-[#2D2926] tracking-tight leading-tight truncate">
             {title}
           </h1>
-          <p className="text-white/85 text-[13px] font-medium mt-0.5">{subtitle}</p>
+          {subtitle && (
+            <p className="text-[13px] font-medium text-[#766B68] mt-0.5 truncate">{subtitle}</p>
+          )}
         </div>
+        {actions && <div className="flex items-center gap-2 shrink-0">{actions}</div>}
       </div>
     </div>
   );

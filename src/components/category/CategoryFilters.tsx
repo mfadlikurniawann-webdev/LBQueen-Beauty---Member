@@ -7,8 +7,8 @@ const chipClass = (active: boolean) =>
     "whitespace-nowrap px-4 min-h-10 rounded-full text-[13px] font-semibold capitalize transition-all",
     "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20",
     active
-      ? "bg-gradient-to-br from-[#C94F78] to-[#A83960] text-white shadow-md shadow-rose-200/60"
-      : "bg-white text-[#5F5552] border border-[#EEDFE3] hover:border-[#C94F78]/40 hover:text-[#A83960]",
+      ? "bg-[#FFE3EE] text-[#A83960] border border-[#E9A9C0] font-bold"
+      : "bg-white text-[#3F3734] border border-[#E6D3DA] hover:border-[#C94F78]/40 hover:text-[#A83960]",
   );
 
 export function CategoryFilters({
@@ -42,7 +42,7 @@ export function CategoryFilters({
           aria-label={`Cari di ${section.title}`}
           placeholder={`Cari di ${section.title}...`}
           className={cn(
-            "w-full bg-white border border-[#EEDFE3] rounded-2xl py-4 pl-12 pr-4 text-[15px] font-medium",
+            "w-full bg-white border border-[#E6D3DA] rounded-full h-12 pl-12 pr-4 text-base font-medium",
             "text-[#2D2926] placeholder:text-[#8C8280] shadow-sm focus:outline-none focus:border-[#C94F78]",
             "focus:ring-4 focus:ring-rose-100 transition-all",
           )}
@@ -78,7 +78,7 @@ export function CategoryFilters({
         </div>
       )}
 
-      <div className="sticky top-[88px] z-40 bg-[#FDFBFB]/90 backdrop-blur-md -mx-5 px-5 py-3 mb-5">
+      <div className="sticky top-[76px] z-40 bg-[#FBF9F9]/90 backdrop-blur-md -mx-5 px-5 py-3 mb-5">
         <div
           className={cn(
             `grid ${section.tabs.length === 2 ? "grid-cols-2" : "grid-cols-3"} gap-1 rounded-2xl`,

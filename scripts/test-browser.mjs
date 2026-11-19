@@ -327,7 +327,7 @@ try {
     customers[0],
   );
   await customerPage.goto(base + "/");
-  await customerPage.getByPlaceholder("Cari treatment atau produk...").waitFor();
+  await customerPage.getByRole("searchbox", { name: "Cari treatment atau produk" }).waitFor();
   await customerPage.waitForTimeout(500);
   assert.equal(
     await customerPage.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1),
@@ -335,19 +335,34 @@ try {
     "Portal overflows mobile",
   );
   await customerPage.screenshot({ path: ".scratch/qa/member-home-mobile.png", fullPage: true });
+  await customerPage.setViewportSize({ width: 1280, height: 900 });
+  await customerPage.waitForTimeout(300);
+  await customerPage.screenshot({ path: ".scratch/qa/member-home-desktop.png", fullPage: true });
+  await customerPage.setViewportSize({ width: 390, height: 844 });
   assert.equal(
     await customerPage.getByRole("button", { name: "Lihat Semua", exact: true }).count(),
     0,
     "Lihat Semua button still shown",
   );
-  const categoryNav = customerPage.getByRole("navigation", { name: "Kategori katalog" });
-  assert.deepEqual(await categoryNav.getByRole("button").allInnerTexts(), [
+  const serviceNav = customerPage.getByRole("navigation", { name: "Menu layanan" });
+  for (const [name, href] of [
+    ["Layanan", "/category/layanan"],
+    ["Produk", "/category/produk"],
+    ["Promo", "/category/promo"],
+  ])
+    assert.equal(
+      await serviceNav.getByRole("link", { name, exact: true }).getAttribute("href"),
+      href,
+    );
+  const bottomNav = customerPage.getByRole("navigation", { name: "Navigasi pelanggan" });
+  assert.deepEqual(await bottomNav.getByRole("link").allInnerTexts(), [
+    "Beranda",
     "Promo",
-    "Layanan",
-    "Produk",
+    "Pesanan",
+    "Profil",
   ]);
   await customerPage.getByRole("heading", { name: "Promo Spesial" }).waitFor();
-  await categoryNav.getByRole("button", { name: "Produk" }).click();
+  await serviceNav.getByRole("link", { name: "Produk", exact: true }).click();
   await customerPage.waitForURL("**/category/produk");
   await customerPage.getByRole("heading", { name: "Produk", exact: true }).waitFor();
   await customerPage
@@ -385,6 +400,21 @@ try {
     false,
     "Category page overflows mobile",
   );
+  await customerPage.goto(base + "/promo");
+  await customerPage.getByRole("heading", { name: "Voucher Tersedia" }).waitFor();
+  await customerPage.getByRole("heading", { name: "Potongan Harga" }).waitFor();
+  assert.equal(
+    await customerPage.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1),
+    false,
+    "Promo page overflows mobile",
+  );
+  await customerPage.screenshot({ path: ".scratch/qa/member-promo-mobile.png", fullPage: true });
+  await customerPage.goto(base + "/membership");
+  await customerPage.getByRole("heading", { name: /^Nikmati \d+ benefit$/ }).waitFor();
+  await customerPage.screenshot({
+    path: ".scratch/qa/member-membership-mobile.png",
+    fullPage: true,
+  });
   await customerPage.goto(base + "/orders");
   await customerPage.waitForTimeout(500);
   assert(
@@ -394,6 +424,7 @@ try {
   await customerPage.screenshot({ path: ".scratch/qa/member-orders-mobile.png", fullPage: true });
   await customerPage.goto(base + "/profile");
   await customerPage.getByRole("heading", { name: "QA Customer", exact: true }).waitFor();
+  await customerPage.screenshot({ path: ".scratch/qa/member-profile-mobile.png", fullPage: true });
   assert.equal(await customerPage.getByText("Terverifikasi", { exact: true }).count(), 0);
   customers[0].points = 321;
   customers[0].membership_type = "Gold";
@@ -443,7 +474,7 @@ try {
     ),
   );
   console.log(
-    "PASS: member routes at root, legacy /customer-portal redirect, admin tables/RPC/routes absent, catalog pagination/promo/private columns, own-customer filtering, write rejection, admin session rejected, 3 category buttons, category pagination with layered browser history, mobile layout, regular-account upgrade CTA, server profile refresh, cookie-only authentication, stale storage ignored, no runtime errors. Database responses mocked.",
+    "PASS: member routes at root, legacy /customer-portal redirect, admin tables/RPC/routes absent, catalog pagination/promo/private columns, own-customer filtering, write rejection, admin session rejected, 8-item service grid with category links, Gojek-style bottom nav, promo and membership pages, category pagination with layered browser history, mobile layout, regular-account upgrade CTA, server profile refresh, cookie-only authentication, stale storage ignored, no runtime errors. Database responses mocked.",
   );
 } finally {
   await browser?.close();
