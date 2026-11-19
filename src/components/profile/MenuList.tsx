@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { ChevronRight, type LucideIcon } from "lucide-react";
+import { IconChip } from "@/components/IconChip";
+import type { Tone } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
 export type MenuRow = {
   label: string;
   icon: LucideIcon;
+  tone?: Tone;
   href?: string;
   external?: boolean;
   onClick?: () => void;
@@ -15,19 +18,14 @@ export type MenuRow = {
 };
 
 const ROW = cn(
-  "w-full flex items-center gap-4 px-4 min-h-[60px] text-left transition-colors hover:bg-[#FBF5F7]",
+  "w-full flex items-center gap-3.5 px-4 min-h-[60px] text-left transition-colors hover:bg-[#FBF5F7]",
   "focus-visible:outline-none focus-visible:bg-[#FBF5F7]",
 );
 
 function RowBody({ row }: { row: MenuRow }) {
-  const Icon = row.icon;
   return (
     <>
-      <Icon
-        className="w-[22px] h-[22px] shrink-0 text-[#3F3734]"
-        strokeWidth={2.1}
-        aria-hidden="true"
-      />
+      <IconChip icon={row.icon} tone={row.tone ?? "rose"} size="sm" />
       <span className="flex-1 min-w-0 flex items-center gap-2 py-4 border-b border-[#F1E8EB] group-last:border-b-0">
         <span className="text-[15px] font-semibold text-[#2D2926] truncate">{row.label}</span>
         {row.badge && (

@@ -22,8 +22,8 @@ export const metadata: Metadata = {
     "Portal member LBQueen Beauty Clinic untuk pemesanan treatment dan produk kecantikan online",
   manifest: "/manifest.json",
   icons: {
-    icon: "/lbqueen_logo.png",
-    apple: "/lbqueen_logo.png",
+    icon: "/lbqueen-mark.png",
+    apple: "/lbqueen-mark.png",
   },
   appleWebApp: {
     capable: true,

@@ -35,14 +35,14 @@ export function ProfileSummary({ customer }: { customer: Customer }) {
         className="-mt-5 pt-7 pb-3 px-4 sm:px-5 flex items-center gap-2.5"
         style={{ background: tier.chip }}
       >
-        <Crown className="w-5 h-5 shrink-0 text-[#7A4B0B]" fill="#F5C842" aria-hidden="true" />
-        <span className="text-[14px] font-bold text-[#4A2A06] flex-1 min-w-0 truncate">
+        <Crown className="w-5 h-5 shrink-0 text-[#B8861A]" fill="#F5D57A" aria-hidden="true" />
+        <span className="text-[14px] font-bold text-[#2D2926] flex-1 min-w-0 truncate">
           {tier.id === "regular" ? "Akun Reguler" : `${tier.name} Member`}
         </span>
-        <span className="text-[13px] font-semibold text-[#4A2A06] tabular-nums">
+        <span className="text-[13px] font-semibold text-[#2D2926] tabular-nums">
           {formatNumber(customer.points || 0)} Poin
         </span>
-        <span className="w-7 h-7 shrink-0 rounded-full bg-[#5A2A0C] flex items-center justify-center">
+        <span className="w-7 h-7 shrink-0 rounded-full bg-[#9B3055] flex items-center justify-center">
           <ArrowRight className="w-4 h-4 text-white" aria-hidden="true" />
         </span>
       </Link>

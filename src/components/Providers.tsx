@@ -4,7 +4,8 @@ import { ToastProvider } from "./Toast";
 import { PWAProvider } from "./PWAContext";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { watchStaleDeploy } from "@/lib/stale-deploy";
 import { SWRConfig } from "swr";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -20,6 +21,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
         },
       }),
   );
+
+  useEffect(() => watchStaleDeploy(), []);
 
   return (
     <QueryClientProvider client={queryClient}>

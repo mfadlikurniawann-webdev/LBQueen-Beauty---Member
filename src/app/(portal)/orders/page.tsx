@@ -13,6 +13,7 @@ import { useOrderReview } from "@/components/orders/useOrderReview";
 import { PageHero } from "@/components/portal/PageHero";
 import { useCart } from "@/context/CartContext";
 import { useCustomer } from "@/context/CustomerContext";
+import { IconChip } from "@/components/IconChip";
 import { waLink } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
 import { watchWhileVisible } from "@/lib/watch-visible";
@@ -129,7 +130,7 @@ export default function OrdersPage() {
           href="/cart"
           className="mb-4 flex items-center gap-3 rounded-[18px] border border-[#E6D3DA] bg-white px-4 h-14"
         >
-          <ShoppingCart className="w-5 h-5 text-[#3B6FD8]" aria-hidden="true" />
+          <IconChip icon={ShoppingCart} tone="berry" size="sm" bare />
           <span className="flex-1 text-[15px] text-[#3F3734]">Keranjang belanja</span>
           {totalItems > 0 && (
             <span className="rounded-full bg-[#C94F78] px-2.5 py-0.5 text-[12px] font-bold text-white tabular-nums">

@@ -2,24 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  ArrowLeft,
-  ChevronLeft,
-  ChevronRight,
-  Crown,
-  Gift,
-  MessageCircle,
-  Sparkles,
-  Star,
-  Ticket,
-} from "lucide-react";
+import { CalendarHeart, Crown, Gift, Info, Sparkles, Star, Ticket } from "lucide-react";
+import { IconChip } from "@/components/IconChip";
+import { PageHero } from "@/components/portal/PageHero";
 import { useCustomer } from "@/context/CustomerContext";
 import { waLink } from "@/lib/constants";
 import { formatNumber } from "@/lib/format";
 import { MEMBER_BENEFITS, REGULAR_BENEFITS, TIERS, tierOf } from "@/lib/membership";
+import type { Tone } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
 const BENEFIT_ICONS = [Star, Ticket, Sparkles, Gift];
+const BENEFIT_TONES: Tone[] = ["gold", "rose", "berry", "gold"];
 
 export default function MembershipPage() {
   const router = useRouter();
@@ -41,14 +35,14 @@ export default function MembershipPage() {
     const onScroll = () => {
       const center = el.scrollLeft + el.clientWidth / 2;
       let best = 0;
+      let bestDistance = Infinity;
       Array.from(el.children).forEach((child, i) => {
         const c = child as HTMLElement;
-        const top = el.children[best] as HTMLElement;
-        if (
-          Math.abs(c.offsetLeft + c.clientWidth / 2 - center) <
-          Math.abs(top.offsetLeft + top.clientWidth / 2 - center)
-        )
+        const distance = Math.abs(c.offsetLeft + c.clientWidth / 2 - center);
+        if (distance < bestDistance) {
           best = i;
+          bestDistance = distance;
+        }
       });
       setViewed(best);
     };
@@ -75,189 +69,133 @@ export default function MembershipPage() {
   return (
     <div className="min-h-screen">
       <div
-        className="transition-[background] duration-500 pb-10"
-        style={{ background: tier.stage }}
+        className="transition-[background] duration-500 pb-6"
+        style={{
+          background: `linear-gradient(180deg, ${tier.stage} 0%, rgba(251,249,249,0) 100%)`,
+        }}
       >
+        <PageHero
+          title="Membership"
+          subtitle="Status tier dan benefit akun Anda"
+          onBack={() => router.back()}
+          transparent
+        />
+
         <div
-          className="flex items-center justify-between px-4 sm:px-8"
-          style={{ paddingTop: "max(env(safe-area-inset-top, 0px), 20px)" }}
+          ref={track}
+          className="flex gap-3 overflow-x-auto snap-x snap-mandatory no-scrollbar px-[12%] sm:px-[calc(50%-170px)] pt-2 pb-4"
         >
-          <button
-            type="button"
-            aria-label="Kembali"
-            onClick={() => router.back()}
-            className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-[#2D2926] shadow-md active:scale-95"
-          >
-            <ArrowLeft className="w-6 h-6" strokeWidth={2.4} />
-          </button>
-          <a
-            href={waLink("Halo admin LBQueen, saya ingin bertanya tentang membership.")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="h-12 rounded-full bg-white px-4 flex items-center gap-2 text-[15px] font-semibold text-[#2D2926] shadow-md"
-          >
-            <MessageCircle className="w-5 h-5" aria-hidden="true" /> Info
-          </a>
+          {TIERS.map((t, i) => {
+            const mine = i === currentIndex;
+            return (
+              <div
+                key={t.id}
+                className={cn(
+                  "snap-center shrink-0 w-[76%] sm:w-[340px] transition-transform duration-300",
+                  viewed !== i && "scale-[0.94] opacity-80",
+                )}
+                aria-hidden={viewed !== i}
+              >
+                <div
+                  className="relative aspect-[1.45/1] rounded-[24px] p-5 flex flex-col justify-between overflow-hidden shadow-[0_18px_36px_-20px_rgba(90,24,52,0.6)]"
+                  style={{ background: t.card, color: t.ink }}
+                >
+                  <span
+                    className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/15"
+                    aria-hidden="true"
+                  />
+                  <div className="relative flex items-start justify-between">
+                    <div>
+                      <p className="text-[12px] font-semibold opacity-80">LBQueen Member</p>
+                      <p className="text-[24px] font-extrabold leading-tight">{t.label}</p>
+                    </div>
+                    <span className="w-11 h-11 rounded-full bg-white/25 flex items-center justify-center">
+                      <Crown className="w-6 h-6" aria-hidden="true" />
+                    </span>
+                  </div>
+                  <div className="relative flex items-end justify-between gap-3">
+                    {mine ? (
+                      <>
+                        <div>
+                          <p className="text-[26px] font-extrabold leading-none tabular-nums">
+                            {formatNumber(customer.points || 0)}
+                          </p>
+                          <p className="text-[12px] font-semibold opacity-80 mt-1">Poin</p>
+                        </div>
+                        <span className="rounded-full bg-white/90 px-3 py-1 text-[12px] font-bold text-[#2D2926]">
+                          Tier Anda
+                        </span>
+                      </>
+                    ) : (
+                      <p className="text-[13px] font-semibold opacity-90">
+                        Ditetapkan oleh admin LBQueen
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
-        <h1 className="sr-only">Membership LBQueen</h1>
-        <div
-          className="flex items-center justify-center gap-2 px-4 mt-5 overflow-hidden"
-          role="group"
-          aria-label="Tingkat membership"
-        >
+        <div className="flex justify-center gap-1.5" role="group" aria-label="Pilih tier">
           {TIERS.map((t, i) => (
-            <div key={t.id} className="flex items-center gap-2 min-w-0">
-              {i > 0 && (
-                <span className="w-5 sm:w-12 h-[3px] rounded-full bg-white/35" aria-hidden="true" />
-              )}
-              <button
-                type="button"
-                aria-pressed={viewed === i}
-                onClick={() => goTo(i)}
+            <button
+              key={t.id}
+              type="button"
+              aria-label={`Lihat tier ${t.label}`}
+              aria-pressed={viewed === i}
+              onClick={() => goTo(i)}
+              className="h-6 flex items-center"
+            >
+              <span
                 className={cn(
-                  "text-[14px] whitespace-nowrap transition-colors",
-                  viewed === i ? "font-bold text-white" : "font-medium text-white/60",
+                  "block h-1.5 rounded-full transition-all",
+                  viewed === i ? "w-6 bg-[#C94F78]" : "w-1.5 bg-[#C94F78]/30",
                 )}
-              >
-                {t.label}
-              </button>
-            </div>
+              />
+            </button>
           ))}
         </div>
 
-        <div className="relative mt-6">
-          <div
-            ref={track}
-            className="flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar px-[11%] sm:px-[calc(50%-170px)]"
-          >
-            {TIERS.map((t, i) => {
-              const mine = i === currentIndex;
-              return (
-                <div
-                  key={t.id}
-                  className="snap-center shrink-0 w-[78%] sm:w-[340px]"
-                  aria-hidden={viewed !== i}
-                >
-                  <div
-                    className="relative rounded-[28px] p-[6px] shadow-[0_24px_50px_-20px_rgba(0,0,0,0.6)]"
-                    style={{ background: t.card }}
-                  >
-                    <div className="rounded-[22px] border-2 border-white/35 px-5 pt-0 pb-5 flex flex-col items-center">
-                      <span
-                        className="-mt-px rounded-b-2xl px-6 py-2 text-[18px] font-bold bg-white/25 backdrop-blur-sm"
-                        style={{ color: t.ink }}
-                      >
-                        {t.label}
-                      </span>
-                      <span
-                        className="my-8 w-28 h-28 rounded-full flex items-center justify-center bg-white/25 border-4 border-white/40 shadow-inner"
-                        aria-hidden="true"
-                      >
-                        <Crown
-                          className="w-14 h-14"
-                          style={{ color: t.ink }}
-                          fill="rgba(255,255,255,0.35)"
-                        />
-                      </span>
-                      {mine ? (
-                        <div
-                          className="w-full grid grid-cols-2 divide-x divide-white/40"
-                          style={{ color: t.ink }}
-                        >
-                          <div className="text-center">
-                            <p className="text-[24px] font-extrabold leading-none tabular-nums">
-                              {formatNumber(customer.points || 0)}
-                            </p>
-                            <p className="text-[13px] font-medium mt-1.5 opacity-90">Poin</p>
-                          </div>
-                          <div className="text-center">
-                            <p className="text-[18px] font-extrabold leading-tight">Aktif</p>
-                            <p className="text-[13px] font-medium mt-1.5 opacity-90">Tier Anda</p>
-                          </div>
-                        </div>
-                      ) : (
-                        <p
-                          className="text-[14px] font-semibold text-center"
-                          style={{ color: t.ink }}
-                        >
-                          Ditetapkan oleh admin LBQueen
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="-mt-5 pt-8 pb-4 px-5 rounded-b-[28px] bg-[#1B1416] text-white text-center">
-                    <p className="text-[13px] leading-relaxed text-white/90">
-                      {mine
-                        ? "Status tier dikelola admin. Poin tidak otomatis mengubah tier."
-                        : `Tanya admin untuk informasi tier ${t.label}.`}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          {viewed > 0 && (
-            <button
-              type="button"
-              aria-label="Tier sebelumnya"
-              onClick={() => goTo(viewed - 1)}
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 flex items-center justify-center text-[#2D2926] shadow"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-          )}
-          {viewed < TIERS.length - 1 && (
-            <button
-              type="button"
-              aria-label="Tier berikutnya"
-              onClick={() => goTo(viewed + 1)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 flex items-center justify-center text-[#2D2926] shadow"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          )}
-        </div>
+        <p className="mx-auto mt-3 max-w-sm px-6 flex items-start justify-center gap-1.5 text-center text-[12px] text-[#766B68]">
+          <Info className="w-4 h-4 shrink-0 mt-px" aria-hidden="true" />
+          Status tier dikelola admin. Poin tidak otomatis mengubah tier.
+        </p>
       </div>
 
-      <div className="px-4 sm:px-8 max-w-2xl mx-auto -mt-2 pb-6">
-        <h2 className="text-center text-[22px] font-bold! text-[#2D2926] mb-4">
+      <div className="px-4 sm:px-8 max-w-2xl mx-auto pb-6">
+        <h2 className="text-[18px] font-bold! text-[#2D2926] mb-3.5">
           Nikmati {benefits.length} benefit{isCurrent ? "" : ` ${tier.label}`}
         </h2>
-        <ul className="space-y-3">
-          {benefits.map((b, i) => {
-            const Icon = BENEFIT_ICONS[i % BENEFIT_ICONS.length];
-            return (
-              <li
-                key={b.title}
-                className="flex items-center gap-4 rounded-[20px] bg-white border border-[#F0E4E8] px-4 py-4 shadow-[0_8px_24px_-18px_rgba(122,34,64,0.4)]"
-              >
-                <span
-                  className="w-11 h-11 shrink-0 rounded-2xl flex items-center justify-center"
-                  style={{ background: tier.chip }}
-                >
-                  <Icon className="w-6 h-6 text-[#7A4B0B]" aria-hidden="true" />
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-[15px] font-bold text-[#2D2926]">{b.title}</span>
-                  <span className="block text-[13px] text-[#766B68] mt-0.5">{b.desc}</span>
-                </span>
-              </li>
-            );
-          })}
+        <ul className="rounded-[22px] bg-white border border-[#F0E4E8] divide-y divide-[#F3EAEE] shadow-[0_10px_30px_-20px_rgba(122,34,64,0.4)]">
+          {benefits.map((b, i) => (
+            <li key={b.title} className="flex items-center gap-3.5 px-4 py-3.5">
+              <IconChip
+                icon={BENEFIT_ICONS[i % BENEFIT_ICONS.length]}
+                tone={BENEFIT_TONES[i % BENEFIT_TONES.length]}
+                size="md"
+              />
+              <span className="min-w-0">
+                <span className="block text-[15px] font-semibold text-[#2D2926]">{b.title}</span>
+                <span className="block text-[13px] text-[#766B68] mt-0.5">{b.desc}</span>
+              </span>
+            </li>
+          ))}
         </ul>
-        {current.id === "regular" && (
-          <a
-            href={waLink(
-              "Halo, saya ingin menanyakan peningkatan status member akun LBQueen saya.",
-            )}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-pink w-full mt-5"
-          >
-            Tanya upgrade ke admin
-          </a>
-        )}
+        <a
+          href={waLink(
+            current.id === "regular"
+              ? "Halo, saya ingin menanyakan peningkatan status member akun LBQueen saya."
+              : "Halo admin LBQueen, saya ingin bertanya tentang membership.",
+          )}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-5 w-full h-[52px] rounded-full flex items-center justify-center gap-2 text-[15px] font-bold text-white bg-gradient-to-r from-[#C94F78] to-[#9B3055] shadow-[0_10px_24px_-12px_rgba(168,57,96,0.7)]"
+        >
+          <CalendarHeart className="w-5 h-5" aria-hidden="true" />
+          {current.id === "regular" ? "Tanya upgrade ke admin" : "Tanya admin soal membership"}
+        </a>
       </div>
     </div>
   );

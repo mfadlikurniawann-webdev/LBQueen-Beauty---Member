@@ -8,6 +8,7 @@ import { PageControls } from "@/components/PageControls";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { ProductDetailSheet } from "@/components/catalog/ProductDetailSheet";
 import { CatalogLoadError } from "@/components/category/CatalogLoadError";
+import { IconChip } from "@/components/IconChip";
 import { EmptyVouchers, VoucherTicket } from "@/components/home/MemberVouchers";
 import { SectionHeading } from "@/components/home/SectionHeading";
 import { PageHero } from "@/components/portal/PageHero";
@@ -54,28 +55,24 @@ export default function PromoPage() {
         <div className="rounded-[22px] bg-white border border-[#F0E4E8] p-4 shadow-[0_10px_30px_-18px_rgba(122,34,64,0.4)]">
           <div className="grid grid-cols-2 divide-x divide-[#F0E4E8]">
             <a href="#voucher-tersedia" className="flex items-center gap-3 pr-3 min-w-0">
-              <span className="w-11 h-11 shrink-0 rounded-full bg-[#FFE7DE] flex items-center justify-center">
-                <Ticket className="w-5 h-5 text-[#E0663A]" aria-hidden="true" />
-              </span>
+              <IconChip icon={Ticket} tone="gold" size="md" />
               <span className="min-w-0">
                 <span className="block text-[15px] font-bold text-[#2D2926] leading-tight truncate tabular-nums">
                   {vouchers.length} voucher
                 </span>
-                <span className="block text-[13px] font-semibold text-[#2F8F5B]">Pakai, yuk!</span>
+                <span className="block text-[13px] font-semibold text-[#A83960]">Pakai, yuk!</span>
               </span>
             </a>
             <Link
               href={customer ? "/membership" : "/login"}
               className="flex items-center gap-3 pl-3 min-w-0"
             >
-              <span className="w-11 h-11 shrink-0 rounded-full bg-[#FFF4D1] flex items-center justify-center">
-                <Crown className="w-5 h-5 text-[#B8861A]" aria-hidden="true" />
-              </span>
+              <IconChip icon={Crown} tone="rose" size="md" />
               <span className="min-w-0">
                 <span className="block text-[15px] font-bold text-[#2D2926] leading-tight truncate">
                   Membership
                 </span>
-                <span className="block text-[13px] font-semibold text-[#2F8F5B] truncate">
+                <span className="block text-[13px] font-semibold text-[#A83960] truncate">
                   {customer ? tierOf(customer).name : "Masuk dulu"}
                 </span>
               </span>

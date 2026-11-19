@@ -1,3 +1,4 @@
+import { submitOrderReview } from "@/app/actions/reviews";
 import { useState } from "react";
 import { useToast } from "@/components/Toast";
 import type { Order } from "./order-utils";
@@ -18,7 +19,6 @@ export function useOrderReview() {
   const submit = async () => {
     if (!order || submitting) return;
     setSubmitting(true);
-    const { submitOrderReview } = await import("@/app/actions/reviews");
     const result = await submitOrderReview(order.id, rating, text);
     setSubmitting(false);
     if (result.error) {

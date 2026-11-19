@@ -1,14 +1,15 @@
 "use client";
 
+import { loginCustomer } from "@/app/actions/auth";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Info } from "lucide-react";
 import { AuthActions } from "@/components/auth/AuthActions";
 import { AuthError } from "@/components/auth/AuthError";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { INPUT_CLASS, LABEL_CLASS } from "@/components/auth/auth-styles";
 import { useCustomer } from "@/context/CustomerContext";
 import { PasswordToggle } from "@/components/PasswordToggle";
+import { errorMessage } from "@/lib/stale-deploy";
 
 export default function CustomerLoginPage() {
   const router = useRouter();
@@ -41,8 +42,6 @@ export default function CustomerLoginPage() {
     try {
       const identifier = form.phone.trim();
       const password = form.password;
-
-      const { loginCustomer } = await import("@/app/actions/auth");
       const res = await loginCustomer(identifier, password);
 
       if (res.error) {
@@ -58,7 +57,7 @@ export default function CustomerLoginPage() {
       localStorage.setItem("lbqueen_customer", JSON.stringify(res.data));
       router.push("/");
     } catch (err) {
-      setError((err as Error).message);
+      setError(errorMessage(err, "Gagal masuk. Coba lagi."));
     } finally {
       setLoading(false);
     }
@@ -71,17 +70,10 @@ export default function CustomerLoginPage() {
       footer="PT. LBQueen Care Beauty"
       contentClassName="w-full max-w-[400px]"
     >
-      <p className="text-[12px] font-bold uppercase tracking-[0.12em] mb-3 text-[#9A7B22]">
-        Selamat Datang
-      </p>
-      <h2 className="text-[28px] font-bold! text-[#2D2926] tracking-tight leading-tight mb-2">
-        Masuk ke Akun
-      </h2>
-      <p className="text-[14px] text-[#766B68] mb-8 leading-relaxed">
-        Masukkan <span className="font-semibold text-[#A83960]">Username</span>
-        {" dan "}
-        <span className="font-semibold text-[#A83960]">Password</span> Anda
-      </p>
+      <h1 className="text-[28px] font-extrabold! text-[#2D2926] tracking-tight leading-tight">
+        Masuk
+      </h1>
+      <p className="text-[15px] text-[#766B68] mt-1.5 mb-7">Pakai username atau nomor HP Anda.</p>
 
       <form onSubmit={handleLogin} className="space-y-5">
         <div>
@@ -143,20 +135,16 @@ export default function CustomerLoginPage() {
 
         <AuthActions
           loading={loading}
-          submitLabel="Masuk Sekarang"
+          submitLabel="Masuk"
           href="/register"
           prompt="Belum ada akun?"
           linkLabel="Daftar dulu"
         />
       </form>
 
-      <div className="mt-8 p-4 rounded-2xl flex items-start gap-3 bg-[#FBF7ED] border border-[#EADFB8]">
-        <Info className="w-4 h-4 shrink-0 mt-0.5 text-[#9A7B22]" aria-hidden="true" />
-        <p className="text-[13px] leading-relaxed text-[#6B5512]">
-          Silakan mendaftar secara online melalui link pendaftaran di atas, atau minta dibuatkan
-          akun oleh kasir/admin di klinik.
-        </p>
-      </div>
+      <p className="mt-6 text-center text-[13px] text-[#8C8280]">
+        Akun juga bisa dibuatkan oleh kasir di klinik.
+      </p>
     </AuthShell>
   );
 }

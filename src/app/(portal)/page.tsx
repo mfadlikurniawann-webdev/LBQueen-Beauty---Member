@@ -5,22 +5,34 @@ import useSWR from "swr";
 import { useRouter } from "next/navigation";
 import { PageControls } from "@/components/PageControls";
 import { ProductDetailSheet } from "@/components/catalog/ProductDetailSheet";
+import { ActiveOrderCard } from "@/components/home/ActiveOrderCard";
 import { CatalogUnavailable } from "@/components/home/CatalogUnavailable";
 import { ClinicInfoCard } from "@/components/home/ClinicInfoCard";
 import { HomeCatalog } from "@/components/home/HomeCatalog";
+import { HomeHeader } from "@/components/home/HomeHeader";
 import { HomeHero } from "@/components/home/HomeHero";
 import { HomeSkeleton } from "@/components/home/HomeSkeleton";
 import { MemberStrip } from "@/components/home/MemberStrip";
 import { MemberVouchers } from "@/components/home/MemberVouchers";
+import { MenuPanel } from "@/components/home/MenuPanel";
 import { OnboardingView } from "@/components/home/OnboardingView";
-import { PointsCard } from "@/components/home/PointsCard";
-import { CATALOG_SHORTCUTS, ServiceGrid } from "@/components/home/ServiceGrid";
+import { ProductRail } from "@/components/home/ProductRail";
+import { CATALOG_SHORTCUTS } from "@/components/home/ServiceGrid";
 import { useCart } from "@/context/CartContext";
 import { useCustomer } from "@/context/CustomerContext";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useProductSelection } from "@/hooks/useProductSelection";
-import { loadCatalog } from "@/lib/catalog";
-import { tierOf } from "@/lib/membership";
+import { loadCatalog, type CatalogProduct } from "@/lib/catalog";
+import { TREATMENT_TYPE } from "@/lib/constants";
+
+const RAIL_OPTIONS = { revalidateOnFocus: false, keepPreviousData: true };
+
+function bestSaving(products: CatalogProduct[]) {
+  return products.reduce((max, p) => {
+    if (!p.voucher_discount || !p.selling_price) return max;
+    return Math.max(max, Math.round((p.voucher_discount / p.selling_price) * 100));
+  }, 0);
+}
 
 export default function CustomerPortalPage() {
   const router = useRouter();
@@ -29,14 +41,8 @@ export default function CustomerPortalPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const selection = useProductSelection(customer, { loginToAdd: true });
-  const changePage = (next: number) => {
-    setPage(next);
-    document
-      .getElementById("katalog-beranda")
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
   const debouncedSearch = useDebounce(searchQuery, 400);
+  const searching = !!debouncedSearch;
 
   const {
     data,
@@ -45,9 +51,20 @@ export default function CustomerPortalPage() {
     error: catalogError,
     mutate,
   } = useSWR(
-    ["/api/catalog", debouncedSearch, page],
+    ["/api/catalog", debouncedSearch, searching ? page : 1],
     ([, search, page]) => loadCatalog({ search, category: search ? "semua" : "promo", page }),
-    { revalidateOnFocus: false, keepPreviousData: true },
+    RAIL_OPTIONS,
+  );
+  const enabled = !!customer && !searching;
+  const treatments = useSWR(
+    enabled ? ["home-rail", TREATMENT_TYPE] : null,
+    () => loadCatalog({ category: TREATMENT_TYPE, page: 1 }),
+    RAIL_OPTIONS,
+  );
+  const skincare = useSWR(
+    enabled ? ["home-rail", "produk"] : null,
+    () => loadCatalog({ category: "Product Care & Beauty", page: 1 }),
+    RAIL_OPTIONS,
   );
 
   const products = data?.products || [];
@@ -59,7 +76,7 @@ export default function CustomerPortalPage() {
     );
   }, [router]);
 
-  if ((loading && customer) || customerLoading) return <HomeSkeleton />;
+  if ((loading && customer && !data) || customerLoading) return <HomeSkeleton />;
 
   if (customerError)
     return (
@@ -72,52 +89,81 @@ export default function CustomerPortalPage() {
 
   if (catalogError) return <CatalogUnavailable onRetry={() => mutate()} />;
 
-  const searching = !!searchQuery;
+  const saving = bestSaving(products);
+  const changePage = (next: number) => {
+    setPage(next);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <div className="min-h-screen animate-in fade-in duration-500">
-      <HomeHero
-        customer={customer}
+      <HomeHeader
         searchQuery={searchQuery}
+        cartCount={totalItems}
         onSearch={(value) => {
           setPage(1);
           setSearchQuery(value);
         }}
       />
 
-      <div className="px-4 sm:px-8 lg:px-12 space-y-7 lg:space-y-9">
-        {!searching && (
-          <>
-            <PointsCard
-              points={customer.points}
-              voucherCount={allVouchers.length}
-              cartCount={totalItems}
-            />
-            <ServiceGrid voucherCount={allVouchers.length} cartCount={totalItems} />
-            <MemberStrip isMember={customer.is_member} tierName={tierOf(customer).name} />
-            <MemberVouchers vouchers={allVouchers} />
-          </>
-        )}
-
-        <HomeCatalog
-          products={products}
-          page={page}
-          loading={loading}
-          searching={searching}
-          onOpen={selection.open}
-        />
-
-        {(page > 1 || data?.hasMore) && (
+      {searching ? (
+        <div className="px-4 sm:px-8 lg:px-12 pt-5">
+          <HomeCatalog
+            products={products}
+            page={page}
+            loading={isValidating && !data}
+            searching
+            onOpen={selection.open}
+          />
           <PageControls
             page={page}
             hasMore={!!data?.hasMore}
             loading={isValidating}
             onChange={changePage}
           />
-        )}
+        </div>
+      ) : (
+        <>
+          <HomeHero name={customer.name}>
+            <MenuPanel
+              customer={customer}
+              voucherCount={allVouchers.length}
+              cartCount={totalItems}
+            />
+          </HomeHero>
 
-        {!searching && <ClinicInfoCard />}
-      </div>
+          <div className="px-4 sm:px-8 lg:px-12 pt-5 space-y-6 lg:space-y-8">
+            {!customer.is_member && <MemberStrip />}
+            <ActiveOrderCard customerId={customer.id} />
+            <ProductRail
+              band
+              title="Promo Spesial"
+              subtitle={saving > 0 ? `Hemat hingga ${saving}%` : "Potongan harga pilihan"}
+              href="/category/promo"
+              products={products}
+              onOpen={selection.open}
+            />
+            <MemberVouchers vouchers={allVouchers} />
+            <ProductRail
+              title="Treatment Klinik"
+              subtitle="Perawatan pilihan di klinik LBQueen"
+              href="/category/layanan"
+              products={treatments.data?.products ?? []}
+              loading={treatments.isLoading}
+              onOpen={selection.open}
+            />
+            <ProductRail
+              title="Produk Skincare"
+              subtitle="Rawat kulit dari rumah"
+              href="/category/produk"
+              products={skincare.data?.products ?? []}
+              loading={skincare.isLoading}
+              onOpen={selection.open}
+            />
+            <ClinicInfoCard />
+          </div>
+        </>
+      )}
 
       <ProductDetailSheet selection={selection} />
     </div>

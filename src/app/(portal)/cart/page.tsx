@@ -1,5 +1,6 @@
 "use client";
 
+import { checkoutOnline } from "@/app/actions/checkout";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, ShoppingBag } from "lucide-react";
@@ -19,6 +20,7 @@ import { PRIMARY_GRADIENT, WA_NUMBER } from "@/lib/constants";
 import { useCustomer } from "@/context/CustomerContext";
 import { formatRupiah } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { errorMessage } from "@/lib/stale-deploy";
 
 export default function CartPage() {
   const router = useRouter();
@@ -57,7 +59,6 @@ export default function CartPage() {
     setProcessing(true);
     try {
       checkoutKey.current ||= crypto.randomUUID();
-      const { checkoutOnline } = await import("@/app/actions/checkout");
       const result = await checkoutOnline({
         items: cart.map((item) => ({
           product_id: item.id,
@@ -87,7 +88,7 @@ export default function CartPage() {
       window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
       router.push("/orders");
     } catch (e) {
-      toast("Gagal: " + ((e as Error).message || "Terjadi kesalahan"), "error");
+      toast("Gagal: " + errorMessage(e, "Terjadi kesalahan"), "error");
     } finally {
       setProcessing(false);
       checkoutInFlight.current = false;

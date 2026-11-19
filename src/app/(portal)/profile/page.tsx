@@ -1,5 +1,6 @@
 "use client";
 
+import { logoutCustomer } from "@/app/actions/auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -34,7 +35,6 @@ export default function ProfilePage() {
 
   const logout = async () => {
     localStorage.removeItem("lbqueen_customer");
-    const { logoutCustomer } = await import("@/app/actions/auth");
     await logoutCustomer();
     router.push("/");
   };
@@ -59,8 +59,14 @@ export default function ProfilePage() {
               expanded: showPassword,
               panel: <ChangePasswordForm customerId={customer.id} embedded />,
             },
-            { label: "Membership", icon: Crown, href: "/membership", value: tierOf(customer).name },
-            { label: "Voucher & promo", icon: Ticket, href: "/promo" },
+            {
+              label: "Membership",
+              tone: "gold",
+              icon: Crown,
+              href: "/membership",
+              value: tierOf(customer).name,
+            },
+            { label: "Voucher & promo", tone: "gold", icon: Ticket, href: "/promo" },
           ]}
         />
 
@@ -70,6 +76,7 @@ export default function ProfilePage() {
             { label: "Pesanan saya", icon: ClipboardList, href: "/orders" },
             {
               label: "Keranjang",
+              tone: "berry",
               icon: ShoppingCart,
               href: "/cart",
               badge: totalItems > 0 ? `${totalItems} item` : undefined,
@@ -86,9 +93,16 @@ export default function ProfilePage() {
               href: waLink("Halo admin LBQueen, saya butuh bantuan."),
               external: true,
             },
-            { label: "Lokasi klinik", icon: MapPin, href: CLINIC_MAPS_URL, external: true },
+            {
+              label: "Lokasi klinik",
+              tone: "berry",
+              icon: MapPin,
+              href: CLINIC_MAPS_URL,
+              external: true,
+            },
             {
               label: "Jam buka",
+              tone: "gold",
               icon: Clock3,
               href: "/#info-klinik",
               value:

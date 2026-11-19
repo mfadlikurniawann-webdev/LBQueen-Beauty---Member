@@ -14,16 +14,15 @@ export function SectionHeading({
 }) {
   return (
     <div className={cn("flex items-center gap-3 mb-3.5", className)}>
-      <Tag className="shrink-0 text-[18px] font-bold! text-[#2D2926] tracking-tight leading-tight">
+      <Tag className="shrink-0 text-[18px] font-extrabold! text-[#2D2926] tracking-tight leading-tight">
         {title}
       </Tag>
-      <span className="flex-1 border-t border-dashed border-[#E6D3DA]" aria-hidden="true" />
+      <span className="flex-1" aria-hidden="true" />
       {action && (
         <Link
           href={action.href}
           className={cn(
-            "shrink-0 rounded-full bg-[#FFE3EE] px-4 py-1.5 text-[13px] font-bold text-[#A83960]",
-            "hover:bg-[#FFD3E3] transition-colors",
+            "shrink-0 text-[13px] font-bold text-[#A83960] hover:underline underline-offset-4",
           )}
         >
           {action.label}

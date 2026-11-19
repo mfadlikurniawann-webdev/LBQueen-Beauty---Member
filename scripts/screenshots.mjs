@@ -127,8 +127,11 @@ const mock = http.createServer((request, response) => {
       if (condition?.startsWith("eq."))
         data = data.filter((row) => String(row[field]) === condition.slice(3));
     }
-    const type = url.searchParams.get("type");
-    if (type?.startsWith("eq.")) data = data.filter((row) => row.type === type.slice(3));
+    const type = url.searchParams.getAll("type").find((value) => value.startsWith("eq."));
+    if (type) data = data.filter((row) => row.type === type.slice(3));
+    const status = url.searchParams.get("status");
+    if (status?.startsWith("in.("))
+      data = data.filter((row) => status.slice(4, -1).split(",").includes(row.status));
     if (table === "products" && url.searchParams.get("select")?.includes("promotions:vouchers")) {
       data = data.map(({ purchase_price, stock, unit, ...row }) => ({
         ...row,

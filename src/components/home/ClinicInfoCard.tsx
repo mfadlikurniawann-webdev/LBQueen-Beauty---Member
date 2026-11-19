@@ -1,4 +1,5 @@
 import { Clock3, MapPin, MessageCircle, Navigation } from "lucide-react";
+import { IconChip } from "@/components/IconChip";
 import { CLINIC_HOURS, clinicStatus } from "@/lib/clinic";
 import { CLINIC_ADDRESS, CLINIC_MAPS_URL, waLink } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -16,9 +17,7 @@ export function ClinicInfoCard() {
       <SectionHeading title="Info Klinik" />
       <div className="rounded-[22px] bg-white border border-[#F0E4E8] p-4 sm:p-5 shadow-[0_10px_30px_-18px_rgba(122,34,64,0.35)]">
         <div className="flex items-start gap-3">
-          <span className="w-10 h-10 shrink-0 rounded-2xl bg-[#FFF4D1] flex items-center justify-center">
-            <Clock3 className="w-5 h-5 text-[#B8861A]" aria-hidden="true" />
-          </span>
+          <IconChip icon={Clock3} tone="gold" size="sm" />
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <h3 id="info-klinik-title" className="text-[15px] font-bold! text-[#2D2926]">
@@ -48,9 +47,7 @@ export function ClinicInfoCard() {
           </div>
         </div>
         <div className="flex items-start gap-3 mt-4 pt-4 border-t border-dashed border-[#EEDFE3]">
-          <span className="w-10 h-10 shrink-0 rounded-2xl bg-[#E3F5EA] flex items-center justify-center">
-            <MapPin className="w-5 h-5 text-[#2F8F5B]" aria-hidden="true" />
-          </span>
+          <IconChip icon={MapPin} tone="rose" size="sm" />
           <div className="min-w-0">
             <p className="text-[15px] font-bold text-[#2D2926]">LBQueen Care & Beauty Clinic</p>
             <p className="text-[13px] text-[#766B68] leading-relaxed mt-0.5">{CLINIC_ADDRESS}</p>

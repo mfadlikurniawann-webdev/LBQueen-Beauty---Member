@@ -1,10 +1,17 @@
 "use client";
 
+import { useEffect } from "react";
+import { isStaleDeployError, reloadForNewVersion } from "@/lib/stale-deploy";
+
 import Link from "next/link";
 import { AlertCircle, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export default function ErrorPage({ reset }: { reset: () => void }) {
+export default function ErrorPage({ error, reset }: { error: Error; reset: () => void }) {
+  useEffect(() => {
+    if (isStaleDeployError(error)) reloadForNewVersion();
+  }, [error]);
+
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4 py-12">
       <div

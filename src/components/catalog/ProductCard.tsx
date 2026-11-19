@@ -42,8 +42,8 @@ export function ProductCard({
       type="button"
       onClick={onOpen}
       className={cn(
-        "flex flex-col text-left bg-white rounded-[24px] border border-[#EEDFE3]",
-        "shadow-[0_6px_18px_-10px_rgba(168,57,96,0.28)] cursor-pointer group active:scale-[0.98]",
+        "flex flex-col text-left bg-white rounded-[20px] border border-[#F0E4E8]",
+        "shadow-[0_8px_24px_-18px_rgba(122,34,64,0.4)] cursor-pointer group active:scale-[0.98]",
         "transition-all hover:shadow-lg hover:shadow-rose-100",
         "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25",
         styles.card,
@@ -63,8 +63,8 @@ export function ProductCard({
         {discount > 0 && (
           <span
             className={cn(
-              "absolute inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-100",
-              "py-0.5 text-[11px] font-bold text-emerald-700 shadow-sm",
+              "absolute inline-flex items-center gap-1 rounded-full bg-[#C94F78]",
+              "py-0.5 text-[11px] font-bold text-white shadow-sm",
               styles.badge,
             )}
           >

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { BrandMark } from "@/components/BrandMark";
 import Link from "next/link";
 import { ShoppingCart } from "lucide-react";
 import type { Customer } from "@/lib/customer";
@@ -22,21 +22,7 @@ export function TopNav({
           className="flex items-center gap-2.5 shrink-0"
           aria-label="LBQueen, ke beranda"
         >
-          <span className="w-10 h-10 rounded-2xl bg-white border border-[#F0E4E8] overflow-hidden flex items-center justify-center">
-            <Image
-              src="/lbqueen_logo.png"
-              alt=""
-              width={40}
-              height={40}
-              className="object-contain"
-            />
-          </span>
-          <span className="leading-none">
-            <span className="block text-[16px] font-bold text-[#A83960]">LBQueen</span>
-            <span className="block text-[11px] font-semibold uppercase tracking-[0.12em] text-[#766B68] mt-1">
-              Care & Beauty
-            </span>
-          </span>
+          <BrandMark size={44} />
         </Link>
         <nav aria-label="Navigasi utama" className="flex items-center gap-1">
           {NAV_ITEMS.map(({ icon: Icon, label, href }) => {

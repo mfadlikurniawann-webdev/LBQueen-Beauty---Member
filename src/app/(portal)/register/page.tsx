@@ -1,5 +1,6 @@
 "use client";
 
+import { registerCustomer } from "@/app/actions/auth";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AuthActions } from "@/components/auth/AuthActions";
@@ -9,6 +10,7 @@ import { INPUT_CLASS, LABEL_CLASS } from "@/components/auth/auth-styles";
 import { useCustomer } from "@/context/CustomerContext";
 import { PasswordToggle } from "@/components/PasswordToggle";
 import { nikError, passwordError, phoneError, usernameError } from "@/lib/validation";
+import { errorMessage } from "@/lib/stale-deploy";
 
 const REQUIRED = <span className="text-[#A83960]">*</span>;
 const OPTIONAL = <span className="normal-case tracking-normal font-medium">(Opsional)</span>;
@@ -66,7 +68,6 @@ export default function CustomerRegisterPage() {
     }
 
     try {
-      const { registerCustomer } = await import("@/app/actions/auth");
       const res = await registerCustomer({
         name,
         username,
@@ -84,7 +85,7 @@ export default function CustomerRegisterPage() {
       localStorage.setItem("lbqueen_customer", JSON.stringify(res.data));
       router.push("/");
     } catch (err) {
-      setError((err as Error).message);
+      setError(errorMessage(err, "Pendaftaran gagal. Coba lagi."));
     } finally {
       setLoading(false);
     }
@@ -113,16 +114,10 @@ export default function CustomerRegisterPage() {
       bodyClassName="overflow-y-auto"
       contentClassName="w-full max-w-[440px] my-auto"
     >
-      <p className="text-[12px] font-bold uppercase tracking-[0.12em] mb-3 text-[#9A7B22]">
-        Pendaftaran Online
-      </p>
-      <h2 className="text-[28px] font-bold! text-[#2D2926] tracking-tight leading-tight mb-2">
-        Buat Akun Baru
-      </h2>
-      <p className="text-[14px] text-[#766B68] mb-8 leading-relaxed">
-        {"Lengkapi data di bawah untuk bergabung sebagai "}
-        <span className="font-semibold text-[#A83960]">Pelanggan</span>
-      </p>
+      <h1 className="text-[28px] font-extrabold! text-[#2D2926] tracking-tight leading-tight">
+        Daftar akun
+      </h1>
+      <p className="text-[15px] text-[#766B68] mt-1.5 mb-7">Isi data di bawah untuk mulai pesan.</p>
 
       <form onSubmit={handleRegister} className="space-y-5">
         <input

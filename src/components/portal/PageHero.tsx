@@ -6,12 +6,14 @@ export function PageHero({
   subtitle,
   onBack,
   tall = false,
+  transparent = false,
   actions,
 }: {
   title: string;
   subtitle?: string;
   onBack?: () => void;
   tall?: boolean;
+  transparent?: boolean;
   actions?: React.ReactNode;
 }) {
   return (
@@ -19,9 +21,11 @@ export function PageHero({
       className={cn("relative px-4 sm:px-8", tall ? "pb-16 rounded-b-[32px]" : "pb-4")}
       style={{
         paddingTop: "max(env(safe-area-inset-top, 0px), 20px)",
-        background: tall
-          ? "linear-gradient(160deg,#FFC9DC 0%,#FFE3EE 55%,#FCEFC9 100%)"
-          : "linear-gradient(180deg,#FFE3EE 0%,rgba(255,236,244,0) 100%)",
+        background: transparent
+          ? "transparent"
+          : tall
+            ? "linear-gradient(160deg,#FFC9DC 0%,#FFE3EE 55%,#FCEFC9 100%)"
+            : "linear-gradient(180deg,#FFE3EE 0%,rgba(255,236,244,0) 100%)",
       }}
     >
       <div className="flex items-center gap-3 min-h-12">
