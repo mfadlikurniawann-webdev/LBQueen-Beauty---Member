@@ -40,14 +40,13 @@ export function OrderCard({
     <article data-reveal className="glass-soft rounded-[24px] p-4">
       <div className="flex items-center justify-between gap-3 mb-3">
         <StatusBadge status={o.status} />
-        <span className="text-[12px] font-semibold text-[#766B68] tabular-nums">#{invoiceNum}</span>
+        <span className="text-[12px] font-semibold text-ink-muted tabular-nums">#{invoiceNum}</span>
       </div>
 
       <button
         type="button"
         onClick={onDetail}
-        aria-label={`Detail pesanan ${parsed.name}`}
-        className="w-full flex gap-3 text-left rounded-2xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20"
+        className="w-full flex gap-3 text-left rounded-2xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/70"
       >
         <div className={cn("shrink-0", muted && "grayscale opacity-70")}>
           <ItemThumb
@@ -58,35 +57,36 @@ export function OrderCard({
           />
         </div>
         <div className="flex-1 min-w-0">
+          <span className="sr-only">Detail pesanan </span>
           <p
             className={cn(
               "text-[15px] font-semibold leading-snug line-clamp-2 break-words",
-              muted ? "text-[#766B68]" : "text-[#2D2926]",
+              muted ? "text-ink-muted" : "text-ink",
             )}
           >
             {parsed.name}
           </p>
-          {detail && <p className="mt-0.5 text-[13px] text-[#766B68] truncate">{detail}</p>}
-          <p className="mt-0.5 text-[13px] text-[#766B68] tabular-nums">x{qty}</p>
+          {detail && <p className="mt-0.5 text-[13px] text-ink-muted truncate">{detail}</p>}
+          <p className="mt-0.5 text-[13px] text-ink-muted tabular-nums">x{qty}</p>
         </div>
       </button>
 
       <p className="mt-2 flex items-baseline justify-end gap-2 tabular-nums">
-        <span className="text-[13px] text-[#766B68]">Total</span>
-        <span className={cn("text-[16px] font-semibold", muted ? "text-[#766B68]" : "text-[#2D2926]")}>
+        <span className="text-[13px] text-ink-muted">Total</span>
+        <span className={cn("text-[16px] font-semibold", muted ? "text-ink-muted" : "text-ink")}>
           {total > 0 ? formatRupiah(total) : "Cek WA"}
         </span>
       </p>
 
-      <div className="mt-3 pt-3 border-t border-[#C94F78]/10 flex flex-wrap items-center justify-end gap-2">
+      <div className="mt-3 pt-3 border-t border-brand/10 flex flex-wrap items-center justify-end gap-2">
         {/* Dua tombol tidak muat bersama teks di HP: teks pindah ke baris sendiri. */}
-        <p className={cn("text-[13px] text-[#766B68]", canReview ? "basis-full sm:basis-auto sm:flex-1" : "flex-1")}>
+        <p className={cn("text-[13px] text-ink-muted", canReview ? "basis-full sm:basis-auto sm:flex-1" : "flex-1")}>
           {meta}
         </p>
         <button
           type="button"
           onClick={() => openWhatsApp(orderQuestion(o, invoiceNum))}
-          className={cn(ACTION, "btn-glass text-[#A83960]")}
+          className={cn(ACTION, "btn-glass text-brand-ink")}
         >
           <MessageCircle className="w-4 h-4" aria-hidden="true" /> Chat admin
         </button>

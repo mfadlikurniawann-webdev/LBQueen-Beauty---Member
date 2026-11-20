@@ -14,7 +14,7 @@ export function ReviewModal({ review, product }: { review: OrderReview; product?
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[120] flex items-end sm:items-center justify-center bg-[#2A1520]/50 md:bg-[#2A1520]/45 md:backdrop-blur-[6px]",
+        "fixed inset-0 z-[120] flex items-end sm:items-center justify-center bg-scrim md:bg-scrim md:backdrop-blur-[6px]",
         "p-0 sm:p-4 animate-in fade-in duration-300",
       )}
     >
@@ -26,7 +26,7 @@ export function ReviewModal({ review, product }: { review: OrderReview; product?
         className="glass-strong w-full sm:max-w-[400px] rounded-t-[32px] sm:rounded-[32px] p-5 animate-in slide-in-from-bottom duration-300"
         style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 20px)" }}
       >
-        <h2 id="review-title" className="text-[18px] font-semibold text-[#2D2926] mb-4">
+        <h2 id="review-title" className="text-[18px] font-semibold text-ink mb-4">
           Beri ulasan
         </h2>
 
@@ -37,7 +37,7 @@ export function ReviewModal({ review, product }: { review: OrderReview; product?
             treatment={isTreatmentOrder(product, parsed.name)}
             sizes="72px"
           />
-          <p className="flex-1 min-w-0 text-[15px] font-semibold text-[#2D2926] truncate">
+          <p className="flex-1 min-w-0 text-[15px] font-semibold text-ink truncate">
             {parsed.name}
           </p>
         </div>
@@ -54,15 +54,15 @@ export function ReviewModal({ review, product }: { review: OrderReview; product?
                 onClick={() => review.setRating(star)}
                 className={cn(
                   "w-11 h-11 rounded-full flex items-center justify-center active:scale-95 transition-transform",
-                  "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25",
-                  review.rating >= star ? "text-[#B8861A]" : "text-[#D9CFD3]",
+                  "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/70",
+                  review.rating >= star ? "text-[#B8861A]" : "text-star-empty",
                 )}
               >
                 <Star className="w-8 h-8" fill={review.rating >= star ? "currentColor" : "none"} />
               </button>
             ))}
           </div>
-          <p className="mt-1.5 text-[13px] font-semibold text-[#766B68]" aria-live="polite">
+          <p className="mt-1.5 text-[13px] font-semibold text-ink-muted" aria-live="polite">
             {RATING_LABEL[review.rating] ?? RATING_LABEL[0]}
           </p>
         </div>
@@ -83,7 +83,7 @@ export function ReviewModal({ review, product }: { review: OrderReview; product?
           <button
             type="button"
             onClick={review.close}
-            className="btn-glass flex-1 h-12 text-[14px] text-[#5F5552]"
+            className="btn-glass flex-1 h-12 text-[14px] text-ink-3"
           >
             Nanti
           </button>

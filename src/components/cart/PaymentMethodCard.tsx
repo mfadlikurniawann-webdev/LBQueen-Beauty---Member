@@ -28,7 +28,7 @@ export function PaymentMethodCard({
   };
   return (
     <div className={`${CARD} p-4`}>
-      <p id="payment-label" className="text-[15px] font-semibold text-[#2D2926] mb-2.5">
+      <p id="payment-label" className="text-[15px] font-semibold text-ink mb-2.5">
         Pembayaran
       </p>
       <div role="radiogroup" aria-labelledby="payment-label" className="grid grid-cols-2 gap-2">
@@ -43,8 +43,8 @@ export function PaymentMethodCard({
               onClick={() => onChange(id)}
               className={cn(
                 "h-12 rounded-full flex items-center justify-center gap-2 text-[14px] font-semibold transition-colors",
-                "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20",
-                active ? "chip-active" : "chip-glass text-[#5F5552]",
+                "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/70",
+                active ? "chip-active" : "chip-glass text-ink-3",
               )}
             >
               <Icon className="w-4 h-4" aria-hidden="true" />
@@ -57,8 +57,8 @@ export function PaymentMethodCard({
       {method === "bank" ? (
         <div className="mt-3 flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-[13px] text-[#766B68]">BNI a.n. Meilinda Juwita Sari</p>
-            <p className="text-[17px] font-semibold text-[#2D2926] tabular-nums tracking-wide">
+            <p className="text-[13px] text-ink-muted">BNI a.n. Meilinda Juwita Sari</p>
+            <p className="text-[17px] font-semibold text-ink tabular-nums tracking-wide">
               {BANK_ACCOUNT}
             </p>
           </div>
@@ -67,7 +67,7 @@ export function PaymentMethodCard({
             onClick={copy}
             className={cn(
               "h-11 px-4 rounded-full text-[13px] font-semibold inline-flex items-center gap-1.5 shrink-0",
-              copied ? "bg-emerald-50 text-emerald-700" : "chip-glass text-[#A83960]",
+              copied ? "bg-success-soft text-success" : "chip-glass text-brand-ink",
             )}
           >
             {copied ? <Check className="w-4 h-4" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
@@ -79,7 +79,7 @@ export function PaymentMethodCard({
           <div className="relative w-28 h-28 shrink-0 rounded-[16px] bg-white p-1.5 border border-white shadow-[0_8px_20px_-14px_rgba(122,34,64,0.4)]">
             <Image src="/qris_customer.png" alt="QRIS LBQueen" width={100} height={100} className="object-contain w-full h-full" />
           </div>
-          <p className="text-[13px] text-[#766B68]">Pindai dengan m-banking atau e-wallet.</p>
+          <p className="text-[13px] text-ink-muted">Pindai dengan m-banking atau e-wallet.</p>
         </div>
       )}
     </div>

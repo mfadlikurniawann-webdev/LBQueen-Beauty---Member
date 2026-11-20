@@ -38,10 +38,10 @@ export function CategoryGrid({
         )}
       >
         <div className="chip-glass w-16 h-16 rounded-full flex items-center justify-center mb-4">
-          <SearchIcon className="w-7 h-7 text-[#A83960]" aria-hidden="true" />
+          <SearchIcon className="w-7 h-7 text-brand-ink" aria-hidden="true" />
         </div>
-        <p className="text-[15px] font-semibold text-[#2D2926]">Produk tidak ditemukan</p>
-        <p className="mt-1.5 max-w-[260px] text-[13px] leading-relaxed text-[#766B68]">
+        <p className="text-[15px] font-semibold text-ink">Produk tidak ditemukan</p>
+        <p className="mt-1.5 max-w-[260px] text-[13px] leading-relaxed text-ink-muted">
           Coba kata kunci lain atau ubah filter yang dipilih.
         </p>
       </div>

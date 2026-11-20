@@ -35,11 +35,11 @@ export function AuthActions({
       <Link
         href={href}
         className={cn(
-          "btn-glass w-full h-[52px] text-[14px] gap-1.5 text-[#5F5552]",
+          "btn-glass w-full h-[52px] text-[14px] gap-1.5 text-ink-3",
         )}
       >
         {`${prompt} `}
-        <span className="text-[#A83960]">{linkLabel}</span>
+        <span className="text-brand-ink">{linkLabel}</span>
       </Link>
     </div>
   );

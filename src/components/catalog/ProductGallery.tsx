@@ -6,9 +6,9 @@ import { ProductPlaceholder } from "./ProductPlaceholder";
 
 const ARROW = cn(
   "glass absolute top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full",
-  "hidden md:flex items-center justify-center text-[#2D2926] transition-opacity",
+  "hidden md:flex items-center justify-center text-ink transition-opacity",
   "opacity-0 group-hover:opacity-100 focus-visible:opacity-100 disabled:!opacity-0",
-  "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25",
+  "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/70",
 );
 
 /**
@@ -87,7 +87,7 @@ export function ProductGallery({
   return (
     <div className="space-y-2.5">
       <div
-        className="group relative aspect-square w-full overflow-hidden bg-[#FBEFF3] md:rounded-[24px] md:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.8)]"
+        className="group relative aspect-square w-full overflow-hidden bg-blush md:rounded-[24px] md:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.8)]"
         data-fly-source
         data-active-src={images[index] || undefined}
         role="region"
@@ -174,9 +174,9 @@ export function ProductGallery({
               onMouseEnter={() => go(i, false)}
               className={cn(
                 "relative w-14 h-14 md:w-16 md:h-16 shrink-0 overflow-hidden rounded-[14px] border-2 transition-all duration-300",
-                "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25",
+                "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/70",
                 i === index
-                  ? "border-[#C94F78] shadow-[0_6px_14px_-6px_rgba(168,57,96,0.6)]"
+                  ? "border-brand shadow-[0_6px_14px_-6px_rgba(168,57,96,0.6)]"
                   : "border-transparent opacity-80 hover:opacity-100",
               )}
             >

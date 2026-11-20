@@ -17,7 +17,7 @@ export function PasswordToggle({
       aria-label={shown ? `Sembunyikan ${label}` : `Tampilkan ${label}`}
       className={cn(
         "absolute right-1.5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-xl flex items-center justify-center",
-        "text-[#766B68] hover:text-[#C94F78] hover:bg-white/70 transition-colors",
+        "text-ink-muted hover:text-brand hover:bg-fill/70 transition-colors",
       )}
     >
       {shown ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}

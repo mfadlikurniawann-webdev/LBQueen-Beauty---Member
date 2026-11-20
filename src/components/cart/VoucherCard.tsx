@@ -22,29 +22,29 @@ export function VoucherCard({ voucher }: { voucher: CartVoucher }) {
   return (
     <>
       <div className={`${CARD} flex items-center gap-3 pl-4 pr-2 min-h-14`}>
-        <Ticket className="w-5 h-5 text-[#C94F78] shrink-0" aria-hidden="true" />
+        <Ticket className="w-5 h-5 text-brand shrink-0" aria-hidden="true" />
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="flex-1 min-w-0 min-h-12 flex items-center gap-2 text-left rounded-2xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20"
+          className="flex-1 min-w-0 min-h-12 flex items-center gap-2 text-left rounded-2xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/70"
         >
-          <span className="text-[15px] font-semibold text-[#2D2926]">Voucher</span>
+          <span className="text-[15px] font-semibold text-ink">Voucher</span>
           <span
             className={cn(
               "flex-1 min-w-0 text-right text-[14px] truncate",
-              applied ? "font-semibold text-emerald-700" : "text-[#766B68]",
+              applied ? "font-semibold text-success" : "text-ink-muted",
             )}
           >
             {applied ? `${applied.code}, hemat ${formatRupiah(voucher.discount)}` : "Pilih voucher"}
           </span>
-          {!applied && <ChevronRight className="w-5 h-5 text-[#766B68] shrink-0" aria-hidden="true" />}
+          {!applied && <ChevronRight className="w-5 h-5 text-ink-muted shrink-0" aria-hidden="true" />}
         </button>
         {applied && (
           <button
             type="button"
             onClick={voucher.remove}
             aria-label="Hapus voucher"
-            className="w-11 h-11 shrink-0 rounded-full flex items-center justify-center text-[#766B68] hover:text-rose-700 hover:bg-rose-50"
+            className="w-11 h-11 shrink-0 rounded-full flex items-center justify-center text-ink-muted hover:text-danger hover:bg-danger-soft"
           >
             <X className="w-4 h-4" aria-hidden="true" />
           </button>
@@ -63,7 +63,7 @@ function VoucherSheet({ voucher, onClose }: { voucher: CartVoucher; onClose: () 
     if (voucher.choose(v)) onClose();
   };
   return (
-    <div className="fixed inset-0 z-[120] flex items-end sm:items-center justify-center bg-[#2A1520]/50 sm:p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[120] flex items-end sm:items-center justify-center bg-scrim sm:p-4 animate-in fade-in duration-200">
       <div className="absolute inset-0" onClick={onClose} aria-hidden="true" />
       <div
         ref={dialogRef}
@@ -74,14 +74,14 @@ function VoucherSheet({ voucher, onClose }: { voucher: CartVoucher; onClose: () 
         style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 16px)" }}
       >
         <div className="flex items-center justify-between gap-3 pl-5 pr-3 pt-3">
-          <h2 id="voucher-title" className="text-[17px] font-semibold text-[#2D2926]">
+          <h2 id="voucher-title" className="text-[17px] font-semibold text-ink">
             Pilih voucher
           </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Tutup"
-            className="chip-glass w-11 h-11 rounded-full flex items-center justify-center text-[#5F5552]"
+            className="chip-glass w-11 h-11 rounded-full flex items-center justify-center text-ink-3"
           >
             <X className="w-5 h-5" aria-hidden="true" />
           </button>
@@ -122,22 +122,22 @@ function VoucherSheet({ voucher, onClose }: { voucher: CartVoucher; onClose: () 
           </button>
         </form>
         {voucher.error && (
-          <p id="voucher-error" role="alert" className="px-5 pt-2 text-[13px] text-rose-700 font-semibold">
+          <p id="voucher-error" role="alert" className="px-5 pt-2 text-[13px] text-danger font-semibold">
             {voucher.error}
           </p>
         )}
         {voucher.applied && !voucher.error && (
-          <p className="px-5 pt-2 text-[13px] text-emerald-700 font-semibold">
+          <p className="px-5 pt-2 text-[13px] text-success font-semibold">
             {voucher.applied.code} dipakai
           </p>
         )}
 
         <div className="scroll-thin flex-1 min-h-0 overflow-y-auto px-5 pt-4">
-          <p className="text-[13px] font-semibold text-[#5F5552] mb-2">Voucher Saya</p>
+          <p className="text-[13px] font-semibold text-ink-3 mb-2">Voucher Saya</p>
           {voucher.loadingMine ? (
             <div className="skeleton-glass h-16 rounded-[20px]" />
           ) : myVouchers.length === 0 ? (
-            <p className="text-[14px] text-[#766B68] py-2">Belum ada voucher.</p>
+            <p className="text-[14px] text-ink-muted py-2">Belum ada voucher.</p>
           ) : (
             <ul className="flex flex-col gap-2 pb-2">
               {myVouchers.map((v) => {
@@ -151,26 +151,26 @@ function VoucherSheet({ voucher, onClose }: { voucher: CartVoucher; onClose: () 
                       onClick={() => choose(v)}
                       className={cn(
                         "w-full flex items-center gap-3 rounded-[20px] px-3 py-2.5 text-left",
-                        "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/15",
-                        problem ? "bg-white/50 opacity-70 cursor-not-allowed" : "chip-glass hover:bg-white/90",
+                        "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/70",
+                        problem ? "bg-fill/50 opacity-70 cursor-not-allowed" : "chip-glass hover:bg-fill/90",
                       )}
                     >
                       <span className="min-w-0 flex-1">
-                        <span className="block text-[14px] font-semibold text-[#2D2926] truncate">
+                        <span className="block text-[14px] font-semibold text-ink truncate">
                           {valueLabel(v)}, {v.name}
                         </span>
-                        <span className="block text-[12px] font-semibold text-[#A83960] truncate">
+                        <span className="block text-[12px] font-semibold text-brand-ink truncate">
                           {v.code}
                           {scope ? `, ${scope}` : ""}
                         </span>
-                        <span className="block text-[12px] text-[#766B68] truncate">
+                        <span className="block text-[12px] text-ink-muted truncate">
                           {problem ||
                             (Number(v.min_transaction) > 0
                               ? `Min. belanja ${formatRupiah(Number(v.min_transaction))}`
                               : "Tanpa minimal belanja")}
                         </span>
                       </span>
-                      {!problem && <Check className="w-5 h-5 text-[#C94F78] shrink-0" aria-hidden="true" />}
+                      {!problem && <Check className="w-5 h-5 text-brand shrink-0" aria-hidden="true" />}
                     </button>
                   </li>
                 );

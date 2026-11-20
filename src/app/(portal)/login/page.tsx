@@ -70,10 +70,10 @@ export default function CustomerLoginPage() {
       footer="PT. LBQueen Care Beauty"
       contentClassName="w-full max-w-[400px]"
     >
-      <h1 className="text-[28px] font-bold! text-[#2D2926] tracking-tight leading-tight">
+      <h1 className="text-[28px] font-bold! text-ink tracking-tight leading-tight">
         Masuk
       </h1>
-      <p className="text-[15px] text-[#766B68] mt-1.5 mb-7">Pakai username atau nomor HP Anda.</p>
+      <p className="text-[15px] text-ink-muted mt-1.5 mb-7">Pakai username atau nomor HP Anda.</p>
 
       <form onSubmit={handleLogin} className="space-y-5">
         <div>
@@ -128,9 +128,9 @@ export default function CustomerLoginPage() {
             type="checkbox"
             checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)}
-            className="w-5 h-5 rounded border-gray-300 accent-[#C94F78] cursor-pointer"
+            className="w-5 h-5 rounded border-line accent-brand cursor-pointer"
           />
-          <span className="text-[14px] font-medium text-[#2D2926] group-hover:text-[#A83960] transition-colors">
+          <span className="text-[14px] font-medium text-ink group-hover:text-brand-ink transition-colors">
             Ingatkan Saya
           </span>
         </label>

@@ -35,7 +35,7 @@ export function AuthShell({
           <Link
             href="/"
             aria-label="Kembali"
-            className="chip-glass w-11 h-11 rounded-full flex items-center justify-center text-[#2D2926] hover:bg-white/90 active:scale-95 transition-[background-color,transform]"
+            className="chip-glass w-11 h-11 rounded-full flex items-center justify-center text-ink hover:bg-fill/90 active:scale-95 transition-[background-color,transform]"
           >
             <ArrowLeft className="w-5 h-5" strokeWidth={2.4} />
           </Link>

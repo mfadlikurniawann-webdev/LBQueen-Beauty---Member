@@ -17,19 +17,19 @@ export function CategoryHeader({ section, page }: { section: Section; page: numb
         aria-label="Kembali ke beranda"
         onClick={() => router.push("/", { scroll: true })}
         className={cn(
-          "chip-glass w-12 h-12 shrink-0 rounded-full flex items-center justify-center text-[#2D2926]",
-          "hover:bg-white/90 active:scale-95 transition-[background-color,transform] focus-visible:outline-none focus-visible:ring-4",
-          "focus-visible:ring-[#C94F78]/20",
+          "chip-glass w-12 h-12 shrink-0 rounded-full flex items-center justify-center text-ink",
+          "hover:bg-fill/90 active:scale-95 transition-[background-color,transform] focus-visible:outline-none focus-visible:ring-4",
+          "focus-visible:ring-brand/70",
         )}
       >
         <ArrowLeft className="w-6 h-6" strokeWidth={2.4} />
       </button>
       <div className="min-w-0 flex-1">
-        <h1 className="text-[18px] font-semibold text-[#2D2926] leading-tight tracking-tight truncate">
+        <h1 className="text-[18px] font-semibold text-ink leading-tight tracking-tight truncate">
           {section.title}
         </h1>
         {page > 1 && (
-          <p className="mt-0.5 text-[12px] font-medium text-[#766B68] truncate">Halaman {page}</p>
+          <p className="mt-0.5 text-[12px] font-medium text-ink-muted truncate">Halaman {page}</p>
         )}
       </div>
       <span

@@ -37,26 +37,26 @@ export function CartItemCard({
       <ItemThumb src={item.image_url} alt="" treatment={treatment} sizes="72px" />
       <div className="flex-1 min-w-0">
         <div className="flex items-start gap-1">
-          <p className="flex-1 min-w-0 text-[15px] font-semibold text-[#2D2926] leading-snug line-clamp-2 break-words">
+          <p className="flex-1 min-w-0 text-[15px] font-semibold text-ink leading-snug line-clamp-2 break-words">
             {item.name}
           </p>
           <button
             type="button"
             aria-label={`Hapus ${item.name}`}
             onClick={remove}
-            className="w-11 h-11 -mt-2.5 -mr-2 shrink-0 rounded-full flex items-center justify-center text-[#766B68] hover:text-rose-700 hover:bg-rose-50 transition-colors"
+            className="w-11 h-11 -mt-2.5 -mr-2 shrink-0 rounded-full flex items-center justify-center text-ink-muted hover:text-danger hover:bg-danger-soft transition-colors"
           >
             <Trash2 className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
         {item.variant_name && (
-          <p className="text-[13px] text-[#766B68] truncate">{item.variant_name}</p>
+          <p className="text-[13px] text-ink-muted truncate">{item.variant_name}</p>
         )}
         {treatment && (
           <p
             className={cn(
               "mt-0.5 flex items-center gap-1 text-[13px] truncate",
-              schedule ? "text-[#5F5552]" : "text-[#A83960] font-semibold",
+              schedule ? "text-ink-3" : "text-brand-ink font-semibold",
             )}
           >
             <CalendarClock className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
@@ -65,11 +65,11 @@ export function CartItemCard({
         )}
         <div className="mt-2 flex items-center justify-between gap-2">
           <p className="min-w-0 tabular-nums leading-tight">
-            <span className="block text-[15px] font-semibold text-[#A83960]">
+            <span className="block text-[15px] font-semibold text-brand-ink">
               <Rupiah value={unit} />
             </span>
             {hasItemDiscount && (
-              <span className="block text-[12px] text-[#766B68] line-through">
+              <span className="block text-[12px] text-ink-muted line-through">
                 <Rupiah value={item.price} />
               </span>
             )}
@@ -79,18 +79,18 @@ export function CartItemCard({
               type="button"
               aria-label="Kurangi jumlah"
               onClick={() => (item.qty === 1 ? remove() : onQty(item.qty - 1))}
-              className={`${STEP} text-[#766B68] hover:text-[#C94F78]`}
+              className={`${STEP} text-ink-muted hover:text-brand`}
             >
               <Minus className="w-4 h-4" aria-hidden="true" />
             </button>
-            <span className="text-[15px] font-semibold text-[#2D2926] min-w-6 text-center tabular-nums" aria-live="polite">
+            <span className="text-[15px] font-semibold text-ink min-w-6 text-center tabular-nums" aria-live="polite">
               {item.qty}
             </span>
             <button
               type="button"
               aria-label="Tambah jumlah"
               onClick={() => onQty(item.qty + 1)}
-              className={`${STEP} text-[#C94F78]`}
+              className={`${STEP} text-brand`}
             >
               <Plus className="w-4 h-4" aria-hidden="true" />
             </button>

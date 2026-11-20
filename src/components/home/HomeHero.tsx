@@ -44,8 +44,8 @@ export function HomeHero({
       <div className="relative px-4 sm:px-8 lg:px-12">
         {/* Sapaan dua baris: teks kecil lalu nama, sejajar padding halaman. */}
         <div className="md:pt-4">
-          <p className="text-[13px] font-semibold text-[#766B68]">{greeting(hour)}</p>
-          <h1 className="mt-0.5 text-[26px] md:text-[36px] font-semibold! leading-tight tracking-tight text-[#2D2926] truncate">
+          <p className="text-[13px] font-semibold text-ink-muted">{greeting(hour)}</p>
+          <h1 className="mt-0.5 text-[26px] md:text-[36px] font-semibold! leading-tight tracking-tight text-ink truncate">
             {firstName}
           </h1>
         </div>
@@ -55,7 +55,7 @@ export function HomeHero({
             data-reveal
             className={cn(
               // Layar lebar: banner dibingkai kaca; di HP tiap slide sudah berupa kartu kaca sendiri.
-              "md:p-1.5 md:rounded-[28px] md:bg-white/55 md:border md:border-white/85 md:backdrop-blur-xl",
+              "md:p-1.5 md:rounded-[28px] md:bg-fill/55 md:border md:border-edge/85 md:backdrop-blur-xl",
               "md:shadow-[inset_0_1px_0_rgba(255,255,255,1),0_16px_40px_-18px_rgba(122,34,64,0.3)]",
             )}
           >

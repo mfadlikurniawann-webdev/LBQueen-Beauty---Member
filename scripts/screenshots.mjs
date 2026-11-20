@@ -1,6 +1,6 @@
 import http from "node:http";
 import { spawn } from "node:child_process";
-import { mkdir } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { chromium, devices, webkit } from "@playwright/test";
 import { createSession } from "../src/lib/session.ts";
@@ -238,6 +238,41 @@ server.stderr.on("data", (chunk) => {
 });
 
 const outDir = path.resolve(process.argv[2] || ".scratch/screenshots");
+// Setiap halaman dipotret dua kali: tema terang (outDir/light) dan gelap (outDir/dark).
+let theme = "light";
+let shotDir = outDir;
+const axeSource = await readFile(path.resolve("node_modules/axe-core/axe.min.js"), "utf8");
+const axeResults = { light: [], dark: [] };
+async function newContext(b, options = {}) {
+  const context = await b.newContext({ ...options, colorScheme: theme });
+  const mode = theme;
+  await context.addInitScript((value) => {
+    try {
+      localStorage.setItem("lbq-theme", value);
+    } catch {}
+  }, mode);
+  return context;
+}
+// axe-core (WCAG 2.1 A/AA) di halaman/dialog yang sedang terbuka; hasil dikumpulkan per tema.
+async function audit(page, name) {
+  try {
+    if (!(await page.evaluate(() => !!window.axe))) await page.evaluate(axeSource);
+    const violations = await page.evaluate(async () => {
+      const result = await window.axe.run(document, {
+        runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] },
+        resultTypes: ["violations"],
+      });
+      return result.violations.map((v) => ({
+        id: v.id,
+        nodes: v.nodes.length,
+        sample: v.nodes.slice(0, 3).map((n) => `${n.target.join(" ")} ${n.any?.[0]?.message || ""}`),
+      }));
+    });
+    for (const v of violations) axeResults[theme].push({ name, ...v });
+  } catch (error) {
+    axeResults[theme].push({ name, id: "audit-error", nodes: 0, sample: [error.message.split("\n")[0]] });
+  }
+}
 const MOBILE = { width: 390, height: 844 };
 const TABLET = { width: 820, height: 1180 };
 const DESKTOP = { width: 1440, height: 900 };
@@ -358,10 +393,11 @@ async function shoot(page, name, viewport, { full = true } = {}) {
     // Animasi reveal (blur-up bertahap) butuh ~1,3 detik sebelum konten diam.
     await page.waitForTimeout(1400);
   }
-  const file = path.join(outDir, `${name}.png`);
+  const file = path.join(shotDir, `${name}.png`);
   await page.screenshot({ path: file });
   await page.setViewportSize(viewport);
   shots.push(file);
+  await audit(page, `${name}`);
 }
 async function visit(page, url, ready, viewport = MOBILE) {
   await page.setViewportSize(viewport);
@@ -437,14 +473,19 @@ try {
     throw new Error("purchase_price bocor dari gateway member");
   console.log("Cek keamanan gateway member: lulus");
 
-  const guest = await (await watch(await browser.newContext({ viewport: MOBILE }))).newPage();
+  for (const mode of ["light", "dark"]) {
+  theme = mode;
+  shotDir = path.join(outDir, mode);
+  await mkdir(shotDir, { recursive: true });
+
+  const guest = await (await watch(await newContext(browser, { viewport: MOBILE }))).newPage();
   await both(guest, "01-selamat-datang", "/", (p) =>
     p.getByRole("button", { name: "Masuk", exact: true }).waitFor(),
   );
   await both(guest, "02-masuk", "/login");
   await both(guest, "03-daftar", "/register");
 
-  const memberContext = await watch(await browser.newContext({ viewport: MOBILE }));
+  const memberContext = await watch(await newContext(browser, { viewport: MOBILE }));
   await memberContext.addCookies([
     { name: "lbqueen_customer", value: await createSession(1, "customer", 900), url: base },
   ]);
@@ -582,7 +623,7 @@ try {
   await member.setViewportSize(MOBILE);
 
   // Keranjang tanpa treatment.
-  const productContext = await watch(await browser.newContext({ viewport: MOBILE }));
+  const productContext = await watch(await newContext(browser, { viewport: MOBILE }));
   await productContext.addCookies([
     { name: "lbqueen_customer", value: await createSession(1, "customer", 900), url: base },
   ]);
@@ -614,7 +655,7 @@ try {
     await page.waitForTimeout(1200);
     const hidden = await page.evaluate(hiddenInView);
     if (hidden) failures.push(`${name}: ${hidden} elemen di layar masih tersembunyi`);
-    const file = path.join(outDir, `${name}.png`);
+    const file = path.join(shotDir, `${name}.png`);
     await page.screenshot({ path: file });
     shots.push(file);
     await context.close();
@@ -622,7 +663,7 @@ try {
   for (const width of [360, 390, 430])
     await firstScreen(
       await watch(
-        await browser.newContext({
+        await newContext(browser, {
           viewport: { width, height: 844 },
           isMobile: true,
           hasTouch: true,
@@ -634,14 +675,28 @@ try {
   const webkitBrowser = await webkit.launch();
   try {
     await firstScreen(
-      await webkitBrowser.newContext({ ...devices["iPhone 14"] }),
+      await newContext(webkitBrowser, { ...devices["iPhone 14"] }),
       "21-beranda-layar-awal-webkit-iphone",
     );
+    if (theme === "dark") {
+      const context = await newContext(webkitBrowser, { ...devices["iPhone 14"] });
+      await context.addCookies([
+        { name: "lbqueen_customer", value: await createSession(1, "customer", 900), url: base },
+      ]);
+      const page = await context.newPage();
+      await page.goto(base + "/profile");
+      await page.getByRole("radiogroup", { name: "Tampilan" }).waitFor();
+      await page.waitForTimeout(1000);
+      const file = path.join(shotDir, "23-profil-webkit-iphone.png");
+      await page.screenshot({ path: file });
+      shots.push(file);
+      await context.close();
+    }
   } finally {
     await webkitBrowser.close();
   }
 
-  const regularContext = await watch(await browser.newContext({ viewport: MOBILE }));
+  const regularContext = await watch(await newContext(browser, { viewport: MOBILE }));
   await regularContext.addCookies([
     { name: "lbqueen_customer", value: await createSession(2, "customer", 900), url: base },
   ]);
@@ -651,7 +706,44 @@ try {
     p.getByRole("heading", { name: /Nikmati/ }).waitFor(),
   );
 
+  // Nota tetap terang saat dicetak, juga dengan preferensi gelap.
+  await visit(member, "/invoice/1");
+  await member.emulateMedia({ media: "print" });
+  await shoot(member, "13-nota-cetak", MOBILE);
+  await member.emulateMedia({ media: null });
+
+  // Kelas <html> saat <body> pertama kali diurai (sebelum paint) harus sudah sesuai preferensi.
+  for (const [pref, scheme, expectDark] of [
+    ["dark", "light", true],
+    ["light", "dark", false],
+    [null, "dark", true],
+    [null, "light", false],
+  ]) {
+    const context = await browser.newContext({ viewport: MOBILE, colorScheme: scheme });
+    await context.addInitScript((value) => {
+      if (value) localStorage.setItem("lbq-theme", value);
+      else localStorage.removeItem("lbq-theme");
+      new MutationObserver((_, observer) => {
+        if (!document.body) return;
+        window.__firstPaintDark = document.documentElement.classList.contains("dark");
+        observer.disconnect();
+      }).observe(document, { childList: true, subtree: true });
+    }, pref);
+    const page = await context.newPage();
+    await page.goto(base + "/login");
+    const first = await page.evaluate(() => window.__firstPaintDark);
+    if (first !== expectDark)
+      failures.push(`tema awal salah (pref ${pref}, sistem ${scheme}): dark=${first}`);
+    await context.close();
+  }
+  }
+
   console.log(`Saved ${shots.length} screenshots to ${outDir}`);
+  for (const mode of ["light", "dark"]) {
+    const list = axeResults[mode];
+    console.log(`axe ${mode}: ${list.length} pelanggaran, ${list.reduce((n, v) => n + v.nodes, 0)} node`);
+    for (const v of list.slice(0, 40)) console.log(`  ${v.name} ${v.id} (${v.nodes}) ${v.sample.join(" | ")}`);
+  }
   console.log(`Pelanggaran CSP: ${cspViolations.length}, error konsol: ${consoleErrors.length}`);
   for (const line of [...cspViolations, ...consoleErrors].slice(0, 20)) console.log(`  ${line}`);
   if (cspViolations.length) failures.push(`${cspViolations.length} pelanggaran CSP`);

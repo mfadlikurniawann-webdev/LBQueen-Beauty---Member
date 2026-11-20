@@ -54,10 +54,10 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
                 t.type === "success"
-                  ? "bg-emerald-50 text-emerald-600"
+                  ? "bg-success-soft text-success"
                   : t.type === "error"
-                    ? "bg-rose-50 text-rose-600"
-                    : "bg-[#FFEAF1] text-[#A83960]"
+                    ? "bg-danger-soft text-danger"
+                    : "bg-blush text-brand-ink"
               }`}
             >
               {t.type === "success" ? (
@@ -68,11 +68,11 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 <Info className="w-4 h-4" />
               )}
             </div>
-            <p className="text-[13px] font-medium text-[#2D2926] flex-1">{t.message}</p>
+            <p className="text-[13px] font-medium text-ink flex-1">{t.message}</p>
             <button
               aria-label="Tutup notifikasi"
               onClick={() => removeToast(t.id)}
-              className="w-11 h-11 -mr-1.5 rounded-full flex items-center justify-center text-[#766B68] hover:text-[#2D2926] hover:bg-white/70 transition-colors"
+              className="w-11 h-11 -mr-1.5 rounded-full flex items-center justify-center text-ink-muted hover:text-ink hover:bg-fill/70 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>

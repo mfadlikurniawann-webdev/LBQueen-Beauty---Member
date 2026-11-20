@@ -63,14 +63,14 @@ export default function PromoPage() {
 
       <div className="px-4 sm:px-8 lg:px-12 pt-1 space-y-6 pb-6">
         <div data-reveal className="glass-lit spotlight rounded-[28px] p-4">
-          <div className="grid grid-cols-2 divide-x divide-[#C94F78]/12">
+          <div className="grid grid-cols-2 divide-x divide-brand/12">
             <a href="#voucher-tersedia" className="flex items-center gap-3 pr-3 min-w-0">
               <IconChip icon={Ticket} tone="gold" size="md" />
               <span className="min-w-0">
-                <span className="block text-[15px] font-semibold text-[#2D2926] leading-tight truncate tabular-nums">
+                <span className="block text-[15px] font-semibold text-ink leading-tight truncate tabular-nums">
                   {vouchers.length} voucher
                 </span>
-                <span className="block text-[13px] font-semibold text-[#A83960]">
+                <span className="block text-[13px] font-semibold text-brand-ink">
                   Lihat voucher
                 </span>
               </span>
@@ -81,10 +81,10 @@ export default function PromoPage() {
             >
               <IconChip icon={Crown} tone="rose" size="md" />
               <span className="min-w-0">
-                <span className="block text-[15px] font-semibold text-[#2D2926] leading-tight truncate">
+                <span className="block text-[15px] font-semibold text-ink leading-tight truncate">
                   Membership
                 </span>
-                <span className="block text-[13px] font-semibold text-[#A83960] truncate">
+                <span className="block text-[13px] font-semibold text-brand-ink truncate">
                   {customer ? tierOf(customer).name : "Masuk dulu"}
                 </span>
               </span>
@@ -92,11 +92,11 @@ export default function PromoPage() {
           </div>
           <Link
             href="/cart"
-            className="chip-glass mt-4 flex items-center gap-3 rounded-full px-4 h-12 text-[15px] text-[#5F5552] hover:bg-white/85 transition-colors"
+            className="chip-glass mt-4 flex items-center gap-3 rounded-full px-4 h-12 text-[15px] text-ink-3 hover:bg-fill/85 transition-colors"
           >
-            <BadgePercent className="w-5 h-5 text-[#5F5552]" aria-hidden="true" />
+            <BadgePercent className="w-5 h-5 text-ink-3" aria-hidden="true" />
             <span className="flex-1 truncate">Masukkan kode promo di keranjang</span>
-            <ChevronRight className="w-5 h-5 text-[#5F5552]" aria-hidden="true" />
+            <ChevronRight className="w-5 h-5 text-ink-3" aria-hidden="true" />
           </Link>
         </div>
 
@@ -135,7 +135,7 @@ export default function PromoPage() {
                   "shrink-0 h-11 px-5 rounded-full text-[14px] font-semibold transition-all duration-300",
                   filter === f.id
                     ? "chip-active font-semibold"
-                    : "chip-glass text-[#3F3734] hover:bg-white/85",
+                    : "chip-glass text-ink-2 hover:bg-fill/85",
                 )}
               >
                 {f.label}
@@ -164,10 +164,10 @@ export default function PromoPage() {
             </div>
           ) : (
             <div className="glass py-12 px-6 text-center rounded-[28px]">
-              <p className="text-[15px] font-semibold text-[#2D2926]">
+              <p className="text-[15px] font-semibold text-ink">
                 Belum ada promo di kategori ini
               </p>
-              <p className="text-[13px] text-[#766B68] mt-1.5">
+              <p className="text-[13px] text-ink-muted mt-1.5">
                 Coba kategori lain atau cek kembali nanti.
               </p>
             </div>

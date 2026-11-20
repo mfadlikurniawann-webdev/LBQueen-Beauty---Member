@@ -35,7 +35,7 @@ export function BottomNav({ pathname }: { pathname: string }) {
                 "transition-[background-color,color,transform,box-shadow] duration-300 active:scale-95",
                 active
                   ? "chip-active text-white"
-                  : "text-[#5F5552] hover:bg-white/60",
+                  : "text-ink-3 hover:bg-fill/60",
               )}
             >
               <Icon

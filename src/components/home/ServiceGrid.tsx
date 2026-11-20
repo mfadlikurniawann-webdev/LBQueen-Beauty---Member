@@ -73,12 +73,12 @@ export function ServiceGrid({
               className="transition-transform group-hover:-translate-y-0.5"
             >
               {s.badge && (
-                <span className="absolute -top-2 -left-2 rounded-full bg-[#2D2926] px-1.5 py-0.5 text-[12px] font-semibold text-white whitespace-nowrap tabular-nums ring-2 ring-white">
+                <span className="absolute -top-2 -left-2 rounded-full bg-ink px-1.5 py-0.5 text-[12px] font-semibold text-page whitespace-nowrap tabular-nums ring-2 ring-surface">
                   {s.badge}
                 </span>
               )}
             </IconChip>
-            <span className="text-[12px] min-[380px]:text-[13px] font-medium text-[#3F3734] text-center leading-tight truncate max-w-full">
+            <span className="text-[12px] min-[380px]:text-[13px] font-medium text-ink-2 text-center leading-tight truncate max-w-full">
               {s.label}
             </span>
           </>

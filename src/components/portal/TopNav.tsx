@@ -27,7 +27,7 @@ export function TopNav({
           "morph-bar mx-auto h-[64px] flex items-center gap-4 lg:gap-8 rounded-full border",
           scrolled
             ? "glass max-w-5xl px-3 lg:px-4"
-            : "max-w-7xl px-3 lg:px-6 bg-white/40 border-white/60 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]",
+            : "max-w-7xl px-3 lg:px-6 bg-fill/40 border-edge/60 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]",
         )}
       >
         <Link
@@ -49,7 +49,7 @@ export function TopNav({
                   "h-11 px-3 lg:px-4 rounded-full flex items-center gap-2 text-[14px] transition-colors duration-300",
                   active
                     ? "chip-active font-semibold"
-                    : "text-[#5F5552] font-semibold hover:bg-white/70",
+                    : "text-ink-3 font-semibold hover:bg-fill/70",
                 )}
               >
                 <Icon
@@ -68,23 +68,23 @@ export function TopNav({
             data-cart-target
             href="/cart"
             aria-label={totalItems > 0 ? `Keranjang, ${totalItems} item` : "Keranjang"}
-            className="chip-glass relative w-11 h-11 rounded-full flex items-center justify-center text-[#A83960] transition-transform active:scale-95"
+            className="chip-glass relative w-11 h-11 rounded-full flex items-center justify-center text-brand-ink transition-transform active:scale-95"
           >
             <ShoppingCart className="w-5 h-5" aria-hidden="true" />
             {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-[#E0263F] text-white text-[12px] font-semibold flex items-center justify-center ring-2 ring-white tabular-nums">
+              <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-[#E0263F] text-white text-[12px] font-semibold flex items-center justify-center ring-2 ring-surface tabular-nums">
                 {totalItems > 9 ? "9+" : totalItems}
               </span>
             )}
           </Link>
           <Link
             href="/profile"
-            className="chip-glass flex items-center gap-2.5 h-11 pl-1 pr-4 rounded-full hover:bg-white/80 transition-colors"
+            className="chip-glass flex items-center gap-2.5 h-11 pl-1 pr-4 rounded-full hover:bg-fill/80 transition-colors"
           >
             <span className="w-9 h-9 shrink-0">
               <CustomerAvatar name={customer.name} src={customer.avatar_url} size={36} className="text-[13px]" />
             </span>
-            <span className="text-[14px] font-semibold text-[#2D2926] max-w-[160px] truncate">
+            <span className="text-[14px] font-semibold text-ink max-w-[160px] truncate">
               {customer.name?.split(" ")[0]}
             </span>
           </Link>

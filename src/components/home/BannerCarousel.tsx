@@ -74,7 +74,7 @@ export function BannerCarousel({
         ref={track}
         className={cn(
           "flex overflow-x-auto snap-x snap-mandatory no-scrollbar rounded-[22px]",
-          "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/30",
+          "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/70",
           peek && "gap-3 md:gap-0 scroll-px-0",
         )}
         aria-roledescription="carousel"
@@ -88,7 +88,7 @@ export function BannerCarousel({
             className={cn(
               "relative shrink-0 aspect-[1440/956]",
               peek
-                ? "w-full snap-start overflow-hidden rounded-[22px] md:rounded-none border border-white/90 md:border-0 md:shadow-none"
+                ? "w-full snap-start overflow-hidden rounded-[22px] md:rounded-none border border-edge/90 md:border-0 md:shadow-none"
                 : "w-full snap-center",
             )}
             style={peek ? { background: BANNER_BG } : undefined}

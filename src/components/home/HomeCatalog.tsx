@@ -28,7 +28,7 @@ export function HomeCatalog({
         {products.length > 0 && (
           <span
             className={cn(
-              "chip-glass mb-3.5 shrink-0 rounded-full px-3 py-1 text-[12px] font-semibold text-[#A83960]",
+              "chip-glass mb-3.5 shrink-0 rounded-full px-3 py-1 text-[12px] font-semibold text-brand-ink",
               "tabular-nums",
             )}
           >
@@ -56,12 +56,12 @@ export function HomeCatalog({
           )}
         >
           <div className="chip-glass w-16 h-16 rounded-full flex items-center justify-center mb-4">
-            <EmptyIcon className="w-7 h-7 text-[#A83960]" aria-hidden="true" />
+            <EmptyIcon className="w-7 h-7 text-brand-ink" aria-hidden="true" />
           </div>
-          <p className="text-[15px] font-semibold text-[#2D2926]">
+          <p className="text-[15px] font-semibold text-ink">
             {searching ? "Tidak ada hasil ditemukan" : "Belum ada promo aktif"}
           </p>
-          <p className="text-[13px] text-[#766B68] mt-1.5 max-w-[260px] leading-relaxed">
+          <p className="text-[13px] text-ink-muted mt-1.5 max-w-[260px] leading-relaxed">
             {searching
               ? "Coba kata kunci lain."
               : "Lihat Layanan atau Produk untuk menjelajahi katalog lengkap."}

@@ -9,12 +9,12 @@ export function EmptyCart({ onShop }: { onShop: () => void }) {
           "glass-lit w-20 h-20 rounded-full flex items-center justify-center mb-6",
         )}
       >
-        <ShoppingBag className="w-8 h-8 text-[#C94F78]" aria-hidden="true" />
+        <ShoppingBag className="w-8 h-8 text-brand" aria-hidden="true" />
       </div>
-      <h2 className="text-[20px] font-semibold! text-[#2D2926] mb-2 tracking-tight">
+      <h2 className="text-[20px] font-semibold! text-ink mb-2 tracking-tight">
         Keranjang Kosong
       </h2>
-      <p className="text-[14px] text-[#766B68] leading-relaxed mb-8 max-w-[280px]">
+      <p className="text-[14px] text-ink-muted leading-relaxed mb-8 max-w-[280px]">
         Belum ada treatment atau produk di keranjang.
       </p>
       <button

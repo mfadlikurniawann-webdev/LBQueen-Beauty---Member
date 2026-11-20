@@ -30,13 +30,13 @@ export function VoucherTicket({ voucher, className }: { voucher: MyVoucher; clas
     >
       <IconChip icon={Ticket} tone="gold" size="md" />
       <div className="min-w-0 flex-1">
-        <p className="text-[12px] font-semibold text-[#8A6414] truncate">{voucher.name}</p>
-        <p className="text-[15px] font-semibold text-[#2D2926] leading-tight tabular-nums truncate">
+        <p className="text-[12px] font-semibold text-gold-ink truncate">{voucher.name}</p>
+        <p className="text-[15px] font-semibold text-ink leading-tight tabular-nums truncate">
           Potongan {amount}
         </p>
-        <p className="text-[12px] font-semibold text-[#A83960] mt-0.5 truncate">{voucher.code}</p>
+        <p className="text-[12px] font-semibold text-brand-ink mt-0.5 truncate">{voucher.code}</p>
         {(scope || voucher.products?.name) && (
-          <p className="text-[12px] text-[#766B68] truncate">
+          <p className="text-[12px] text-ink-muted truncate">
             {[
               scope && `Khusus ${scope}`,
               voucher.products?.name && `Untuk ${voucher.products.name}`,
@@ -46,7 +46,7 @@ export function VoucherTicket({ voucher, className }: { voucher: MyVoucher; clas
           </p>
         )}
         {voucher.min_transaction > 0 && (
-          <p className="text-[12px] text-[#766B68] truncate tabular-nums">
+          <p className="text-[12px] text-ink-muted truncate tabular-nums">
             Min. belanja {formatRupiah(voucher.min_transaction)}
           </p>
         )}
@@ -57,7 +57,7 @@ export function VoucherTicket({ voucher, className }: { voucher: MyVoucher; clas
         aria-label={`Salin kode ${voucher.code}`}
         className={cn(
           "shrink-0 inline-flex items-center gap-1 rounded-full px-3.5 h-11 text-[13px] font-semibold transition-all duration-300 active:scale-95",
-          copied ? "chip-active" : "chip-glass text-[#A83960] hover:bg-white/90",
+          copied ? "chip-active" : "chip-glass text-brand-ink hover:bg-fill/90",
         )}
       >
         {copied ? (
@@ -76,8 +76,8 @@ export function EmptyVouchers() {
     <div className="glass w-full rounded-[24px] p-4 flex items-center gap-3.5">
       <IconChip icon={Ticket} tone="gold" size="md" />
       <div>
-        <p className="text-[14px] text-[#2D2926] font-semibold">Belum ada voucher</p>
-        <p className="text-[12px] text-[#766B68] mt-0.5">
+        <p className="text-[14px] text-ink font-semibold">Belum ada voucher</p>
+        <p className="text-[12px] text-ink-muted mt-0.5">
           Voucher untuk membership Anda akan tampil di sini.
         </p>
       </div>

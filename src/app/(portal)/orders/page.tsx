@@ -127,7 +127,7 @@ export default function OrdersPage() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Bantuan pesanan"
-            className="chip-glass w-11 h-11 rounded-full text-[#A83960] flex items-center justify-center hover:bg-white/90 transition-colors"
+            className="chip-glass w-11 h-11 rounded-full text-brand-ink flex items-center justify-center hover:bg-fill/90 transition-colors"
           >
             <CircleHelp className="w-5 h-5" aria-hidden="true" />
           </a>
@@ -143,21 +143,21 @@ export default function OrdersPage() {
           className="glass spotlight lift mb-4 flex items-center gap-3 rounded-[24px] px-3 h-16"
         >
           <IconChip icon={ShoppingCart} tone="berry" size="sm" bare />
-          <span className="flex-1 text-[15px] text-[#3F3734]">Keranjang belanja</span>
+          <span className="flex-1 text-[15px] text-ink-2">Keranjang belanja</span>
           {totalItems > 0 && (
             <span className="chip-active rounded-full px-2.5 py-0.5 text-[12px] font-semibold tabular-nums">
               {totalItems} item
             </span>
           )}
-          <ChevronRight className="w-5 h-5 text-[#5F5552]" aria-hidden="true" />
+          <ChevronRight className="w-5 h-5 text-ink-3" aria-hidden="true" />
         </Link>
 
         {loadError && (
           <p
             role="alert"
             className={cn(
-              "mb-4 px-4 py-3 rounded-[20px] bg-rose-50/85 border border-white text-[13px] font-medium shadow-[0_0_0_1px_rgba(225,29,72,0.2)]",
-              "text-rose-700 text-center",
+              "mb-4 px-4 py-3 rounded-[20px] bg-danger-soft/85 border border-edge text-[13px] font-medium shadow-[0_0_0_1px_rgba(225,29,72,0.2)]",
+              "text-danger text-center",
             )}
           >
             {loadError}
@@ -166,18 +166,18 @@ export default function OrdersPage() {
 
         {loading ? (
           <div className="py-20 flex flex-col items-center gap-3" role="status">
-            <Loader2 className="w-8 h-8 animate-spin text-[#C94F78]" />
-            <p className="text-[13px] font-medium text-[#766B68]">Memuat pesanan</p>
+            <Loader2 className="w-8 h-8 animate-spin text-brand" />
+            <p className="text-[13px] font-medium text-ink-muted">Memuat pesanan</p>
           </div>
         ) : filtered.length === 0 ? (
           <div data-reveal className="glass py-14 px-6 flex flex-col items-center text-center rounded-[32px]">
             <div className="glass-lit w-20 h-20 rounded-full flex items-center justify-center mb-5">
-              <ShoppingBag className="w-8 h-8 text-[#C94F78]" aria-hidden="true" />
+              <ShoppingBag className="w-8 h-8 text-brand" aria-hidden="true" />
             </div>
-            <h2 className="text-[18px] font-semibold! text-[#2D2926] tracking-tight">
+            <h2 className="text-[18px] font-semibold! text-ink tracking-tight">
               Belum Ada Pesanan
             </h2>
-            <p className="text-[14px] text-[#766B68] leading-relaxed mt-1.5 max-w-[280px]">
+            <p className="text-[14px] text-ink-muted leading-relaxed mt-1.5 max-w-[280px]">
               Pesanan Anda akan tampil di sini.
             </p>
           </div>

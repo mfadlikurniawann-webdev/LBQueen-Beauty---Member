@@ -62,8 +62,8 @@ export default function OnlineInvoicePage() {
       >
         <div className="ambient fixed inset-0 -z-10 pointer-events-none print:hidden" aria-hidden="true" />
 
-        <Loader2 className="w-8 h-8 text-[#C94F78] animate-spin" />
-        <p className="text-[13px] font-medium text-[#766B68]">Memuat invoice</p>
+        <Loader2 className="w-8 h-8 text-brand animate-spin" />
+        <p className="text-[13px] font-medium text-ink-muted">Memuat invoice</p>
       </div>
     );
   }
@@ -88,16 +88,16 @@ export default function OnlineInvoicePage() {
               "justify-center mb-4",
             )}
           >
-            <AlertCircle className="w-8 h-8 text-rose-600" aria-hidden="true" />
+            <AlertCircle className="w-8 h-8 text-danger" aria-hidden="true" />
           </div>
-          <p className="text-[16px] font-semibold text-[#2D2926]">
+          <p className="text-[16px] font-semibold text-ink">
             {error || "Pesanan online tidak ditemukan"}
           </p>
           <button
             type="button"
             onClick={() => window.close()}
             className={cn(
-              "btn-glass mt-6 h-12 px-8 text-[14px] text-[#5F5552]",
+              "btn-glass mt-6 h-12 px-8 text-[14px] text-ink-3",
             )}
           >
             Tutup

@@ -69,7 +69,7 @@ export function ProfileSummary({
             aria-label={customer.avatar_url ? "Ganti foto profil" : "Tambah foto profil"}
             className="absolute -right-2 -bottom-2 w-11 h-11 rounded-full flex items-center justify-center"
           >
-            <span className="w-8 h-8 rounded-full chip-active flex items-center justify-center ring-2 ring-white">
+            <span className="w-8 h-8 rounded-full chip-active flex items-center justify-center ring-2 ring-surface">
               {busy ? (
                 <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
               ) : (
@@ -88,17 +88,17 @@ export function ProfileSummary({
           />
         </div>
         <div className="min-w-0 flex-1">
-          <h2 className="text-[20px] font-semibold text-[#2D2926] leading-snug line-clamp-2 break-words">
+          <h2 className="text-[20px] font-semibold text-ink leading-snug line-clamp-2 break-words">
             {customer.name}
           </h2>
-          {customer.username && <p className="text-[14px] text-[#5F5552] truncate">@{customer.username}</p>}
-          <p className="text-[14px] text-[#5F5552] tabular-nums truncate">{customer.phone || "-"}</p>
+          {customer.username && <p className="text-[14px] text-ink-3 truncate">@{customer.username}</p>}
+          <p className="text-[14px] text-ink-3 tabular-nums truncate">{customer.phone || "-"}</p>
           {customer.avatar_url && (
             <button
               type="button"
               onClick={remove}
               disabled={busy}
-              className="-ml-1 mt-0.5 min-h-11 px-1 text-[13px] font-semibold text-[#A83960]"
+              className="-ml-1 mt-0.5 min-h-11 px-1 text-[13px] font-semibold text-brand-ink"
             >
               Hapus foto
             </button>
@@ -107,17 +107,17 @@ export function ProfileSummary({
       </div>
       <Link
         href="/membership"
-        className="mx-2 mb-2 rounded-[22px] min-h-12 py-2.5 px-3.5 flex items-center gap-2.5 border border-white/80"
+        className="mx-2 mb-2 rounded-[22px] min-h-12 py-2.5 px-3.5 flex items-center gap-2.5 border border-edge/80 dark:bg-none! dark:bg-fill!"
         style={{ background: tier.chip }}
       >
         <Crown className="w-5 h-5 shrink-0 text-[#B8861A]" fill="#F5D57A" aria-hidden="true" />
-        <span className="text-[14px] font-semibold text-[#2D2926] flex-1 min-w-0 truncate">
+        <span className="text-[14px] font-semibold text-ink flex-1 min-w-0 truncate">
           {tier.id === "regular" ? "Akun Reguler" : `${tier.name} Member`}
         </span>
-        <span className="text-[13px] font-semibold text-[#2D2926] tabular-nums">
+        <span className="text-[13px] font-semibold text-ink tabular-nums">
           {formatNumber(customer.points || 0)} Poin
         </span>
-        <ArrowRight className="w-4 h-4 text-[#A83960] shrink-0" aria-hidden="true" />
+        <ArrowRight className="w-4 h-4 text-brand-ink shrink-0" aria-hidden="true" />
       </Link>
     </div>
   );

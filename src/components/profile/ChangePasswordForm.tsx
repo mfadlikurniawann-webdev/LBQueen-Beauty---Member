@@ -9,7 +9,7 @@ const INPUT_CLASS = cn(
   "input-glass min-h-12 px-4 py-3 text-base sm:text-[14px]",
 );
 const LABEL_CLASS =
-  "block text-[13px] font-semibold text-[#5F5552] mb-2 ml-1";
+  "block text-[13px] font-semibold text-ink-3 mb-2 ml-1";
 const NOTICE = "mb-5 px-4 py-3 text-[13px] font-semibold rounded-2xl border";
 
 export function ChangePasswordForm({
@@ -69,26 +69,26 @@ export function ChangePasswordForm({
         <div
           className={cn(
             "chip-glass w-12 h-12 shrink-0 rounded-full flex items-center justify-center",
-            "text-[#C94F78]",
+            "text-brand",
           )}
         >
           <Lock className="w-6 h-6" aria-hidden="true" />
         </div>
         <div className="min-w-0">
-          <h3 className="text-[16px] font-semibold! text-[#2D2926]">Keamanan Akun</h3>
-          <p className="text-[13px] text-[#766B68]">Perbarui password Anda secara berkala</p>
+          <h3 className="text-[16px] font-semibold! text-ink">Keamanan Akun</h3>
+          <p className="text-[13px] text-ink-muted">Perbarui password Anda secara berkala</p>
         </div>
       </div>
 
       {error && (
-        <div role="alert" className={`${NOTICE} bg-rose-50 text-rose-700 border-rose-200`}>
+        <div role="alert" className={`${NOTICE} bg-danger-soft text-danger border-danger-line`}>
           {error}
         </div>
       )}
       {success && (
         <div
           role="status"
-          className={`${NOTICE} bg-emerald-50 text-emerald-700 border-emerald-200 flex items-center gap-2`}
+          className={`${NOTICE} bg-success-soft text-success border-success-line flex items-center gap-2`}
         >
           <CheckCircle2 className="w-4 h-4 shrink-0" aria-hidden="true" />
           {success}
@@ -139,7 +139,7 @@ export function ChangePasswordForm({
               label="password baru"
             />
           </div>
-          <p id="new-password-hint" className="text-[12px] text-[#766B68] mt-2 ml-1">
+          <p id="new-password-hint" className="text-[12px] text-ink-muted mt-2 ml-1">
             Gunakan minimal {PASSWORD_MIN} karakter, kombinasi huruf & angka.
           </p>
         </div>

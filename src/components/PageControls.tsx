@@ -5,9 +5,9 @@ import { cn } from "@/lib/utils";
 
 const arrow = cn(
   "chip-glass inline-flex h-11 w-11 items-center justify-center rounded-full",
-  "text-[#A83960] transition-[background-color,transform] hover:bg-white/90 active:scale-95",
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C94F78]/40",
-  "disabled:cursor-not-allowed disabled:text-[#B9ADA9] disabled:opacity-70",
+  "text-brand-ink transition-[background-color,transform] hover:bg-fill/90 active:scale-95",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/70",
+  "disabled:cursor-not-allowed disabled:text-ink-disabled disabled:opacity-70",
 );
 
 export function PageControls({

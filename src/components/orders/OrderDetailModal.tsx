@@ -32,7 +32,7 @@ export function OrderDetailModal({
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[110] flex items-end sm:items-center justify-center bg-[#2A1520]/50 md:bg-[#2A1520]/45 md:backdrop-blur-[6px]",
+        "fixed inset-0 z-[110] flex items-end sm:items-center justify-center bg-scrim md:bg-scrim md:backdrop-blur-[6px]",
         "p-0 sm:p-4 animate-in fade-in duration-300",
       )}
     >
@@ -46,16 +46,16 @@ export function OrderDetailModal({
           "flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-300",
         )}
       >
-        <div className="px-4 py-3 border-b border-[#C94F78]/10 flex items-center gap-3 shrink-0">
+        <div className="px-4 py-3 border-b border-brand/10 flex items-center gap-3 shrink-0">
           <button
             type="button"
             aria-label="Tutup rincian"
             onClick={onClose}
-            className="chip-glass w-11 h-11 shrink-0 rounded-full flex items-center justify-center text-[#5F5552] hover:text-[#A83960] transition-colors"
+            className="chip-glass w-11 h-11 shrink-0 rounded-full flex items-center justify-center text-ink-3 hover:text-brand-ink transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <h2 id="order-detail-title" className="flex-1 min-w-0 text-[17px] font-semibold text-[#2D2926] truncate">
+          <h2 id="order-detail-title" className="flex-1 min-w-0 text-[17px] font-semibold text-ink truncate">
             Rincian pesanan
           </h2>
           <StatusBadge status={o.status} />
@@ -71,20 +71,20 @@ export function OrderDetailModal({
               sizes="80px"
             />
             <div className="flex-1 min-w-0">
-              <h3 className="text-[15px] font-semibold text-[#2D2926] leading-snug line-clamp-2 break-words">
+              <h3 className="text-[15px] font-semibold text-ink leading-snug line-clamp-2 break-words">
                 {parsed.name}
               </h3>
-              {detail && <p className="mt-0.5 text-[13px] text-[#766B68]">{detail}</p>}
+              {detail && <p className="mt-0.5 text-[13px] text-ink-muted">{detail}</p>}
               <p className="mt-1 flex items-baseline justify-between gap-2 text-[13px] tabular-nums">
-                <span className="text-[#766B68]">x{qty}</span>
-                <span className="font-semibold text-[#2D2926]">{unit > 0 ? formatRupiah(unit) : "-"}</span>
+                <span className="text-ink-muted">x{qty}</span>
+                <span className="font-semibold text-ink">{unit > 0 ? formatRupiah(unit) : "-"}</span>
               </p>
             </div>
           </div>
 
           <div className="glass-soft rounded-[20px] px-4 py-3 flex justify-between items-center gap-3">
-            <span className="text-[14px] font-semibold text-[#2D2926]">Total</span>
-            <span className="text-[18px] font-semibold text-[#A83960] tabular-nums">
+            <span className="text-[14px] font-semibold text-ink">Total</span>
+            <span className="text-[18px] font-semibold text-brand-ink tabular-nums">
               {total > 0 ? formatRupiah(total) : "Cek WA"}
             </span>
           </div>
@@ -93,16 +93,16 @@ export function OrderDetailModal({
           {o.reviewed_at && (
             <div className={ROW}>
               <span className={MUTED}>Ulasan</span>
-              <span className="text-[#2D2926] font-semibold">Sudah diulas</span>
+              <span className="text-ink font-semibold">Sudah diulas</span>
             </div>
           )}
         </div>
 
         <div
-          className="px-5 pt-3 border-t border-[#C94F78]/10 grid grid-cols-2 gap-3 shrink-0"
+          className="px-5 pt-3 border-t border-brand/10 grid grid-cols-2 gap-3 shrink-0"
           style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 16px)" }}
         >
-          <button type="button" onClick={onClose} className="btn-glass h-12 text-[14px] text-[#5F5552]">
+          <button type="button" onClick={onClose} className="btn-glass h-12 text-[14px] text-ink-3">
             Tutup
           </button>
           <button

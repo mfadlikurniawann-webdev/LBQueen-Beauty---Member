@@ -9,14 +9,14 @@ export function OrderInfo({ order: o, invoiceNum }: { order: Order; invoiceNum: 
       <div className={`${ROW} items-center`}>
         <span className={MUTED}>No. pesanan</span>
         <div className="flex items-center gap-2 min-w-0">
-          <span className="text-[#2D2926] font-semibold tabular-nums">#{invoiceNum}</span>
+          <span className="text-ink font-semibold tabular-nums">#{invoiceNum}</span>
           <button
             type="button"
             onClick={() => {
               navigator.clipboard.writeText(invoiceNum);
               toast("Nomor pesanan disalin.", "success");
             }}
-            className="chip-glass h-11 px-4 rounded-full hover:bg-white/90 text-[13px] font-semibold text-[#A83960] transition-colors"
+            className="chip-glass h-11 px-4 rounded-full hover:bg-fill/90 text-[13px] font-semibold text-brand-ink transition-colors"
           >
             Salin
           </button>

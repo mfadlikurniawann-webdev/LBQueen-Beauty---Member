@@ -158,7 +158,7 @@ export default function CartPage() {
                 <div>
                   <TreatmentNotice agreed={isAgreed} onChange={setIsAgreed} />
                   {attempted && !isAgreed && (
-                    <p role="alert" className="mt-2 px-1 text-[13px] font-semibold text-rose-700">
+                    <p role="alert" className="mt-2 px-1 text-[13px] font-semibold text-danger">
                       Centang persetujuan dulu.
                     </p>
                   )}
@@ -172,18 +172,18 @@ export default function CartPage() {
           <div className="hidden md:block glass-lit rounded-[24px] p-5 md:sticky md:top-[96px]">
             <dl className="space-y-2 text-[14px]">
               <div className="flex justify-between gap-3">
-                <dt className="text-[#766B68]">Subtotal</dt>
-                <dd className="font-semibold text-[#2D2926] tabular-nums">{formatRupiah(cartTotal)}</dd>
+                <dt className="text-ink-muted">Subtotal</dt>
+                <dd className="font-semibold text-ink tabular-nums">{formatRupiah(cartTotal)}</dd>
               </div>
               {discount > 0 && (
                 <div className="flex justify-between gap-3">
-                  <dt className="text-[#766B68]">Voucher</dt>
-                  <dd className="font-semibold text-emerald-700 tabular-nums">-{formatRupiah(discount)}</dd>
+                  <dt className="text-ink-muted">Voucher</dt>
+                  <dd className="font-semibold text-success tabular-nums">-{formatRupiah(discount)}</dd>
                 </div>
               )}
-              <div className="flex justify-between items-baseline gap-3 pt-2 border-t border-[#C94F78]/10">
-                <dt className="font-semibold text-[#2D2926]">Total</dt>
-                <dd className="text-[22px] font-semibold text-[#A83960] tabular-nums">{formatRupiah(finalTotal)}</dd>
+              <div className="flex justify-between items-baseline gap-3 pt-2 border-t border-brand/10">
+                <dt className="font-semibold text-ink">Total</dt>
+                <dd className="text-[22px] font-semibold text-brand-ink tabular-nums">{formatRupiah(finalTotal)}</dd>
               </div>
             </dl>
             <div className="mt-4 [&>button]:w-full">{payButton}</div>
@@ -198,12 +198,12 @@ export default function CartPage() {
       >
         <div className="glass mx-auto max-w-lg rounded-[28px] pl-5 pr-2 py-2 flex items-center gap-3">
           <div className="flex-1 min-w-0">
-            <p className="text-[12px] text-[#766B68]">Total</p>
-            <p className="text-[18px] font-semibold text-[#2D2926] tabular-nums leading-tight truncate">
+            <p className="text-[12px] text-ink-muted">Total</p>
+            <p className="text-[18px] font-semibold text-ink tabular-nums leading-tight truncate">
               {formatRupiah(finalTotal)}
             </p>
             {savings > 0 && (
-              <p className="text-[12px] font-semibold text-emerald-700 tabular-nums truncate">
+              <p className="text-[12px] font-semibold text-success tabular-nums truncate">
                 Hemat {formatRupiah(savings)}
               </p>
             )}

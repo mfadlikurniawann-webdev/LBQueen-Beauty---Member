@@ -46,6 +46,7 @@ export function ProductPlaceholder({
       className={cn(
         "absolute inset-0 flex flex-col items-center justify-center gap-2",
         "bg-gradient-to-br from-[#F9E1E9] via-[#FCEFF3] to-[#FAF7F5]",
+        "dark:from-blush-2 dark:via-blush dark:to-surface",
       )}
       aria-hidden="true"
     >
@@ -53,14 +54,14 @@ export function ProductPlaceholder({
       <div className="absolute -left-4 -bottom-4 w-20 h-20 rounded-full bg-[#D4AF37]/15 blur-xl" />
       <div
         className={cn(
-          `relative ${circle} rounded-full bg-white/90 border border-[#EEDFE3] shadow-sm`,
+          `relative ${circle} rounded-full bg-surface/90 border border-line shadow-sm`,
           "flex items-center justify-center",
         )}
       >
-        <Icon className={`${icon} text-[#A83960]`} strokeWidth={1.75} />
+        <Icon className={`${icon} text-brand-ink`} strokeWidth={1.75} />
       </div>
       {size !== "sm" && (
-        <span className="relative text-[12px] font-semibold tracking-[0.02em] text-[#A83960]/85">
+        <span className="relative text-[12px] font-semibold tracking-[0.02em] text-brand-ink/85">
           LBQueen
         </span>
       )}

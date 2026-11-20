@@ -5,6 +5,7 @@ import { PWAProvider } from "./PWAContext";
 
 import { useEffect } from "react";
 import { watchStaleDeploy } from "@/lib/stale-deploy";
+import { subscribeTheme } from "@/lib/theme-mode";
 import { SWRConfig } from "swr";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -13,6 +14,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
     localStorage.removeItem("lbqueen_customer");
     return watchStaleDeploy();
   }, []);
+  // Tema mengikuti perubahan sistem dan pilihan dari tab lain di semua halaman.
+  useEffect(() => subscribeTheme(() => {}), []);
 
   return (
     <SWRConfig value={{ dedupingInterval: 30000, revalidateOnFocus: false, errorRetryCount: 1 }}>

@@ -57,7 +57,7 @@ export function InvoiceReceipt({
   return (
     <div
       className={cn(
-        `bg-white shadow-[0_12px_40px_rgba(45,41,38,0.10)] ${printWidth} relative p-4`,
+        `light-scope bg-white shadow-[0_12px_40px_rgba(45,41,38,0.10)] ${printWidth} relative p-4`,
         "print:shadow-none print:p-0 print:m-0 mx-auto text-black",
       )}
     >

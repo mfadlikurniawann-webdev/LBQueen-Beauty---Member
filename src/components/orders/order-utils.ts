@@ -42,21 +42,21 @@ export const TAB_STATUS: Record<string, string> = {
 
 export function getOrderStatus(s: string) {
   if (s === "pending")
-    return { label: "Menunggu", icon: Clock, cls: "bg-amber-50 text-amber-700 border-amber-200" };
+    return { label: "Menunggu", icon: Clock, cls: "bg-warning-soft text-warning border-warning-line" };
   if (s === "processing")
-    return { label: "Diproses", icon: Package, cls: "bg-sky-50 text-sky-700 border-sky-200" };
+    return { label: "Diproses", icon: Package, cls: "bg-info-soft text-info border-info-line" };
   if (s === "dp")
     return {
       label: "Sudah DP",
       icon: Wallet,
-      cls: "bg-violet-50 text-violet-700 border-violet-200",
+      cls: "bg-violet-50 text-violet-700 border-violet-200 dark:bg-violet-400/15 dark:text-violet-300 dark:border-violet-300/30",
     };
   if (s === "cancelled")
-    return { label: "Dibatalkan", icon: XCircle, cls: "bg-rose-50 text-rose-700 border-rose-200" };
+    return { label: "Dibatalkan", icon: XCircle, cls: "bg-danger-soft text-danger border-danger-line" };
   return {
     label: "Selesai",
     icon: CheckCircle2,
-    cls: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    cls: "bg-success-soft text-success border-success-line",
   };
 }
 

@@ -43,23 +43,197 @@
   --shadow-dark: 0 16px 48px rgba(45, 41, 38, 0.2);
 
   --font-body: var(--font-inter), "Helvetica Neue", "Helvetica", system-ui, sans-serif;
-  --background: #fbf6f8;
-  --foreground: var(--lb-charcoal);
-  --card: var(--lb-surface);
-  --card-foreground: var(--lb-charcoal);
-  --primary: var(--lb-pink-deep);
+  --radius: 1rem;
+}
+
+/* ─────────────────────────────────────────────────────
+   TEMA: semua warna permukaan dan teks lewat token di bawah.
+   Terang di :root dan .light-scope (struk nota selalu terang).
+   Gelap hanya untuk layar (@media screen), jadi hasil cetak selalu terang.
+   ───────────────────────────────────────────────────── */
+:root,
+.light-scope {
+  color-scheme: light;
+  --page: #fbf6f8;
+  --surface: #ffffff;
+  --fill: #ffffff;
+  --edge: #ffffff;
+  --line: #eedfe3;
+  --ink: #2d2926;
+  --ink-2: #3f3734;
+  --ink-3: #5f5552;
+  --ink-muted: #766b68;
+  --ink-faint: #8c8280;
+  --ink-disabled: #b9ada9;
+  --brand: #c94f78;
+  --brand-ink: #a83960;
+  --price: #c2185b;
+  --blush: #fbeff3;
+  --blush-2: #f8dce6;
+  --gold-ink: #8a6414;
+  --gold-soft: #fbf2dc;
+  --star-empty: #d9cfd3;
+  --danger: #be123c;
+  --danger-soft: #fff1f2;
+  --danger-line: #fecdd3;
+  --success: #047857;
+  --success-soft: #ecfdf5;
+  --success-line: #a7f3d0;
+  --warning: #b45309;
+  --warning-soft: #fffbeb;
+  --warning-line: #fde68a;
+  --info: #0369a1;
+  --info-soft: #f0f9ff;
+  --info-line: #bae6fd;
+  --scrim: rgb(42 21 32 / 0.5);
+
+  /* Kaca */
+  --glass-bg: rgb(255 255 255 / 0.7);
+  --glass-bg-mobile: rgb(255 255 255 / 0.92);
+  --glass-edge: rgb(255 255 255 / 0.82);
+  --glass-hi: rgb(255 255 255 / 0.95);
+  --glass-lo: rgb(255 255 255 / 0.3);
+  --glass-ring: rgb(122 34 64 / 0.05);
+  --glass-shadow: rgb(122 34 64 / 0.24);
+  --glass-sheen: rgb(255 255 255 / 0.74);
+  --glass-lit-bg: rgb(255 255 255 / 0.62);
+  --sheet-bg: linear-gradient(160deg, rgb(255 255 255 / 0.995) 0%, rgb(255 246 249 / 0.985) 100%), #fffafc;
+  --sheet-shadow: rgb(90 24 52 / 0.35);
+  --soft-bg: linear-gradient(150deg, rgb(255 255 255 / 0.92) 0%, rgb(255 255 255 / 0.72) 100%);
+  --chip-bg: rgb(255 255 255 / 0.62);
+  --chip-bg-mobile: rgb(255 255 255 / 0.84);
+  --chip-ring: rgb(122 34 64 / 0.07);
+  --btn-glass-bg: rgb(255 255 255 / 0.66);
+  --btn-glass-hover: rgb(255 255 255 / 0.85);
+  --btn-glass-ring: rgb(201 79 120 / 0.16);
+  --input-bg: rgb(255 255 255 / 0.68);
+  --input-bg-focus: rgb(255 255 255 / 0.94);
+  --input-ring: rgb(122 34 64 / 0.1);
+  --input-inset: rgb(122 34 64 / 0.06);
+  --skeleton-base: rgb(243 228 234 / 0.75);
+  --skeleton-hi: rgb(255 255 255 / 0.65);
+  --scrollbar: rgb(168 57 96 / 0.3);
+  --scrollbar-hover: rgb(168 57 96 / 0.45);
+  --selection-bg: #f6dde6;
+  --selection-ink: #7a2240;
+  --tile-hi: rgb(255 255 255 / 0.85);
+  --tile-tint: 80%;
+  --ambient-1: rgb(201 79 120 / 0.2);
+  --ambient-2: rgb(255 168 196 / 0.32);
+  --ambient-3: rgb(226 190 94 / 0.16);
+  --ambient-4: rgb(184 85 130 / 0.16);
+
+  /* Nama token gaya shadcn untuk utilitas bawaan. */
+  --background: var(--page);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --primary: var(--brand-ink);
   --primary-foreground: #ffffff;
   --secondary: #f5e8ed;
   --secondary-foreground: #7a2240;
   --accent: #fff0f5;
   --accent-foreground: #7a2240;
   --muted: #f4efec;
-  --muted-foreground: var(--lb-muted);
-  --border: var(--lb-border);
+  --muted-foreground: var(--ink-muted);
+  --border: var(--line);
   --input: #e7d9de;
-  --ring: var(--lb-pink);
+  --ring: var(--brand);
   --destructive: #b42332;
-  --radius: 1rem;
+}
+
+@media screen {
+  .dark {
+    color-scheme: dark;
+    --page: #120c10;
+    --surface: #1b1418;
+    --fill: rgb(255 255 255 / 0.09);
+    --edge: rgb(255 255 255 / 0.14);
+    --line: rgb(255 255 255 / 0.13);
+    --ink: #f6eef1;
+    --ink-2: #ebdfe4;
+    --ink-3: #d6c8cd;
+    --ink-muted: #bdaeb4;
+    --ink-faint: #ab9ba2;
+    --ink-disabled: #85767c;
+    --brand: #ee7fa5;
+    --brand-ink: #f59dbd;
+    --price: #ff92b8;
+    --blush: #2a1c23;
+    --blush-2: #3a2430;
+    --gold-ink: #ebc96f;
+    --gold-soft: rgb(226 190 94 / 0.16);
+    --star-empty: #5e4d55;
+    --danger: #fda4af;
+    --danger-soft: rgb(244 63 94 / 0.14);
+    --danger-line: rgb(253 164 175 / 0.3);
+    --success: #6ee7b7;
+    --success-soft: rgb(16 185 129 / 0.14);
+    --success-line: rgb(110 231 183 / 0.3);
+    --warning: #fcd34d;
+    --warning-soft: rgb(245 158 11 / 0.14);
+    --warning-line: rgb(252 211 77 / 0.3);
+    --info: #7dd3fc;
+    --info-soft: rgb(14 165 233 / 0.14);
+    --info-line: rgb(125 211 252 / 0.3);
+    --scrim: rgb(5 2 4 / 0.66);
+
+    --glass-bg: rgb(255 255 255 / 0.06);
+    --glass-bg-mobile: rgb(31 22 27 / 0.94);
+    --glass-edge: rgb(255 255 255 / 0.1);
+    --glass-hi: rgb(255 255 255 / 0.1);
+    --glass-lo: rgb(255 255 255 / 0.02);
+    --glass-ring: rgb(0 0 0 / 0.3);
+    --glass-shadow: rgb(0 0 0 / 0.6);
+    --glass-sheen: rgb(255 255 255 / 0.07);
+    --glass-lit-bg: rgb(255 255 255 / 0.05);
+    --sheet-bg: linear-gradient(160deg, #241a20 0%, #1b1418 100%), #1b1418;
+    --sheet-shadow: rgb(0 0 0 / 0.7);
+    --soft-bg: linear-gradient(150deg, rgb(255 255 255 / 0.075) 0%, rgb(255 255 255 / 0.045) 100%);
+    --chip-bg: rgb(255 255 255 / 0.08);
+    --chip-bg-mobile: rgb(38 28 34 / 0.92);
+    --chip-ring: rgb(0 0 0 / 0.25);
+    --btn-glass-bg: rgb(255 255 255 / 0.08);
+    --btn-glass-hover: rgb(255 255 255 / 0.14);
+    --btn-glass-ring: rgb(238 127 165 / 0.22);
+    --input-bg: rgb(255 255 255 / 0.06);
+    --input-bg-focus: rgb(255 255 255 / 0.09);
+    --input-ring: rgb(255 255 255 / 0.24);
+    --input-inset: rgb(0 0 0 / 0.25);
+    --skeleton-base: rgb(255 255 255 / 0.06);
+    --skeleton-hi: rgb(255 255 255 / 0.07);
+    --scrollbar: rgb(245 157 189 / 0.3);
+    --scrollbar-hover: rgb(245 157 189 / 0.5);
+    --selection-bg: rgb(201 79 120 / 0.45);
+    --selection-ink: #ffffff;
+    --tile-hi: rgb(255 255 255 / 0.1);
+    --tile-tint: 12%;
+    --ambient-1: rgb(201 79 120 / 0.26);
+    --ambient-2: rgb(142 47 87 / 0.3);
+    --ambient-3: rgb(226 190 94 / 0.09);
+    --ambient-4: rgb(184 85 130 / 0.2);
+
+    --secondary: rgb(255 255 255 / 0.08);
+    --secondary-foreground: #f59dbd;
+    --accent: rgb(255 255 255 / 0.08);
+    --accent-foreground: #f59dbd;
+    --muted: rgb(255 255 255 / 0.06);
+    --input: rgb(255 255 255 / 0.24);
+    --destructive: #fda4af;
+  }
+  /* Struk nota di dalam halaman gelap tetap terang. */
+  .dark .light-scope {
+    color-scheme: light;
+  }
+}
+
+/* Mode gelap: kelas .dark di <html> (dipasang skrip di <head> sebelum render), hanya di layar. */
+@custom-variant dark {
+  @media screen {
+    &:where(.dark, .dark *) {
+      @slot;
+    }
+  }
 }
 
 @theme inline {
@@ -80,6 +254,38 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-destructive: var(--destructive);
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-fill: var(--fill);
+  --color-edge: var(--edge);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-ink-disabled: var(--ink-disabled);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-price: var(--price);
+  --color-blush: var(--blush);
+  --color-blush-2: var(--blush-2);
+  --color-gold-ink: var(--gold-ink);
+  --color-gold-soft: var(--gold-soft);
+  --color-star-empty: var(--star-empty);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-line: var(--danger-line);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-success-line: var(--success-line);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning-line: var(--warning-line);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-info-line: var(--info-line);
+  --color-scrim: var(--scrim);
 }
 
 /* ── GLOBAL BASE ── */
@@ -94,8 +300,8 @@ html {
 }
 
 body {
-  background: #fbf6f8;
-  color: var(--lb-charcoal);
+  background: var(--page);
+  color: var(--ink);
   font-family: var(--font-body);
   font-size: 14px;
   line-height: 1.6;
@@ -132,12 +338,12 @@ button:disabled {
   cursor: not-allowed;
 }
 :focus-visible {
-  outline: 3px solid var(--lb-pink);
+  outline: 3px solid var(--brand);
   outline-offset: 4px;
 }
 ::selection {
-  background: #f6dde6;
-  color: #7a2240;
+  background: var(--selection-bg);
+  color: var(--selection-ink);
 }
 
 .skip-link {
@@ -147,8 +353,8 @@ button:disabled {
   z-index: 200;
   padding: 12px 20px;
   border-radius: 16px;
-  background: white;
-  color: var(--lb-pink-deep);
+  background: var(--surface);
+  color: var(--brand-ink);
   transform: translateY(-160%);
 }
 .skip-link:focus {
@@ -226,6 +432,13 @@ button:disabled {
   }
 }
 
+.lbq-theme-switch,
+.lbq-theme-switch *,
+.lbq-theme-switch *::before,
+.lbq-theme-switch *::after {
+  transition: none !important;
+}
+
 /* ── UTILITY LAYER ── */
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
@@ -239,7 +452,7 @@ button:disabled {
   /* Isi modal/sheet yang bisa digulir: scrollbar tipis, tanpa panah, menjauh dari sudut membulat. */
   .scroll-thin {
     scrollbar-width: thin;
-    scrollbar-color: rgb(168 57 96 / 0.3) transparent;
+    scrollbar-color: var(--scrollbar) transparent;
     scrollbar-gutter: stable;
     overscroll-behavior: contain;
   }
@@ -255,20 +468,20 @@ button:disabled {
     margin-block: 14px;
   }
   .scroll-thin::-webkit-scrollbar-thumb {
-    background: rgb(168 57 96 / 0.28);
+    background: var(--scrollbar);
     border-radius: 999px;
   }
   .scroll-thin::-webkit-scrollbar-thumb:hover {
-    background: rgb(168 57 96 / 0.45);
+    background: var(--scrollbar-hover);
   }
 
   input[type="date"]::-webkit-calendar-picker-indicator,
   input[type="time"]::-webkit-calendar-picker-indicator {
-    background-color: var(--lb-pink-soft);
+    background-color: var(--blush);
     padding: 5px;
     cursor: pointer;
     border-radius: 8px;
-    color: var(--lb-pink);
+    color: var(--brand);
   }
 
   /* Lapisan cahaya ambient tetap di belakang halaman: glass butuh warna di belakangnya
@@ -281,10 +494,10 @@ button:disabled {
     position: absolute;
     inset: -12%;
     background:
-      radial-gradient(42% 36% at 10% 6%, rgb(201 79 120 / 0.2), transparent 70%),
-      radial-gradient(38% 34% at 94% 22%, rgb(255 168 196 / 0.32), transparent 70%),
-      radial-gradient(40% 36% at 18% 72%, rgb(226 190 94 / 0.16), transparent 70%),
-      radial-gradient(46% 40% at 82% 100%, rgb(184 85 130 / 0.16), transparent 70%);
+      radial-gradient(42% 36% at 10% 6%, var(--ambient-1), transparent 70%),
+      radial-gradient(38% 34% at 94% 22%, var(--ambient-2), transparent 70%),
+      radial-gradient(40% 36% at 18% 72%, var(--ambient-3), transparent 70%),
+      radial-gradient(46% 40% at 82% 100%, var(--ambient-4), transparent 70%);
     will-change: transform;
     animation: lbq-ambient-drift 28s ease-in-out infinite alternate;
   }
@@ -306,13 +519,13 @@ button:disabled {
 @layer components {
   /* Chrome dan permukaan utama (header, navigasi, kartu unggulan). */
   .glass {
-    background-color: rgb(255 255 255 / 0.7);
-    border: 1px solid rgb(255 255 255 / 0.78);
+    background-color: var(--glass-bg);
+    border: 1px solid var(--glass-edge);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.95),
-      inset 0 -1px 0 rgb(255 255 255 / 0.3),
-      0 0 0 1px rgb(122 34 64 / 0.04),
-      0 12px 32px -16px rgb(122 34 64 / 0.22);
+      inset 0 1px 0 var(--glass-hi),
+      inset 0 -1px 0 var(--glass-lo),
+      0 0 0 1px var(--glass-ring),
+      0 12px 32px -16px var(--glass-shadow);
     -webkit-backdrop-filter: blur(22px) saturate(1.6);
     backdrop-filter: blur(22px) saturate(1.6);
   }
@@ -320,14 +533,14 @@ button:disabled {
   /* Kaca lebih terang dengan kilau diagonal untuk elemen yang perlu menonjol. */
   .glass-lit {
     background:
-      linear-gradient(122deg, rgb(255 255 255 / 0.74) 0%, rgb(255 255 255 / 0) 42%),
-      rgb(255 255 255 / 0.62);
-    border: 1px solid rgb(255 255 255 / 0.88);
+      linear-gradient(122deg, var(--glass-sheen) 0%, transparent 42%),
+      var(--glass-lit-bg);
+    border: 1px solid var(--glass-edge);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 1),
-      inset 0 -1px 0 rgb(255 255 255 / 0.35),
-      0 0 0 1px rgb(122 34 64 / 0.05),
-      0 16px 40px -18px rgb(122 34 64 / 0.28);
+      inset 0 1px 0 var(--glass-hi),
+      inset 0 -1px 0 var(--glass-lo),
+      0 0 0 1px var(--glass-ring),
+      0 16px 40px -18px var(--glass-shadow);
     -webkit-backdrop-filter: blur(24px) saturate(1.8);
     backdrop-filter: blur(24px) saturate(1.8);
   }
@@ -335,22 +548,22 @@ button:disabled {
   /* Kaca pekat untuk sheet/dialog di atas konten yang ramai. */
   /* Sheet/dialog tanpa blur: lapisan dasar solid agar konten di belakang tidak pernah tembus. */
   .glass-strong {
-    background: linear-gradient(160deg, rgb(255 255 255 / 0.995) 0%, rgb(255 246 249 / 0.985) 100%), #fffafc;
-    border: 1px solid rgb(255 255 255 / 0.9);
+    background: var(--sheet-bg);
+    border: 1px solid var(--glass-edge);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 1),
-      0 0 0 1px rgb(122 34 64 / 0.05),
-      0 24px 60px -20px rgb(90 24 52 / 0.35);
+      inset 0 1px 0 var(--glass-hi),
+      0 0 0 1px var(--glass-ring),
+      0 24px 60px -20px var(--sheet-shadow);
   }
 
   /* Kartu berulang (grid/daftar): tampilan kaca tanpa backdrop-filter agar gulir tetap ringan. */
   .glass-soft {
-    background: linear-gradient(150deg, rgb(255 255 255 / 0.92) 0%, rgb(255 255 255 / 0.72) 100%);
-    border: 1px solid rgb(255 255 255 / 0.9);
+    background: var(--soft-bg);
+    border: 1px solid var(--glass-edge);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 1),
-      0 0 0 1px rgb(122 34 64 / 0.05),
-      0 10px 28px -18px rgb(122 34 64 / 0.3);
+      inset 0 1px 0 var(--glass-hi),
+      0 0 0 1px var(--glass-ring),
+      0 10px 28px -18px var(--glass-shadow);
   }
 
   /* Panel kontras gelap-rose (CTA, pita promo); kaca di dalamnya otomatis versi gelap. */
@@ -370,6 +583,9 @@ button:disabled {
   /* Kartu produk di atas panel gelap tetap terang agar teks gelapnya terbaca. */
   .panel-rose .glass-soft {
     background: linear-gradient(150deg, rgb(255 255 255 / 0.98) 0%, rgb(255 244 248 / 0.94) 100%);
+  }
+  .dark .panel-rose .glass-soft {
+    background: linear-gradient(150deg, rgb(40 26 34 / 0.97) 0%, rgb(27 20 24 / 0.95) 100%);
   }
   .panel-rose .glass,
   .panel-rose .chip-glass {
@@ -428,7 +644,7 @@ button:disabled {
     gap: 6px;
     font-size: 12px;
     font-weight: 600;
-    color: #a83960;
+    color: var(--brand-ink);
   }
   .panel-rose .eyebrow {
     color: #ffc4d8;
@@ -477,13 +693,13 @@ button:disabled {
     border-radius: 9999px;
     font-weight: 600;
     font-size: 15px;
-    color: #a83960;
-    background: rgb(255 255 255 / 0.66);
-    border: 1px solid rgb(255 255 255 / 0.9);
+    color: var(--brand-ink);
+    background: var(--btn-glass-bg);
+    border: 1px solid var(--glass-edge);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 1),
-      0 0 0 1px rgb(201 79 120 / 0.16),
-      0 8px 20px -12px rgb(122 34 64 / 0.3);
+      inset 0 1px 0 var(--glass-hi),
+      0 0 0 1px var(--btn-glass-ring),
+      0 8px 20px -12px var(--glass-shadow);
     -webkit-backdrop-filter: blur(16px) saturate(1.5);
     backdrop-filter: blur(16px) saturate(1.5);
     transition:
@@ -491,7 +707,7 @@ button:disabled {
       background-color 0.3s ease;
   }
   .btn-glass:hover:not(:disabled) {
-    background: rgb(255 255 255 / 0.85);
+    background: var(--btn-glass-hover);
   }
   .btn-glass:active:not(:disabled) {
     transform: scale(0.97);
@@ -499,12 +715,12 @@ button:disabled {
 
   /* Pil kecil berkaca untuk chip filter, lencana, dan tombol ikon. */
   .chip-glass {
-    background: rgb(255 255 255 / 0.62);
-    border: 1px solid rgb(255 255 255 / 0.85);
+    background: var(--chip-bg);
+    border: 1px solid var(--glass-edge);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 1),
-      0 0 0 1px rgb(122 34 64 / 0.07),
-      0 6px 16px -10px rgb(122 34 64 / 0.3);
+      inset 0 1px 0 var(--glass-hi),
+      0 0 0 1px var(--chip-ring),
+      0 6px 16px -10px var(--glass-shadow);
   }
   .chip-active {
     color: #fff;
@@ -521,31 +737,47 @@ button:disabled {
     padding: 12px 16px;
     border-radius: 18px;
     font-size: 16px;
-    color: #2d2926;
-    background: rgb(255 255 255 / 0.68);
-    border: 1px solid rgb(255 255 255 / 0.9);
+    color: var(--ink);
+    background: var(--input-bg);
+    border: 1px solid var(--glass-edge);
     box-shadow:
-      inset 0 1px 2px rgb(122 34 64 / 0.06),
-      0 0 0 1px rgb(122 34 64 / 0.1);
+      inset 0 1px 2px var(--input-inset),
+      0 0 0 1px var(--input-ring);
     outline: none;
     transition:
       background-color 0.25s ease,
       box-shadow 0.25s ease;
   }
   .input-glass::placeholder {
-    color: #8c8280;
+    color: var(--ink-faint);
   }
   .input-glass:focus {
-    background: rgb(255 255 255 / 0.94);
+    background: var(--input-bg-focus);
     box-shadow:
-      0 0 0 1px #c94f78,
-      0 0 0 5px rgb(201 79 120 / 0.14);
+      0 0 0 1px var(--brand),
+      0 0 0 5px rgb(201 79 120 / 0.2);
+  }
+  .input-glass:disabled {
+    color: var(--ink-muted);
+  }
+
+  /* Ubin ikon bertint (IconChip): tint per nada lewat --tint dari inline style. */
+  .icon-tile {
+    border: 1px solid var(--glass-edge);
+    background: linear-gradient(
+      150deg,
+      var(--tile-hi) 0%,
+      color-mix(in srgb, var(--tint, #ffeaf1) var(--tile-tint), transparent) 70%
+    );
+    box-shadow:
+      inset 0 1px 0 var(--glass-hi),
+      0 6px 16px -10px var(--glass-shadow);
   }
 
   .skeleton-glass {
     background:
-      linear-gradient(100deg, transparent 20%, rgb(255 255 255 / 0.65) 50%, transparent 80%),
-      rgb(243 228 234 / 0.75);
+      linear-gradient(100deg, transparent 20%, var(--skeleton-hi) 50%, transparent 80%),
+      var(--skeleton-base);
     background-size: 200% 100%;
     animation: lbq-shimmer 1.4s linear infinite;
   }
@@ -556,9 +788,9 @@ button:disabled {
   .lift:hover {
     transform: translateY(-4px);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 1),
-      0 0 0 1px rgb(201 79 120 / 0.14),
-      0 22px 44px -22px rgb(122 34 64 / 0.4);
+      inset 0 1px 0 var(--glass-hi),
+      0 0 0 1px rgb(201 79 120 / 0.18),
+      0 22px 44px -22px var(--glass-shadow);
   }
 }
 
@@ -640,7 +872,7 @@ html.lbq-reveal-lite [data-reveal].is-revealed {
   .glass-lit,
   .glass-strong,
   .btn-glass {
-    background: rgb(255 255 255 / 0.96);
+    background: var(--surface);
   }
   .panel-rose .glass {
     background: rgb(70 26 46 / 0.95);
@@ -653,16 +885,16 @@ html.lbq-reveal-lite [data-reveal].is-revealed {
   @media (max-width: 767px) {
     .glass,
     .glass-lit {
-      background-color: rgb(255 255 255 / 0.92);
+      background-color: var(--glass-bg-mobile);
     }
     .glass-lit {
       background:
-        linear-gradient(122deg, rgb(255 255 255 / 0.74) 0%, rgb(255 255 255 / 0) 42%),
-        rgb(255 255 255 / 0.92);
+        linear-gradient(122deg, var(--glass-sheen) 0%, transparent 42%),
+        var(--glass-bg-mobile);
     }
     .btn-glass,
     .chip-glass {
-      background-color: rgb(255 255 255 / 0.84);
+      background-color: var(--chip-bg-mobile);
     }
   }
 }
@@ -680,6 +912,11 @@ html.lbq-reveal-lite [data-reveal].is-revealed {
 @media print {
   .no-print {
     display: none !important;
+  }
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000;
   }
 }
 

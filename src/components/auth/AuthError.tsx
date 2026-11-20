@@ -4,7 +4,7 @@ export function AuthError({ message, id }: { message: string; id?: string }) {
     <div
       id={id}
       role="alert"
-      className="px-4 py-3 rounded-[18px] text-[13px] font-medium bg-rose-50/85 text-rose-700 border border-white shadow-[0_0_0_1px_rgba(225,29,72,0.2)]"
+      className="px-4 py-3 rounded-[18px] text-[13px] font-medium bg-danger-soft/85 text-danger border border-edge shadow-[0_0_0_1px_rgba(225,29,72,0.2)]"
     >
       {message}
     </div>

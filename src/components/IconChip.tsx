@@ -57,15 +57,12 @@ export function IconChip({
   return (
     <span
       className={cn(
-        "relative shrink-0 flex items-center justify-center border border-white/90",
+        "icon-tile relative shrink-0 flex items-center justify-center",
         s.tile,
         className,
       )}
-      // Ubin kaca bertint: tint tipis di bawah kilau putih, tepi atas terang seperti glass.
-      style={{
-        background: `linear-gradient(150deg, rgba(255,255,255,0.85) 0%, ${TONES[tone].tint}cc 70%)`,
-        boxShadow: "inset 0 1px 0 rgba(255,255,255,1), 0 6px 16px -10px rgba(122,34,64,0.35)",
-      }}
+      // Ubin kaca bertint (.icon-tile di globals.css): tint per nada, lebih redup di mode gelap.
+      style={{ "--tint": TONES[tone].tint } as React.CSSProperties}
     >
       {chip}
       {children}

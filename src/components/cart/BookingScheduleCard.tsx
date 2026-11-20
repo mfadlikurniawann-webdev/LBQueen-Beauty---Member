@@ -20,10 +20,10 @@ export function BookingScheduleCard({
   return (
     <fieldset className={`${CARD} p-4`} aria-describedby={invalid ? "booking-error" : undefined}>
       <legend className="sr-only">Jadwal treatment</legend>
-      <p className="text-[15px] font-semibold text-[#2D2926] mb-2.5">Jadwal treatment</p>
+      <p className="text-[15px] font-semibold text-ink mb-2.5">Jadwal treatment</p>
       <div className="grid grid-cols-2 gap-2.5">
         <label className="min-w-0">
-          <span className="block text-[12px] font-semibold text-[#766B68] mb-1">Tanggal</span>
+          <span className="block text-[12px] font-semibold text-ink-muted mb-1">Tanggal</span>
           <input
             type="date"
             value={date}
@@ -34,7 +34,7 @@ export function BookingScheduleCard({
           />
         </label>
         <label className="min-w-0">
-          <span className="block text-[12px] font-semibold text-[#766B68] mb-1">Jam</span>
+          <span className="block text-[12px] font-semibold text-ink-muted mb-1">Jam</span>
           <input
             type="time"
             value={time}
@@ -45,7 +45,7 @@ export function BookingScheduleCard({
         </label>
       </div>
       {invalid && (
-        <p id="booking-error" role="alert" className={cn("mt-2 text-[13px] font-semibold text-rose-700")}>
+        <p id="booking-error" role="alert" className={cn("mt-2 text-[13px] font-semibold text-danger")}>
           {invalid}
         </p>
       )}

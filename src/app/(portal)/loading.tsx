@@ -19,7 +19,7 @@ export default function Loading() {
           </div>
         ))}
       </div>
-      <p className="mt-6 text-center text-[13px] font-medium text-[#766B68]">Memuat halaman</p>
+      <p className="mt-6 text-center text-[13px] font-medium text-ink-muted">Memuat halaman</p>
     </div>
   );
 }

@@ -46,7 +46,7 @@ export function OnboardingView() {
             href={waLink("Halo admin LBQueen, saya ingin bertanya.")}
             target="_blank"
             rel="noopener noreferrer"
-            className="chip-glass h-11 px-4 rounded-full flex items-center gap-2 text-[14px] font-semibold text-[#3F3734] hover:bg-white/90 transition-colors"
+            className="chip-glass h-11 px-4 rounded-full flex items-center gap-2 text-[14px] font-semibold text-ink-2 hover:bg-fill/90 transition-colors"
           >
             <MessageCircle className="w-4 h-4" aria-hidden="true" /> Bantuan
           </a>
@@ -61,13 +61,13 @@ export function OnboardingView() {
           <div className="mt-7 text-center min-h-[104px]" aria-live="polite">
             <h1
               key={text.title}
-              className="text-[24px] font-bold! tracking-tight text-[#2D2926] animate-in fade-in duration-500"
+              className="text-[24px] font-bold! tracking-tight text-ink animate-in fade-in duration-500"
             >
               {text.title}
             </h1>
             <p
               key={text.desc}
-              className="mt-2 text-[16px] leading-relaxed text-[#5F5552] animate-in fade-in duration-500"
+              className="mt-2 text-[16px] leading-relaxed text-ink-3 animate-in fade-in duration-500"
             >
               {text.desc}
             </p>

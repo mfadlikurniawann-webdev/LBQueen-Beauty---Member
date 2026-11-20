@@ -33,7 +33,7 @@ export function HomeHeader({
         <label className="relative flex-1 min-w-0">
           <span className="sr-only">Cari treatment atau produk</span>
           <Search
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 h-[18px] w-[18px] text-[#A83960]"
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 h-[18px] w-[18px] text-brand-ink"
             aria-hidden="true"
           />
           <input
@@ -42,15 +42,15 @@ export function HomeHeader({
             value={searchQuery}
             onChange={(e) => onSearch(e.target.value)}
             className={cn(
-              "chip-glass w-full h-11 rounded-full pl-11 pr-4 text-[16px] text-[#2D2926] outline-none",
-              "placeholder:text-[#8C8280] focus:bg-white/90 focus:ring-4 focus:ring-[#C94F78]/15 transition-[box-shadow,background-color]",
+              "chip-glass w-full h-11 rounded-full pl-11 pr-4 text-[16px] text-ink outline-none",
+              "placeholder:text-ink-faint focus:bg-fill/90 focus:ring-4 focus:ring-brand/45 transition-[box-shadow,background-color]",
             )}
           />
         </label>
         <Link
           href="/profile"
           className={cn(
-            "md:hidden shrink-0 w-11 h-11 rounded-full ring-2 ring-white shadow-[0_6px_14px_-8px_rgba(90,24,52,0.6)]",
+            "md:hidden shrink-0 w-11 h-11 rounded-full ring-2 ring-surface shadow-[0_6px_14px_-8px_rgba(90,24,52,0.6)]",
             "active:scale-95 transition-transform",
           )}
         >

@@ -7,7 +7,7 @@ import { errorMessage } from "@/lib/stale-deploy";
 import { nameError, phoneError, usernameError } from "@/lib/validation";
 
 type Field = "name" | "phone" | "username" | "address";
-const LABEL = "block text-[13px] font-semibold text-[#5F5552] mb-1";
+const LABEL = "block text-[13px] font-semibold text-ink-3 mb-1";
 const INPUT = "input-glass w-full h-12 px-4 text-[16px]";
 
 export function ProfileForm({ customer, onSaved }: { customer: Customer; onSaved: () => Promise<unknown> }) {
@@ -74,7 +74,7 @@ export function ProfileForm({ customer, onSaved }: { customer: Customer; onSaved
           {...props}
         />
         {error && (
-          <p id={`profile-${key}-error`} className="mt-1 text-[13px] font-semibold text-rose-700">
+          <p id={`profile-${key}-error`} className="mt-1 text-[13px] font-semibold text-danger">
             {error}
           </p>
         )}
@@ -92,7 +92,7 @@ export function ProfileForm({ customer, onSaved }: { customer: Customer; onSaved
         spellCheck: false,
         maxLength: 50,
       })}
-      <p className="text-[13px] text-[#766B68]">Nomor HP dan username dipakai untuk masuk.</p>
+      <p className="text-[13px] text-ink-muted">Nomor HP dan username dipakai untuk masuk.</p>
       <div>
         <label htmlFor="profile-address" className={LABEL}>
           Alamat
@@ -108,7 +108,7 @@ export function ProfileForm({ customer, onSaved }: { customer: Customer; onSaved
         />
       </div>
       {serverError && !serverError.field && (
-        <p role="alert" className="text-[13px] font-semibold text-rose-700">
+        <p role="alert" className="text-[13px] font-semibold text-danger">
           {serverError.message}
         </p>
       )}

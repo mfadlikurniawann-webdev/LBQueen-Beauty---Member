@@ -10,7 +10,7 @@ const inter = localFont({
 });
 
 export const viewport = {
-  themeColor: "#C94F78",
+  colorScheme: "light dark",
   width: "device-width",
   initialScale: 1,
 };
@@ -33,6 +33,7 @@ export const metadata: Metadata = {
 };
 
 import { Providers } from "@/components/Providers";
+import { THEME_SCRIPT } from "@/lib/theme-mode";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -42,7 +43,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={`${inter.variable} h-full antialiased`}>
+    // Kelas "dark" dipasang skrip di <head> sebelum render, jadi atribut <html> sengaja berbeda dari server.
+    <html lang="id" className={`${inter.variable} h-full antialiased`} suppressHydrationWarning>
+      <head>
+        <meta name="theme-color" content="#C94F78" />
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="min-h-full flex flex-col">
         <a className="skip-link" href="#main-content">
           Lewati ke konten

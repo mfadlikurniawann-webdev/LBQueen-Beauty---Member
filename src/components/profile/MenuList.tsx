@@ -18,16 +18,16 @@ export type MenuRow = {
 };
 
 const ROW = cn(
-  "w-full flex items-center gap-3.5 px-4 min-h-[60px] text-left transition-colors hover:bg-white/60",
-  "focus-visible:outline-none focus-visible:bg-white/60",
+  "w-full flex items-center gap-3.5 px-4 min-h-[60px] text-left transition-colors hover:bg-fill/60",
+  "focus-visible:outline-none focus-visible:bg-fill/60",
 );
 
 function RowBody({ row }: { row: MenuRow }) {
   return (
     <>
       <IconChip icon={row.icon} tone={row.tone ?? "rose"} size="sm" />
-      <span className="flex-1 min-w-0 flex items-center gap-2 py-4 border-b border-[#C94F78]/10 group-last:border-b-0">
-        <span className="text-[15px] font-semibold text-[#2D2926] truncate">{row.label}</span>
+      <span className="flex-1 min-w-0 flex items-center gap-2 py-4 border-b border-brand/10 group-last:border-b-0">
+        <span className="text-[15px] font-semibold text-ink truncate">{row.label}</span>
         {row.badge && (
           <span className="chip-active shrink-0 rounded-full px-2.5 py-0.5 text-[12px] font-semibold">
             {row.badge}
@@ -35,11 +35,11 @@ function RowBody({ row }: { row: MenuRow }) {
         )}
         <span className="flex-1" />
         {row.value && (
-          <span className="shrink-0 text-[13px] font-medium text-[#766B68]">{row.value}</span>
+          <span className="shrink-0 text-[13px] font-medium text-ink-muted">{row.value}</span>
         )}
         <ChevronRight
           className={cn(
-            "w-5 h-5 shrink-0 text-[#5F5552] transition-transform",
+            "w-5 h-5 shrink-0 text-ink-3 transition-transform",
             row.expanded && "rotate-90",
           )}
           aria-hidden="true"

@@ -20,6 +20,7 @@ import { ChangePasswordForm } from "@/components/profile/ChangePasswordForm";
 import { MenuList } from "@/components/profile/MenuList";
 import { ProfileForm } from "@/components/profile/ProfileForm";
 import { ProfileSummary } from "@/components/profile/ProfileSummary";
+import { ThemeSwitcher } from "@/components/profile/ThemeSwitcher";
 import { useToast } from "@/components/Toast";
 import { useCart } from "@/context/CartContext";
 import { useCustomer } from "@/context/CustomerContext";
@@ -64,7 +65,7 @@ export default function ProfilePage() {
 
   const logoutAllPanel = (
     <div className="px-4 pb-4 space-y-3">
-      <p className="text-[14px] text-[#5F5552]">
+      <p className="text-[14px] text-ink-3">
         Semua HP dan browser yang memakai akun ini harus masuk lagi, termasuk perangkat ini.
       </p>
       <div className="flex gap-2">
@@ -129,6 +130,8 @@ export default function ProfilePage() {
             },
           ]}
         />
+
+        <ThemeSwitcher />
 
         <MenuList
           title="Membership & voucher"

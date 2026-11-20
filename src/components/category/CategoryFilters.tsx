@@ -5,8 +5,8 @@ import { TAB_LABEL, type CatalogTab, type Section } from "./sections";
 const chipClass = (active: boolean) =>
   cn(
     "whitespace-nowrap px-4 min-h-11 rounded-full text-[13px] font-semibold capitalize transition-all",
-    "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20",
-    active ? "chip-active font-semibold" : "chip-glass text-[#3F3734] hover:text-[#A83960] hover:bg-white/85",
+    "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/70",
+    active ? "chip-active font-semibold" : "chip-glass text-ink-2 hover:text-brand-ink hover:bg-fill/85",
   );
 
 export function CategoryFilters({
@@ -34,12 +34,12 @@ export function CategoryFilters({
       <div className="relative">
         <SearchIcon
           aria-hidden="true"
-          className="w-5 h-5 text-[#A83960] absolute left-4 top-1/2 -translate-y-1/2"
+          className="w-5 h-5 text-brand-ink absolute left-4 top-1/2 -translate-y-1/2"
         />
         <input
           type="text"
           aria-label={`Cari di ${section.title}`}
-          placeholder={`Cari di ${section.title}...`}
+          placeholder={`Cari di ${section.title}`}
           className={cn(
             "input-glass rounded-full! h-12 pl-12 pr-4 font-medium",
           )}
@@ -92,8 +92,8 @@ export function CategoryFilters({
               onClick={() => onTab(tab)}
               className={cn(
                 "min-h-11 rounded-full text-[13px] font-semibold capitalize transition-all duration-300",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C94F78]/30",
-                activeTab === tab ? "chip-active" : "text-[#5F5552] hover:text-[#A83960]",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/70",
+                activeTab === tab ? "chip-active" : "text-ink-3 hover:text-brand-ink",
               )}
             >
               {TAB_LABEL[tab]}

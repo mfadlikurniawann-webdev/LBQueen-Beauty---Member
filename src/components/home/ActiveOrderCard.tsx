@@ -42,10 +42,10 @@ export function ActiveOrderCard({ customerId }: { customerId: number }) {
       <div className="flex items-center gap-3">
         <IconChip icon={Icon} tone="rose" size="md" />
         <div className="min-w-0 flex-1">
-          <p className="text-[12px] font-semibold text-[#A83960]">Pesanan aktif #{invoiceNum}</p>
-          <p className="text-[15px] font-semibold text-[#2D2926] truncate">{parsed.name}</p>
+          <p className="text-[12px] font-semibold text-brand-ink">Pesanan aktif #{invoiceNum}</p>
+          <p className="text-[15px] font-semibold text-ink truncate">{parsed.name}</p>
         </div>
-        <ChevronRight className="w-5 h-5 shrink-0 text-[#8C8280]" aria-hidden="true" />
+        <ChevronRight className="w-5 h-5 shrink-0 text-ink-faint" aria-hidden="true" />
       </div>
       <div className="mt-3.5 grid grid-cols-3 gap-1.5" aria-label={`Status: ${status.label}`}>
         {STEPS.map((label, i) => (
@@ -55,13 +55,13 @@ export function ActiveOrderCard({ customerId }: { customerId: number }) {
                 "block h-1.5 rounded-full",
                 i <= step
                   ? "bg-gradient-to-r from-[#D4608A] to-[#B8416B] shadow-[0_2px_8px_-2px_rgba(168,57,96,0.6)]"
-                  : "bg-white/70 shadow-[inset_0_1px_2px_rgba(122,34,64,0.12)]",
+                  : "bg-fill/70 dark:bg-white/15 shadow-[inset_0_1px_2px_rgba(122,34,64,0.12)]",
               )}
             />
             <span
               className={cn(
                 "block mt-1.5 text-[12px] font-semibold",
-                i === step ? "text-[#A83960]" : "text-[#8C8280]",
+                i === step ? "text-brand-ink" : "text-ink-faint",
               )}
             >
               {i === step ? status.label : label}

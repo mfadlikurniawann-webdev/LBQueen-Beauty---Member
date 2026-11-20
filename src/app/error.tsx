@@ -26,12 +26,12 @@ export default function ErrorPage({ error, reset }: { error: Error; reset: () =>
             "items-center justify-center",
           )}
         >
-          <AlertCircle className="w-8 h-8 text-[#C94F78]" aria-hidden="true" />
+          <AlertCircle className="w-8 h-8 text-brand" aria-hidden="true" />
         </div>
-        <h1 className="text-[22px] font-semibold! text-[#2D2926] tracking-tight">
+        <h1 className="text-[22px] font-semibold! text-ink tracking-tight">
           Halaman belum dapat dimuat
         </h1>
-        <p className="mt-2 mb-7 text-[14px] leading-relaxed text-[#766B68]">
+        <p className="mt-2 mb-7 text-[14px] leading-relaxed text-ink-muted">
           Silakan coba kembali. Jika masalah berlanjut, hubungi pengelola LBQueen.
         </p>
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">

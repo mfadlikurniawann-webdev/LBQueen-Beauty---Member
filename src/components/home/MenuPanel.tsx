@@ -21,7 +21,7 @@ export function MenuPanel({
           tierName={tierOf(customer).name}
         />
       </div>
-      <div className="border-t border-white/80 shadow-[0_-1px_0_rgba(122,34,64,0.06)] px-3 pt-4 pb-3.5">
+      <div className="border-t border-edge/80 shadow-[0_-1px_0_rgba(122,34,64,0.06)] px-3 pt-4 pb-3.5">
         <ServiceGrid voucherCount={voucherCount} cartCount={cartCount} />
       </div>
     </div>

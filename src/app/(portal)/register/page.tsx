@@ -12,7 +12,7 @@ import { PasswordToggle } from "@/components/PasswordToggle";
 import { nikError, passwordError, phoneError, usernameError } from "@/lib/validation";
 import { errorMessage } from "@/lib/stale-deploy";
 
-const REQUIRED = <span className="text-[#A83960]">*</span>;
+const REQUIRED = <span className="text-brand-ink">*</span>;
 const OPTIONAL = <span className="normal-case tracking-normal font-medium">(Opsional)</span>;
 
 function FieldHint({ id, error, hint }: { id: string; error?: string | null; hint?: string }) {
@@ -21,12 +21,12 @@ function FieldHint({ id, error, hint }: { id: string; error?: string | null; hin
       <p
         id={id}
         role="alert"
-        className="mt-1.5 text-[12px] font-semibold text-red-600 leading-snug"
+        className="mt-1.5 text-[12px] font-semibold text-danger leading-snug"
       >
         {error}
       </p>
     );
-  return hint ? <p className="mt-1.5 text-[12px] text-[#766B68] leading-snug">{hint}</p> : null;
+  return hint ? <p className="mt-1.5 text-[12px] text-ink-muted leading-snug">{hint}</p> : null;
 }
 
 export default function CustomerRegisterPage() {
@@ -114,10 +114,10 @@ export default function CustomerRegisterPage() {
       bodyClassName="scroll-thin overflow-y-auto"
       contentClassName="w-full max-w-[440px] my-auto"
     >
-      <h1 className="text-[28px] font-bold! text-[#2D2926] tracking-tight leading-tight">
+      <h1 className="text-[28px] font-bold! text-ink tracking-tight leading-tight">
         Daftar akun
       </h1>
-      <p className="text-[15px] text-[#766B68] mt-1.5 mb-7">Isi data di bawah untuk mulai pesan.</p>
+      <p className="text-[15px] text-ink-muted mt-1.5 mb-7">Isi data di bawah untuk mulai pesan.</p>
 
       <form onSubmit={handleRegister} className="space-y-5">
         <input
@@ -129,8 +129,8 @@ export default function CustomerRegisterPage() {
           {...field("website")}
           className="absolute -left-[9999px] h-0 w-0 opacity-0"
         />
-        <p className="text-[12px] text-[#766B68]">
-          Kolom bertanda <span className="font-semibold text-[#A83960]">*</span> wajib diisi.
+        <p className="text-[12px] text-ink-muted">
+          Kolom bertanda <span className="font-semibold text-brand-ink">*</span> wajib diisi.
         </p>
         <div>
           <label htmlFor="reg-name" className={LABEL_CLASS}>

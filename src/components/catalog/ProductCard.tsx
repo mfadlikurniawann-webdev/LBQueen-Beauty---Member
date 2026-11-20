@@ -48,7 +48,7 @@ export function ProductCard({
       onClick={onOpen}
       className={cn(
         "glass-soft spotlight lift flex flex-col text-left rounded-[24px] cursor-pointer group",
-        "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25",
+        "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/70",
         styles.card,
       )}
     >
@@ -77,9 +77,9 @@ export function ProductCard({
         )}
         <span
           className={cn(
-            "absolute w-8 h-8 rounded-full bg-white/95 border border-white/90",
+            "absolute w-8 h-8 rounded-full bg-surface/95 border border-edge/90",
             "flex items-center justify-center shadow-[0_6px_14px_-6px_rgba(122,34,64,0.45)]",
-            "text-[#A83960] group-hover:bg-[#C94F78] group-hover:text-white duration-300",
+            "text-brand-ink group-hover:bg-[#C94F78] group-hover:text-white duration-300",
             styles.plus,
           )}
           aria-hidden="true"
@@ -88,14 +88,14 @@ export function ProductCard({
         </span>
       </div>
       <div className={styles.body}>
-        <p className="text-[12px] font-semibold text-[#A83960] truncate">
+        <p className="text-[12px] font-semibold text-brand-ink truncate">
           {product.sub_category || fallbackLabel}
         </p>
-        <Name className="mt-1 text-[14px] font-semibold text-[#2D2926] line-clamp-2 leading-snug min-h-[2.75em]">
+        <Name className="mt-1 text-[14px] font-semibold text-ink line-clamp-2 leading-snug min-h-[2.75em]">
           {product.name}
         </Name>
         {(variantCount > 1 || photoCount > 1) && (
-          <p className="mt-1 text-[12px] font-medium text-[#766B68] truncate">
+          <p className="mt-1 text-[12px] font-medium text-ink-muted truncate">
             {[variantCount > 1 && `${variantCount} variasi`, photoCount > 1 && `${photoCount} foto`]
               .filter(Boolean)
               .join(", ")}

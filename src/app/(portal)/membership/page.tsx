@@ -78,7 +78,7 @@ export default function MembershipPage() {
   return (
     <div className="min-h-screen">
       <div
-        className="transition-[background] duration-500 pb-6"
+        className="transition-[background] duration-500 pb-6 dark:bg-none!"
         style={{
           // Cahaya lembut berwarna tier di belakang kartu, memudar tanpa tepi.
           background: `radial-gradient(75% 65% at 50% 40%, ${tier.stage} 0%, transparent 72%)`,
@@ -95,7 +95,7 @@ export default function MembershipPage() {
           role="region"
           aria-label="Kartu tier membership"
           tabIndex={0}
-          className="flex gap-3 overflow-x-auto snap-x snap-mandatory no-scrollbar focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/30 rounded-[28px] px-[12%] sm:px-[calc(50%-170px)] pt-2 pb-10 -mb-6"
+          className="flex gap-3 overflow-x-auto snap-x snap-mandatory no-scrollbar focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/70 rounded-[28px] px-[12%] sm:px-[calc(50%-170px)] pt-2 pb-10 -mb-6"
         >
           {TIERS.map((t, i) => {
             const mine = i === currentIndex;
@@ -177,10 +177,10 @@ export default function MembershipPage() {
       </div>
 
       <div data-reveal className="px-4 sm:px-8 max-w-2xl mx-auto pb-6">
-        <h2 className="text-[20px] font-semibold! text-[#2D2926] mb-3.5">
+        <h2 className="text-[20px] font-semibold! text-ink mb-3.5">
           Nikmati {benefits.length} benefit{isCurrent ? "" : ` ${tier.label}`}
         </h2>
-        <ul className="glass rounded-[26px] divide-y divide-[#C94F78]/10">
+        <ul className="glass rounded-[26px] divide-y divide-brand/10">
           {benefits.map((b, i) => (
             <li key={b.title} className="flex items-center gap-3.5 px-4 py-3.5">
               <IconChip
@@ -189,7 +189,7 @@ export default function MembershipPage() {
                 size="md"
               />
               <span className="min-w-0">
-                <span className="block text-[15px] font-semibold text-[#2D2926]">{b.title}</span>
+                <span className="block text-[15px] font-semibold text-ink">{b.title}</span>
               </span>
             </li>
           ))}

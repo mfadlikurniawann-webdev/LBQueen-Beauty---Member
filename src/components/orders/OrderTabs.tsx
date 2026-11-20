@@ -26,7 +26,7 @@ export function OrderTabs({
               "shrink-0 h-11 px-4 rounded-full text-[14px] whitespace-nowrap transition-all duration-300",
               isActive
                 ? "chip-active font-semibold"
-                : "chip-glass font-semibold text-[#5F5552] hover:bg-white/85",
+                : "chip-glass font-semibold text-ink-3 hover:bg-fill/85",
             )}
           >
             {t.label}

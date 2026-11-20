@@ -19,10 +19,10 @@ function RailCard({ product, onOpen }: { product: CatalogProduct; onOpen: () => 
       onClick={onOpen}
       className={cn(
         "glass-soft spotlight lift group snap-start shrink-0 w-[152px] sm:w-[168px] text-left rounded-[22px] p-1.5",
-        "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25",
+        "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/70",
       )}
     >
-      <span className="relative block aspect-square rounded-[17px] overflow-hidden bg-[#FBEFF3]">
+      <span className="relative block aspect-square rounded-[17px] overflow-hidden bg-blush">
         {product.image_url ? (
           <Image
             src={product.image_url}
@@ -40,26 +40,26 @@ function RailCard({ product, onOpen }: { product: CatalogProduct; onOpen: () => 
           </span>
         )}
         <span
-          className="absolute right-2 bottom-2 w-8 h-8 rounded-full bg-white/95 border border-white/90 text-[#A83960] shadow-[0_6px_14px_-6px_rgba(122,34,64,0.45)] flex items-center justify-center group-hover:bg-[#C94F78] group-hover:text-white transition-colors duration-300"
+          className="absolute right-2 bottom-2 w-8 h-8 rounded-full bg-surface/95 border border-edge/90 text-brand-ink shadow-[0_6px_14px_-6px_rgba(122,34,64,0.45)] flex items-center justify-center group-hover:bg-[#C94F78] group-hover:text-white transition-colors duration-300"
           aria-hidden="true"
         >
           <Plus className="w-4 h-4" strokeWidth={2.6} />
         </span>
       </span>
       <span className="block px-2 pt-2.5 pb-1.5">
-        <span className="block text-[13px] font-semibold text-[#2D2926] leading-snug line-clamp-2 min-h-[2.6em]">
+        <span className="block text-[13px] font-semibold text-ink leading-snug line-clamp-2 min-h-[2.6em]">
           {product.name}
         </span>
-        <span className="block mt-1.5 text-[15px] font-bold text-[#2D2926] tabular-nums">
-          {hasRange && <span className="text-[12px] font-semibold text-[#766B68]">Mulai </span>}
+        <span className="block mt-1.5 text-[15px] font-bold text-ink tabular-nums">
+          {hasRange && <span className="text-[12px] font-semibold text-ink-muted">Mulai </span>}
           {formatRupiah(price)}
         </span>
         {discount > 0 ? (
           <span className="flex items-center gap-1.5 mt-0.5 text-[12px] tabular-nums">
-            <span className="text-[#8C8280] line-through">{formatRupiah(base)}</span>
+            <span className="text-ink-faint line-through">{formatRupiah(base)}</span>
           </span>
         ) : (
-          <span className="block mt-0.5 text-[12px] font-semibold text-[#A83960] truncate">
+          <span className="block mt-0.5 text-[12px] font-semibold text-brand-ink truncate">
             {product.sub_category || "LBQueen"}
           </span>
         )}
@@ -109,7 +109,7 @@ export function ProductRail({
           <h2
             className={cn(
               "text-[18px] font-bold! tracking-tight leading-tight",
-              band ? "text-white" : "text-[#2D2926]",
+              band ? "text-white" : "text-ink",
             )}
           >
             {title}
@@ -118,7 +118,7 @@ export function ProductRail({
             <p
               className={cn(
                 "text-[13px] mt-0.5 truncate",
-                band ? "text-white/80" : "text-[#766B68]",
+                band ? "text-white/80" : "text-ink-muted",
               )}
             >
               {subtitle}
@@ -129,7 +129,7 @@ export function ProductRail({
           href={href}
           className={cn(
             "chip-glass shrink-0 inline-flex items-center gap-0.5 h-11 rounded-full pl-3.5 pr-2.5 text-[13px] font-semibold transition-colors",
-            band ? "text-white hover:bg-white/20" : "text-[#A83960] hover:bg-white/85",
+            band ? "text-white hover:bg-fill/20" : "text-brand-ink hover:bg-fill/85",
           )}
         >
           Lihat semua
