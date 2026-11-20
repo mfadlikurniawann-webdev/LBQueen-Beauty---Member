@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight, MessageCircle, ShoppingBag } from "lucide-re
 import { ItemThumb } from "@/components/portal/ItemThumb";
 import { formatRupiah } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { useDialogFocus } from "@/hooks/useDialogFocus";
 import {
   describeOrder,
   isTreatmentOrder,
@@ -23,17 +24,19 @@ export function OrderDetailModal({
   product?: OrderProduct;
   onClose: () => void;
 }) {
+  const dialogRef = useDialogFocus<HTMLDivElement>(true, onClose);
   const { parsed, qty, total, invoiceNum } = describeOrder(o);
   const unitPrice = parsed.itemPrice > 0 ? formatRupiah(parsed.itemPrice) : "TBD";
 
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[110] flex items-end sm:items-center justify-center bg-[#2A1520]/45 backdrop-blur-[6px]",
+        "fixed inset-0 z-[110] flex items-end sm:items-center justify-center bg-[#2A1520]/50 md:bg-[#2A1520]/45 md:backdrop-blur-[6px]",
         "p-0 sm:p-4 animate-in fade-in duration-300",
       )}
     >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="order-detail-title"
@@ -54,15 +57,15 @@ export function OrderDetailModal({
               aria-label="Tutup rincian"
               onClick={onClose}
               className={cn(
-                "chip-glass w-10 h-10 shrink-0 rounded-full flex items-center",
+                "chip-glass w-11 h-11 shrink-0 rounded-full flex items-center",
                 "justify-center text-[#5F5552] hover:text-[#A83960] transition-colors",
               )}
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
-            <h3 id="order-detail-title" className="text-[17px] font-bold! text-[#2D2926] truncate">
+            <h2 id="order-detail-title" className="text-[17px] font-bold! text-[#2D2926] truncate">
               Rincian Pesanan
-            </h3>
+            </h2>
           </div>
           <StatusBadge status={o.status} />
         </div>
@@ -90,9 +93,9 @@ export function OrderDetailModal({
             />
             <div className="flex-1 min-w-0 flex flex-col justify-between">
               <div>
-                <h4 className="text-[15px] font-semibold! text-[#2D2926] leading-snug mb-1 line-clamp-2">
+                <h3 className="text-[15px] font-semibold! text-[#2D2926] leading-snug mb-1 line-clamp-2">
                   {parsed.mainName}
-                </h4>
+                </h3>
                 {parsed.variantName && (
                   <span
                     className={cn(
@@ -132,7 +135,7 @@ export function OrderDetailModal({
           </div>
 
           <div>
-            <h5 className={`${HEADING} mb-2.5`}>Butuh Bantuan?</h5>
+            <h3 className={`${HEADING} mb-2.5`}>Butuh Bantuan?</h3>
             <button
               type="button"
               onClick={() =>

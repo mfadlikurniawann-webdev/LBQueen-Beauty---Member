@@ -52,14 +52,13 @@ export function HomeHeader({
             value={searchQuery}
             onChange={(e) => onSearch(e.target.value)}
             className={cn(
-              "chip-glass w-full h-11 rounded-full pl-11 pr-4 text-[15px] text-[#2D2926] outline-none",
+              "chip-glass w-full h-11 rounded-full pl-11 pr-4 text-[16px] text-[#2D2926] outline-none",
               "placeholder:text-[#8C8280] focus:bg-white/90 focus:ring-4 focus:ring-[#C94F78]/15 transition-[box-shadow,background-color]",
             )}
           />
         </label>
         <Link
           href="/membership"
-          aria-label={`Membership ${tier.name}`}
           className={cn(
             "md:hidden shrink-0 h-11 pl-2 pr-3 rounded-full flex items-center gap-1.5",
             "bg-gradient-to-b from-[#FFE9A8] to-[#F6C94E] border-2 border-[#FFF4CF]",
@@ -71,18 +70,18 @@ export function HomeHeader({
           </span>
           <span className="leading-[1.05] text-[#5A3B06]">
             <span className="block text-[13px] font-extrabold">{tier.name}</span>
-            <span className="block text-[11px] font-bold">Member</span>
+            <span className="block text-[12px] font-bold">Member</span>
           </span>
         </Link>
         <Link
           href="/profile"
-          aria-label="Profil saya"
           className={cn(
             "md:hidden shrink-0 w-11 h-11 rounded-full p-[2px] bg-gradient-to-b from-[#FFE9A8] to-[#F6C94E]",
             "active:scale-95 transition-transform",
           )}
         >
           <span className="w-full h-full rounded-full bg-gradient-to-br from-[#D9648C] to-[#7E2449] text-white text-[14px] font-bold flex items-center justify-center ring-2 ring-white">
+            <span className="sr-only">Profil </span>
             {initials(customer.name)}
           </span>
         </Link>

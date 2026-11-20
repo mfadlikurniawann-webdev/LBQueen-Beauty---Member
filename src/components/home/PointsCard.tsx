@@ -19,14 +19,12 @@ function Action({
   return (
     <Link
       href={href}
-      aria-label={count > 0 ? `${label}, ${count}` : label}
       className="flex flex-col items-center gap-1.5 min-w-[60px] rounded-2xl py-1 active:scale-95 transition-transform"
     >
       <IconChip icon={Icon} tone="rose" size="sm" bare>
         {count > 0 && (
           <span
-            className="absolute -top-2 -right-2.5 min-w-5 h-5 px-1 rounded-full bg-[#E0263F] text-white text-[11px] font-bold flex items-center justify-center ring-2 ring-white tabular-nums"
-            aria-hidden="true"
+            className="absolute -top-2 -right-2.5 min-w-5 h-5 px-1 rounded-full bg-[#E0263F] text-white text-[12px] font-bold flex items-center justify-center ring-2 ring-white tabular-nums"
           >
             {count > 9 ? "9+" : count}
           </span>
@@ -68,7 +66,7 @@ export function PointsCard({
             <span className="text-[13px] font-bold text-[#2D2926]">poin</span>
           </span>
           <span
-            className="mt-1.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold"
+            className="mt-1.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[12px] font-bold"
             style={{ background: TONES.gold.tint, color: TONES.gold.ink }}
           >
             <Crown className="w-3 h-3" aria-hidden="true" />

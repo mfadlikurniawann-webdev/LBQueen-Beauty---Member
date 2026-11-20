@@ -27,7 +27,7 @@ function BankTransferInfo({ copied, onCopy }: { copied: boolean; onCopy: () => v
         type="button"
         onClick={onCopy}
         className={cn(
-          "h-10 px-4 rounded-full text-[12px] font-bold flex items-center gap-1.5 transition-all duration-300 border",
+          "h-11 px-4 rounded-full text-[13px] font-bold flex items-center gap-1.5 transition-all duration-300 border",
           copied
             ? "bg-emerald-50/90 text-emerald-700 border-emerald-200"
             : "bg-white/80 text-[#A83960] border-white hover:bg-white shadow-[0_0_0_1px_rgba(201,79,120,0.16)]",

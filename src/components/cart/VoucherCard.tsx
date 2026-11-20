@@ -37,7 +37,7 @@ export function VoucherCard({ voucher }: { voucher: CartVoucher }) {
           <button
             type="button"
             onClick={voucher.remove}
-            className="chip-glass shrink-0 h-9 px-4 rounded-full text-[12px] font-bold text-rose-700 hover:bg-white/90 transition-colors"
+            className="chip-glass shrink-0 h-11 px-4 rounded-full text-[13px] font-bold text-rose-700 hover:bg-white/90 transition-colors"
           >
             Hapus
           </button>
@@ -69,7 +69,7 @@ export function VoucherCard({ voucher }: { voucher: CartVoucher }) {
                 voucher.setError("");
               }}
               className={cn(
-                "input-glass flex-1 min-w-0 min-h-11 h-11 px-3.5 rounded-full text-[14px]",
+                "input-glass flex-1 min-w-0 min-h-11 h-11 px-3.5 rounded-full text-[16px]",
                 "font-semibold placeholder:font-normal placeholder:normal-case uppercase",
               )}
             />
@@ -119,11 +119,11 @@ export function VoucherCard({ voucher }: { voucher: CartVoucher }) {
                             <span className="block text-[13px] font-bold text-[#2D2926] truncate">
                               {valueLabel(v)} · {v.name}
                             </span>
-                            <span className="block text-[11px] font-semibold text-[#A83960] truncate">
+                            <span className="block text-[12px] font-semibold text-[#A83960] truncate">
                               {v.code}
                               {scope ? ` · Khusus ${scope}` : ""}
                             </span>
-                            <span className="block text-[11px] text-[#766B68] truncate">
+                            <span className="block text-[12px] text-[#766B68] truncate">
                               {problem ||
                                 (Number(v.min_transaction) > 0
                                   ? `Min. belanja ${formatRupiah(Number(v.min_transaction))}`

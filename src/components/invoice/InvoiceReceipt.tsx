@@ -148,7 +148,7 @@ export function InvoiceReceipt({
       <div className="text-[11px] space-y-0.5">
         <div className="flex justify-between">
           <span>Status Order</span>
-          <span className="uppercase text-emerald-600 font-bold">
+          <span className="uppercase text-emerald-700 font-bold">
             {order.status === "completed" ? "Selesai" : order.status}
           </span>
         </div>

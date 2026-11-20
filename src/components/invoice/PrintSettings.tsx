@@ -22,7 +22,7 @@ export function PrintSettings({
           type="button"
           onClick={() => window.close()}
           className={cn(
-            "chip-glass h-10 pl-2.5 pr-3.5 rounded-full flex items-center gap-1.5 text-[#5F5552] hover:text-[#A83960]",
+            "chip-glass h-11 pl-2.5 pr-3.5 rounded-full flex items-center gap-1.5 text-[#5F5552] hover:text-[#A83960]",
             "hover:bg-white/90 transition-colors text-[14px] font-bold",
           )}
         >

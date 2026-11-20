@@ -1,5 +1,15 @@
 # Architectural Decisions & Changes Log (LBQueen Member)
 
+## 2026-11-20 (lanjutan 2): Uji perangkat, performa glass, aksesibilitas, teks ringkas
+
+- Diuji di WebKit (iPhone 14, iPad gen 7) dan Chromium mobile dengan CPU 4x lebih lambat. `.ambient` kini menggerakkan `transform` pada `::before` (compositor) dan diam di perangkat sentuh; sebelumnya `background-position` layar penuh di-repaint setiap frame dan memaksa semua permukaan kaca di atasnya diburamkan ulang. Membuka sheet produk: 17,8 menjadi ~30 fps (frame panjang 8 menjadi 2-3).
+- `.glass-strong` (sheet/dialog) tanpa backdrop-filter (sudah hampir pekat); overlay dialog tanpa blur di ponsel; tombol "+" dan badge diskon kartu produk tanpa blur. Elemen blur per layar: beranda 20 menjadi 4, kategori 28 menjadi 4.
+- Ponsel (`max-width: 767px`): `.glass`/`.glass-lit` 92% dan chip/btn kaca 84% agar navigasi, header, dan bar tetap terbaca ketika blur tidak dirender (mode hemat daya, "Kurangi Transparansi"). Override ada di `@layer components` supaya `.panel-rose` tetap menang.
+- Reveal: perangkat dengan `hardwareConcurrency` <= 4 memakai `lbq-reveal-lite` (tanpa animasi filter blur).
+- Aksesibilitas: `hooks/useDialogFocus.ts` (fokus masuk, Tab berputar di dalam, Escape menutup, fokus kembali ke pemicu) dipakai sheet produk, rincian pesanan, dan ulasan. Semua kontrol >= 44x44 px (titik carousel tetap kecil, area tekan 44 px). Input 16px (mencegah zoom iOS). Teks UI minimal 12px (struk nota cetak tidak diubah). Urutan heading dirapikan, nama aksesibel memuat teks yang terlihat, carousel bisa digulir dengan keyboard. Login menautkan error ke input (`aria-invalid`, `aria-describedby`). Hasil axe-core di 390/820/1024/1440 untuk 12 halaman + 3 dialog: 114 node pelanggaran menjadi 0.
+- Teks: tanpa em/en dash di UI ("Senin-Kamis 09.00-21.00", aturan validasi "3 sampai 50 karakter"; aturan sama di POS sebaiknya ikut diubah), ikon Sparkles benefit diganti ikon sesuai arti. Subtitle yang mengulang judul dihapus (Keranjang, Pesanan, Promo, Membership, kategori, rail beranda, eyebrow "Penawaran terbatas", "Benefit", tagline login desktop); kalimat sapaan per jam dihapus dan pil jam dipindah ke baris nama agar kartu poin + grid layanan lebih cepat terlihat.
+- Paket `animejs` dihapus (tidak ada lagi yang mengimpor).
+
 ## 2026-11-20 (lanjutan): Tampilan liquid glass
 
 - Seluruh tampilan member dirombak ke bahasa liquid glass (acuan portfolio `PORTFOLIO-Fadli`: `.glass`, ambient, spotlight, reveal blur-up), memakai palet rose LBQueen; rute, alur, data, dan teks tidak berubah.

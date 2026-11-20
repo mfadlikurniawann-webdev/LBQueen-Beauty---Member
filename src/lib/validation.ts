@@ -1,8 +1,8 @@
 // Aturan ini wajib sama dengan POS LBQueen/src/lib/validation.ts (pembuatan akun oleh kasir).
 
 export const USERNAME_RULE =
-  "3–50 karakter, hanya huruf kecil, angka, dan garis bawah (_), tanpa spasi.";
-export const PHONE_RULE = "Nomor HP diawali 0, 8, 62, atau +62, berisi 9–15 digit.";
+  "3 sampai 50 karakter, hanya huruf kecil, angka, dan garis bawah (_), tanpa spasi.";
+export const PHONE_RULE = "Nomor HP diawali 0, 8, 62, atau +62, berisi 9 sampai 15 digit.";
 export const PASSWORD_MIN = 8;
 
 export function normalizeUsername(value: string) {
@@ -71,7 +71,7 @@ export function voucherCodeError(value: string): string | null {
   const v = value.trim();
   if (!v) return "Kode voucher wajib diisi.";
   if (!/^[A-Za-z0-9_-]{3,30}$/.test(v))
-    return "Kode voucher 3–30 karakter, hanya huruf, angka, - dan _, tanpa spasi.";
+    return "Kode voucher 3 sampai 30 karakter, hanya huruf, angka, - dan _, tanpa spasi.";
   return null;
 }
 

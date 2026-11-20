@@ -7,7 +7,7 @@ export function OrderInfo({ order: o, invoiceNum }: { order: Order; invoiceNum: 
   const { toast } = useToast();
   return (
     <div className="space-y-3 pt-4 border-t border-[#C94F78]/10">
-      <h5 className={`${HEADING} mb-1`}>Info Pesanan</h5>
+      <h3 className={`${HEADING} mb-1`}>Info Pesanan</h3>
 
       <div className={`${ROW} items-center`}>
         <span className={MUTED}>No. Pesanan</span>
@@ -20,7 +20,7 @@ export function OrderInfo({ order: o, invoiceNum }: { order: Order; invoiceNum: 
               toast("Nomor pesanan disalin!", "success");
             }}
             className={cn(
-              "chip-glass h-8 px-3 rounded-full hover:bg-white/90 text-[12px]",
+              "chip-glass h-11 px-4 rounded-full hover:bg-white/90 text-[13px]",
               "font-bold text-[#A83960] transition-colors",
             )}
           >

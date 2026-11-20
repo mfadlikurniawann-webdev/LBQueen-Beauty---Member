@@ -20,6 +20,9 @@ export function Reveal({ children, ...props }: ComponentProps<"div">) {
     if (!el || !("IntersectionObserver" in window)) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     document.documentElement.classList.add("lbq-reveal");
+    // Perangkat dengan sedikit inti CPU: tanpa animasi filter blur (mahal bila banyak kartu muncul bersamaan).
+    if ((navigator.hardwareConcurrency || 8) <= 4)
+      document.documentElement.classList.add("lbq-reveal-lite");
 
     const io = new IntersectionObserver(
       (entries) => {

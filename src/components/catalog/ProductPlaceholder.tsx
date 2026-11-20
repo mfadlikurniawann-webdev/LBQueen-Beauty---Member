@@ -60,7 +60,7 @@ export function ProductPlaceholder({
         <Icon className={`${icon} text-[#A83960]`} strokeWidth={1.75} />
       </div>
       {size !== "sm" && (
-        <span className="relative text-[11px] font-bold tracking-[0.02em] text-[#A83960]/85">
+        <span className="relative text-[12px] font-bold tracking-[0.02em] text-[#A83960]/85">
           LBQueen
         </span>
       )}

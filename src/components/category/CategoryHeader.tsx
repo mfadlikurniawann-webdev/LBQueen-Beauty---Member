@@ -28,9 +28,9 @@ export function CategoryHeader({ section, page }: { section: Section; page: numb
         <h1 className="text-[18px] font-bold text-[#2D2926] leading-tight tracking-tight truncate">
           {section.title}
         </h1>
-        <p className="mt-0.5 text-[12px] font-medium text-[#766B68] truncate">
-          {section.subtitle} · Halaman {page}
-        </p>
+        {page > 1 && (
+          <p className="mt-0.5 text-[12px] font-medium text-[#766B68] truncate">Halaman {page}</p>
+        )}
       </div>
       <span
         className="chip-active w-12 h-12 shrink-0 rounded-full flex items-center justify-center"

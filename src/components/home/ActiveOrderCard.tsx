@@ -60,7 +60,7 @@ export function ActiveOrderCard({ customerId }: { customerId: number }) {
             />
             <span
               className={cn(
-                "block mt-1.5 text-[11px] font-semibold",
+                "block mt-1.5 text-[12px] font-semibold",
                 i === step ? "text-[#A83960]" : "text-[#8C8280]",
               )}
             >

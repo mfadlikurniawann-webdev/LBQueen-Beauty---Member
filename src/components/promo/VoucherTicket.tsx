@@ -56,7 +56,7 @@ export function VoucherTicket({ voucher, className }: { voucher: MyVoucher; clas
         onClick={copy}
         aria-label={`Salin kode ${voucher.code}`}
         className={cn(
-          "shrink-0 inline-flex items-center gap-1 rounded-full px-3 h-9 text-[12px] font-bold transition-all duration-300 active:scale-95",
+          "shrink-0 inline-flex items-center gap-1 rounded-full px-3.5 h-11 text-[13px] font-bold transition-all duration-300 active:scale-95",
           copied ? "chip-active" : "chip-glass text-[#A83960] hover:bg-white/90",
         )}
       >

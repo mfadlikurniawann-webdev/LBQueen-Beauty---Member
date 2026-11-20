@@ -11,7 +11,7 @@ const LAYOUTS = {
     card: "p-1.5",
     media: "relative w-full aspect-[4/3] shrink-0 rounded-[18px] overflow-hidden",
     badge: "top-2.5 left-2.5 z-10 px-2.5",
-    plus: "top-2.5 right-2.5 backdrop-blur-md transition-colors",
+    plus: "top-2.5 right-2.5 transition-colors",
     body: "px-2 pt-3 pb-2 flex flex-1 flex-col",
   },
   category: {
@@ -40,7 +40,7 @@ export function ProductCard({
   const photoCount = productImages(product).length;
   const isHome = layout === "home";
   const fallbackLabel = isHome ? (product.type === TREATMENT_TYPE ? "Layanan" : "Produk") : "Umum";
-  const Name = isHome ? "h4" : "p";
+  const Name = isHome ? "h3" : "p";
   return (
     <button
       type="button"
@@ -66,8 +66,8 @@ export function ProductCard({
         {discount > 0 && (
           <span
             className={cn(
-              "absolute inline-flex items-center gap-1 rounded-full bg-[#B8416B]/90 backdrop-blur-sm",
-              "py-0.5 text-[11px] font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]",
+              "absolute inline-flex items-center gap-1 rounded-full bg-[#B8416B]",
+              "py-0.5 text-[12px] font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]",
               styles.badge,
             )}
           >
@@ -77,7 +77,7 @@ export function ProductCard({
         )}
         <span
           className={cn(
-            "absolute w-8 h-8 rounded-full bg-white/75 backdrop-blur-md border border-white/90",
+            "absolute w-8 h-8 rounded-full bg-white/95 border border-white/90",
             "flex items-center justify-center shadow-[0_6px_14px_-6px_rgba(122,34,64,0.45)]",
             "text-[#A83960] group-hover:bg-[#C94F78] group-hover:text-white duration-300",
             styles.plus,
@@ -95,7 +95,7 @@ export function ProductCard({
           {product.name}
         </Name>
         {(variantCount > 1 || photoCount > 1) && (
-          <p className="mt-1 text-[11px] font-medium text-[#766B68] truncate">
+          <p className="mt-1 text-[12px] font-medium text-[#766B68] truncate">
             {[variantCount > 1 && `${variantCount} variasi`, photoCount > 1 && `${photoCount} foto`]
               .filter(Boolean)
               .join(" · ")}

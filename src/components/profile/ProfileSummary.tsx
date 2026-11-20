@@ -26,7 +26,7 @@ export function ProfileSummary({ customer }: { customer: Customer }) {
             <p className="text-[14px] text-[#5F5552] truncate">@{customer.username}</p>
           )}
           <p className="text-[14px] text-[#5F5552] tabular-nums truncate">
-            {customer.phone || "—"}
+            {customer.phone || "-"}
           </p>
         </div>
       </div>

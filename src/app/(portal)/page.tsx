@@ -149,14 +149,13 @@ export default function CustomerPortalPage() {
             <ProductRail
               band
               title="Promo Spesial"
-              subtitle={saving > 0 ? `Hemat hingga ${saving}%` : "Potongan harga pilihan"}
+              subtitle={saving > 0 ? `Hemat hingga ${saving}%` : undefined}
               href="/category/promo"
               products={products}
               onOpen={selection.open}
             />
             <ProductRail
               title="Treatment Klinik"
-              subtitle="Perawatan pilihan di klinik LBQueen"
               href="/category/layanan"
               products={treatments.data?.products ?? []}
               loading={treatments.isLoading}
@@ -164,7 +163,6 @@ export default function CustomerPortalPage() {
             />
             <ProductRail
               title="Produk Skincare"
-              subtitle="Rawat kulit dari rumah"
               href="/category/produk"
               products={skincare.data?.products ?? []}
               loading={skincare.isLoading}

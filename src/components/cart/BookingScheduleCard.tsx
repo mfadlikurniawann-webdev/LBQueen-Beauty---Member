@@ -38,7 +38,7 @@ function BookingField({
           onChange={(e) => onChange(e.target.value)}
           min={min}
           className={cn(
-            "input-glass block min-w-0 min-h-12 h-12 pl-9 pr-2 text-[14px]",
+            "input-glass block min-w-0 min-h-12 h-12 pl-9 pr-2 text-[16px]",
           )}
         />
       </div>

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { ProductPlaceholder } from "./ProductPlaceholder";
 
 const ARROW = cn(
-  "glass absolute top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full",
+  "glass absolute top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full",
   "hidden md:flex items-center justify-center text-[#2D2926] transition-opacity",
   "opacity-0 group-hover:opacity-100 focus-visible:opacity-100 disabled:!opacity-0",
   "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25",
@@ -147,7 +147,7 @@ export function ProductGallery({
               <ChevronRight className="w-5 h-5" />
             </button>
             <span
-              className="absolute right-3 bottom-3 rounded-full bg-[#2A1520]/45 backdrop-blur-md border border-white/25 px-2.5 py-1 text-[12px] font-semibold text-white tabular-nums"
+              className="absolute right-3 bottom-3 rounded-full bg-[#2A1520]/80 border border-white/25 px-2.5 py-1 text-[12px] font-semibold text-white tabular-nums"
               aria-live="polite"
             >
               {index + 1}/{count}

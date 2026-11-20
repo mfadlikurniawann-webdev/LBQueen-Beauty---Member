@@ -117,7 +117,6 @@ export default function OrdersPage() {
     <div className="min-h-screen">
       <PageHero
         title="Pesanan"
-        subtitle="Riwayat dan status pesanan"
         actions={
           <a
             href={waLink("Halo admin LBQueen, saya butuh bantuan terkait pesanan.")}

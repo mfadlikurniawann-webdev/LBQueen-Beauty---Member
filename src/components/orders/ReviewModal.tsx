@@ -1,21 +1,24 @@
 import { Loader2, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useDialogFocus } from "@/hooks/useDialogFocus";
 import { parseProductName } from "./order-utils";
 import type { OrderReview } from "./useOrderReview";
 
 const FOOTER_BUTTON = "flex-1 h-12 rounded-full text-[14px] font-bold transition-colors";
 
 export function ReviewModal({ review }: { review: OrderReview }) {
+  const dialogRef = useDialogFocus<HTMLDivElement>(review.open && !!review.order, review.close);
   if (!review.open || !review.order) return null;
   const parsed = parseProductName(review.order.product_name);
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[120] flex items-end sm:items-center justify-center bg-[#2A1520]/45 backdrop-blur-[6px]",
+        "fixed inset-0 z-[120] flex items-end sm:items-center justify-center bg-[#2A1520]/50 md:bg-[#2A1520]/45 md:backdrop-blur-[6px]",
         "p-0 sm:p-4 animate-in fade-in duration-300",
       )}
     >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="review-title"
@@ -33,9 +36,9 @@ export function ReviewModal({ review }: { review: OrderReview }) {
         >
           <Star className="w-8 h-8" fill="currentColor" aria-hidden="true" />
         </div>
-        <h3 id="review-title" className="text-[18px] font-bold! text-[#2D2926] mb-1.5">
+        <h2 id="review-title" className="text-[18px] font-bold! text-[#2D2926] mb-1.5">
           Bagaimana pesanan Anda?
-        </h3>
+        </h2>
         <p className="text-[13px] text-[#766B68] mb-5 px-2 leading-relaxed">
           {"Berikan ulasan untuk pesanan "}
           <span className="font-bold text-[#A83960]">{parsed.mainName}</span>
@@ -69,7 +72,7 @@ export function ReviewModal({ review }: { review: OrderReview }) {
           onChange={(e) => review.setText(e.target.value)}
           placeholder="Ceritakan pengalaman Anda di sini (opsional)..."
           className={cn(
-            "input-glass h-24 p-3.5 mb-5 rounded-[20px] text-[14px] resize-none",
+            "input-glass h-24 p-3.5 mb-5 rounded-[20px] text-[16px] resize-none",
           )}
         />
 

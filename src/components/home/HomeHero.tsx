@@ -44,13 +44,6 @@ function greeting(hour: number) {
   return "Selamat malam";
 }
 
-function subtitle(hour: number) {
-  if (hour < 11) return "Mulai hari dengan perawatan terbaik.";
-  if (hour < 15) return "Jadwalkan perawatan Anda hari ini.";
-  if (hour < 18) return "Saatnya merawat diri.";
-  return "Rencanakan perawatan untuk esok hari.";
-}
-
 export function HomeHero({
   customer,
   children,
@@ -64,25 +57,28 @@ export function HomeHero({
   return (
     <section aria-label="Beranda LBQueen" className="relative">
       <div className="relative px-4 sm:px-8 lg:px-12">
-        <div data-reveal className="pt-2 md:pt-4">
+        {/* Sapaan ringkas satu baris dengan pil tanggal agar kartu poin & layanan cepat terlihat. */}
+        <div data-reveal className="pt-1 md:pt-4">
           <p className="eyebrow">{greeting(hour)}</p>
-          <h1 className="mt-2 text-[30px] md:text-[38px] font-bold! leading-[1.1] tracking-tight text-[#2D2926] truncate">
-            {firstName}
-            <span className="text-[#C94F78]">.</span>
-          </h1>
-          <p className="mt-1.5 text-[15px] text-[#5F5552]">{subtitle(hour)}</p>
-          <p
-            className={cn(
-              "chip-glass mt-3.5 inline-flex items-center gap-1.5 h-8 rounded-full px-3",
-              "text-[12px] font-semibold text-[#5F4A55] capitalize tabular-nums",
-            )}
-          >
-            <Clock3 className="w-3.5 h-3.5 text-[#A83960]" aria-hidden="true" />
-            {date} · {time} WIB
-          </p>
+          <div className="mt-1.5 flex items-center justify-between gap-3">
+            <h1 className="min-w-0 text-[28px] md:text-[38px] font-bold! leading-[1.1] tracking-tight text-[#2D2926] truncate">
+              {firstName}
+              <span className="text-[#C94F78]">.</span>
+            </h1>
+            <p
+              className={cn(
+                "chip-glass shrink-0 inline-flex items-center gap-1.5 h-8 rounded-full px-3",
+                "text-[12px] font-semibold text-[#5F4A55] capitalize tabular-nums",
+              )}
+            >
+              <Clock3 className="w-3.5 h-3.5 text-[#A83960]" aria-hidden="true" />
+              <span className="hidden sm:inline">{date} · </span>
+              {time} WIB
+            </p>
+          </div>
         </div>
 
-        <div className="mt-5 grid gap-4 md:grid-cols-2 md:items-start xl:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
+        <div className="mt-4 grid gap-4 md:grid-cols-2 md:items-start xl:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
           <div
             data-reveal
             className={cn(

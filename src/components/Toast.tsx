@@ -72,7 +72,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             <button
               aria-label="Tutup notifikasi"
               onClick={() => removeToast(t.id)}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-[#766B68] hover:text-[#2D2926] hover:bg-white/70 transition-colors"
+              className="w-11 h-11 -mr-1.5 rounded-full flex items-center justify-center text-[#766B68] hover:text-[#2D2926] hover:bg-white/70 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>

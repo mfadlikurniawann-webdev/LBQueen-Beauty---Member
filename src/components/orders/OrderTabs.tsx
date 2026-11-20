@@ -23,7 +23,7 @@ export function OrderTabs({
             aria-pressed={isActive}
             onClick={() => onChange(t.id)}
             className={cn(
-              "shrink-0 h-10 px-4 rounded-full text-[14px] whitespace-nowrap transition-all duration-300",
+              "shrink-0 h-11 px-4 rounded-full text-[14px] whitespace-nowrap transition-all duration-300",
               isActive
                 ? "chip-active font-bold"
                 : "chip-glass font-semibold text-[#5F5552] hover:bg-white/85",

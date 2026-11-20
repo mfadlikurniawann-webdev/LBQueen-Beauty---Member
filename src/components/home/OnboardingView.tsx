@@ -22,7 +22,7 @@ const SLIDES = [
   },
   {
     title: "Buka Senin sampai Sabtu",
-    desc: "Senin–Kamis 09.00–21.00, Jumat–Sabtu 10.00–21.00 WIB.",
+    desc: "Senin-Kamis 09.00-21.00, Jumat-Sabtu 10.00-21.00 WIB.",
   },
 ];
 
@@ -46,7 +46,7 @@ export function OnboardingView() {
             href={waLink("Halo admin LBQueen, saya ingin bertanya.")}
             target="_blank"
             rel="noopener noreferrer"
-            className="chip-glass h-10 px-4 rounded-full flex items-center gap-2 text-[14px] font-semibold text-[#3F3734] hover:bg-white/90 transition-colors"
+            className="chip-glass h-11 px-4 rounded-full flex items-center gap-2 text-[14px] font-semibold text-[#3F3734] hover:bg-white/90 transition-colors"
           >
             <MessageCircle className="w-4 h-4" aria-hidden="true" /> Bantuan
           </a>

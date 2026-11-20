@@ -22,7 +22,7 @@ export function SectionHeading({
         <Link
           href={action.href}
           className={cn(
-            "chip-glass shrink-0 inline-flex items-center h-9 rounded-full px-3.5 text-[13px] font-bold text-[#A83960] hover:bg-white/85 transition-colors",
+            "chip-glass shrink-0 inline-flex items-center h-11 rounded-full px-3.5 text-[13px] font-bold text-[#A83960] hover:bg-white/85 transition-colors",
           )}
         >
           {action.label}

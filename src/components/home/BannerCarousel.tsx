@@ -73,11 +73,14 @@ export function BannerCarousel({
       <div
         ref={track}
         className={cn(
-          "flex overflow-x-auto snap-x snap-mandatory no-scrollbar",
+          "flex overflow-x-auto snap-x snap-mandatory no-scrollbar rounded-[22px]",
+          "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/30",
           peek && "gap-3 md:gap-0 scroll-px-0",
         )}
         aria-roledescription="carousel"
         aria-label="Banner LBQueen"
+        role="region"
+        tabIndex={0}
       >
         {BRAND_BANNERS.map((banner, i) => (
           <div
@@ -106,10 +109,10 @@ export function BannerCarousel({
       {dots && (
         <div
           className={cn(
-            "flex gap-1.5",
+            "flex",
             peek
-              ? "justify-center mt-1 md:absolute md:mt-0 md:bottom-2 md:right-3"
-              : "absolute bottom-2 right-3",
+              ? "justify-center md:absolute md:bottom-0 md:right-1"
+              : "absolute bottom-0 right-1",
           )}
         >
           {BRAND_BANNERS.map((banner, i) => (
@@ -119,7 +122,7 @@ export function BannerCarousel({
               aria-label={`Tampilkan banner ${i + 1}`}
               aria-current={active === i ? "true" : undefined}
               onClick={() => goTo(i)}
-              className="h-6 flex items-center"
+              className="h-11 min-w-11 px-1 flex items-center justify-center"
             >
               <span
                 className={cn(

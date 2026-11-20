@@ -59,7 +59,7 @@ export default function PromoPage() {
 
   return (
     <div className="min-h-screen">
-      <PageHero title="Promo" subtitle="Voucher dan potongan harga" />
+      <PageHero title="Promo" />
 
       <div className="px-4 sm:px-8 lg:px-12 space-y-7 pb-6">
         <div data-reveal className="glass-lit spotlight rounded-[28px] p-4">

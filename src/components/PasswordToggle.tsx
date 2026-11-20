@@ -16,7 +16,7 @@ export function PasswordToggle({
       onClick={onToggle}
       aria-label={shown ? `Sembunyikan ${label}` : `Tampilkan ${label}`}
       className={cn(
-        "absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl flex items-center justify-center",
+        "absolute right-1.5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-xl flex items-center justify-center",
         "text-[#766B68] hover:text-[#C94F78] hover:bg-white/70 transition-colors",
       )}
     >

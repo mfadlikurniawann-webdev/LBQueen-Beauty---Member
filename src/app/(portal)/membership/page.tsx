@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CalendarHeart, Crown, Gift, Sparkles, Star, Ticket } from "lucide-react";
+import { CalendarHeart, Coins, Crown, Gift, History, ShoppingBag, Star, Ticket, type LucideIcon } from "lucide-react";
 import { IconChip } from "@/components/IconChip";
 import { PageHero } from "@/components/portal/PageHero";
 import { useCustomer } from "@/context/CustomerContext";
@@ -12,7 +12,16 @@ import { MEMBER_BENEFITS, REGULAR_BENEFITS, TIERS, tierOf } from "@/lib/membersh
 import type { Tone } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
-const BENEFIT_ICONS = [Star, Ticket, Sparkles, Gift];
+// Ikon mengikuti arti benefit, bukan urutan.
+const BENEFIT_ICONS: Record<string, LucideIcon> = {
+  "Poin di setiap transaksi": Coins,
+  "Voucher khusus member": Ticket,
+  "Treatment eksklusif": Star,
+  "Riwayat perawatan tersimpan": History,
+  "Voucher sesuai membership": Ticket,
+  "Pesan treatment & produk online": ShoppingBag,
+  "Riwayat pesanan tersimpan": History,
+};
 const BENEFIT_TONES: Tone[] = ["gold", "rose", "berry", "gold"];
 
 export default function MembershipPage() {
@@ -77,14 +86,16 @@ export default function MembershipPage() {
       >
         <PageHero
           title="Membership"
-          subtitle="Status tier dan benefit akun Anda"
           onBack={() => router.back()}
           transparent
         />
 
         <div
           ref={track}
-          className="flex gap-3 overflow-x-auto snap-x snap-mandatory no-scrollbar px-[12%] sm:px-[calc(50%-170px)] pt-2 pb-10 -mb-6"
+          role="region"
+          aria-label="Kartu tier membership"
+          tabIndex={0}
+          className="flex gap-3 overflow-x-auto snap-x snap-mandatory no-scrollbar focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/30 rounded-[28px] px-[12%] sm:px-[calc(50%-170px)] pt-2 pb-10 -mb-6"
         >
           {TIERS.map((t, i) => {
             const mine = i === currentIndex;
@@ -144,7 +155,7 @@ export default function MembershipPage() {
           })}
         </div>
 
-        <div className="flex justify-center gap-1.5" role="group" aria-label="Pilih tier">
+        <div className="flex justify-center" role="group" aria-label="Pilih tier">
           {TIERS.map((t, i) => (
             <button
               key={t.id}
@@ -152,7 +163,7 @@ export default function MembershipPage() {
               aria-label={`Lihat tier ${t.label}`}
               aria-pressed={viewed === i}
               onClick={() => goTo(i)}
-              className="h-6 flex items-center"
+              className="h-11 min-w-11 px-1 flex items-center justify-center"
             >
               <span
                 className={cn(
@@ -166,7 +177,6 @@ export default function MembershipPage() {
       </div>
 
       <div data-reveal className="px-4 sm:px-8 max-w-2xl mx-auto pb-6">
-        <p className="eyebrow mb-2">Benefit</p>
         <h2 className="text-[20px] font-bold! text-[#2D2926] mb-3.5">
           Nikmati {benefits.length} benefit{isCurrent ? "" : ` ${tier.label}`}
         </h2>
@@ -174,7 +184,7 @@ export default function MembershipPage() {
           {benefits.map((b, i) => (
             <li key={b.title} className="flex items-center gap-3.5 px-4 py-3.5">
               <IconChip
-                icon={BENEFIT_ICONS[i % BENEFIT_ICONS.length]}
+                icon={BENEFIT_ICONS[b.title] ?? Gift}
                 tone={BENEFIT_TONES[i % BENEFIT_TONES.length]}
                 size="md"
               />

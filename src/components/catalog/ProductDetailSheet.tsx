@@ -5,13 +5,14 @@ import { discountFor, priceRange, productImages, type CatalogProduct } from "@/l
 import { TREATMENT_TYPE } from "@/lib/constants";
 import { formatRupiah } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { useDialogFocus } from "@/hooks/useDialogFocus";
 import { ProductGallery } from "./ProductGallery";
 import { VariantOptions } from "./VariantOptions";
 
 const MAX_QTY = 10;
 const DESCRIPTION_PREVIEW = 280;
 const STEP = cn(
-  "w-10 h-10 rounded-full flex items-center justify-center active:scale-95 transition-all",
+  "w-11 h-11 rounded-full flex items-center justify-center active:scale-95 transition-all",
   "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25",
   "disabled:opacity-40 disabled:active:scale-100",
 );
@@ -86,7 +87,7 @@ function Description({ text }: { text: string }) {
   const long = text.length > DESCRIPTION_PREVIEW;
   return (
     <section className="pt-4 border-t border-[#C94F78]/12">
-      <h4 className="text-[15px] font-bold text-[#2D2926] mb-2">Deskripsi</h4>
+      <h3 className="text-[15px] font-bold text-[#2D2926] mb-2">Deskripsi</h3>
       <p className="text-[14px] text-[#4A4340] leading-relaxed whitespace-pre-line break-words">
         {long && !expanded ? `${text.slice(0, DESCRIPTION_PREVIEW).trimEnd()}…` : text}
       </p>
@@ -197,18 +198,16 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
   const { product, variant, setVariant, agreed, setAgreed, close, needVariant, closing } =
     selection;
   const variantRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useDialogFocus<HTMLDivElement>(!!product, close);
 
   useEffect(() => {
     if (!product) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
     const overflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = overflow;
-      window.removeEventListener("keydown", onKey);
     };
-  }, [product, close]);
+  }, [product]);
 
   useEffect(() => {
     if (needVariant) variantRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -239,13 +238,14 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
     <div className="fixed inset-0 z-[110] flex flex-col justify-end md:justify-center md:p-6">
       <div
         className={cn(
-          "absolute inset-0 bg-[#2A1520]/45 backdrop-blur-[6px] duration-200",
+          "absolute inset-0 bg-[#2A1520]/50 md:bg-[#2A1520]/45 md:backdrop-blur-[6px] duration-200",
           closing ? "animate-out fade-out fill-mode-forwards" : "animate-in fade-in",
         )}
         onClick={() => close()}
         aria-hidden="true"
       />
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="product-sheet-title"
@@ -261,7 +261,7 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
           type="button"
           aria-label="Tutup"
           onClick={() => close()}
-          className="glass absolute top-3 right-3 z-20 w-10 h-10 rounded-full flex items-center justify-center text-[#2D2926] hover:bg-white/90 active:scale-95 transition-transform"
+          className="glass absolute top-3 right-3 z-20 w-11 h-11 rounded-full flex items-center justify-center text-[#2D2926] hover:bg-white/90 active:scale-95 transition-transform"
         >
           <X className="w-5 h-5" />
         </button>
@@ -275,7 +275,7 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
               focusUrl={variant?.image_url}
               badge={
                 savings > 0 ? (
-                  <span className="absolute left-3 bottom-3 rounded-full bg-[#D3264A]/90 backdrop-blur-sm px-3 py-1 text-[12px] font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
+                  <span className="absolute left-3 bottom-3 rounded-full bg-[#D3264A] px-3 py-1 text-[12px] font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
                     Hemat {formatRupiah(savings)}
                   </span>
                 ) : null
@@ -288,12 +288,12 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
               <p className="text-[12px] font-semibold text-[#A83960]">
                 {product.sub_category || (isTreatment ? "Layanan" : "Produk")}
               </p>
-              <h3
+              <h2
                 id="product-sheet-title"
                 className="text-[20px] md:text-[22px] font-bold! text-[#2D2926] leading-snug mt-0.5"
               >
                 {product.name}
-              </h3>
+              </h2>
             </div>
 
             <PriceBlock product={product} selection={selection} />
@@ -301,9 +301,9 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
             {variants.length > 0 && (
               <div ref={variantRef} className="space-y-2.5">
                 <div className="flex items-baseline justify-between gap-3">
-                  <h4 className="text-[15px] font-bold text-[#2D2926]">
+                  <h3 className="text-[15px] font-bold text-[#2D2926]">
                     {product.variant_label?.trim() || "Variasi"}
-                  </h4>
+                  </h3>
                   {variant && (
                     <span className="text-[12px] text-[#766B68] truncate">
                       Dipilih: <strong className="text-[#2D2926]">{variant.variant_name}</strong>
@@ -337,7 +337,7 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
         </div>
 
         <div
-          className="md:hidden border-t border-white/80 bg-white/55 backdrop-blur-xl shadow-[0_-10px_24px_-18px_rgba(122,34,64,0.35)] px-4 pt-3"
+          className="md:hidden border-t border-white/80 bg-white/95 shadow-[0_-10px_24px_-18px_rgba(122,34,64,0.35)] px-4 pt-3"
           style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 16px)" }}
         >
           <Actions {...actionProps} />

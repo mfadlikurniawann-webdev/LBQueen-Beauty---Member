@@ -45,7 +45,7 @@ export function TopNav({
                 href={href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "h-10 px-3 lg:px-4 rounded-full flex items-center gap-2 text-[14px] transition-colors duration-300",
+                  "h-11 px-3 lg:px-4 rounded-full flex items-center gap-2 text-[14px] transition-colors duration-300",
                   active
                     ? "chip-active font-bold"
                     : "text-[#5F5552] font-semibold hover:bg-white/70",
@@ -71,7 +71,7 @@ export function TopNav({
           >
             <ShoppingCart className="w-5 h-5" aria-hidden="true" />
             {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-[#E0263F] text-white text-[11px] font-bold flex items-center justify-center ring-2 ring-white tabular-nums">
+              <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-[#E0263F] text-white text-[12px] font-bold flex items-center justify-center ring-2 ring-white tabular-nums">
                 {totalItems > 9 ? "9+" : totalItems}
               </span>
             )}

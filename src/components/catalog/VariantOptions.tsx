@@ -43,7 +43,7 @@ export function VariantOptions({
               </span>
             )}
             <span className="truncate">{v.variant_name}</span>
-            {soldOut && <span className="text-[11px] font-medium text-[#766B68]">Habis</span>}
+            {soldOut && <span className="text-[12px] font-medium text-[#766B68]">Habis</span>}
           </button>
         );
       })}

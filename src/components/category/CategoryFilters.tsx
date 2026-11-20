@@ -4,7 +4,7 @@ import { TAB_LABEL, type CatalogTab, type Section } from "./sections";
 
 const chipClass = (active: boolean) =>
   cn(
-    "whitespace-nowrap px-4 min-h-10 rounded-full text-[13px] font-semibold capitalize transition-all",
+    "whitespace-nowrap px-4 min-h-11 rounded-full text-[13px] font-semibold capitalize transition-all",
     "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20",
     active ? "chip-active font-bold" : "chip-glass text-[#3F3734] hover:text-[#A83960] hover:bg-white/85",
   );
@@ -90,7 +90,7 @@ export function CategoryFilters({
               aria-pressed={activeTab === tab}
               onClick={() => onTab(tab)}
               className={cn(
-                "min-h-10 rounded-full text-[13px] font-bold capitalize transition-all duration-300",
+                "min-h-11 rounded-full text-[13px] font-bold capitalize transition-all duration-300",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C94F78]/30",
                 activeTab === tab ? "chip-active" : "text-[#5F5552] hover:text-[#A83960]",
               )}

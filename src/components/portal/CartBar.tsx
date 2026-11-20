@@ -24,7 +24,6 @@ export function CartBar() {
         ref={ref}
         data-cart-target
         href="/cart"
-        aria-label={`Lihat keranjang, ${totalItems} item, ${formatRupiah(total)}`}
         className={cn(
           "panel-rose spotlight pointer-events-auto w-full max-w-lg flex items-center gap-3 rounded-[26px] pl-2 pr-4 py-2",
           "animate-in fade-in slide-in-from-bottom-2 duration-300 active:scale-[0.99] transition-transform",

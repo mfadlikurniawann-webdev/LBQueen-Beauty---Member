@@ -84,6 +84,8 @@ export default function CustomerLoginPage() {
           <input
             id="login-identifier"
             type="text"
+            aria-invalid={error ? true : undefined}
+            aria-describedby={error ? "login-error" : undefined}
             autoComplete="username"
             placeholder="Masukkan Username / Nomor HP"
             autoCapitalize="none"
@@ -105,6 +107,8 @@ export default function CustomerLoginPage() {
             <input
               id="login-password"
               type={showPass ? "text" : "password"}
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? "login-error" : undefined}
               autoComplete="current-password"
               placeholder="Masukkan Password"
               required
@@ -132,7 +136,7 @@ export default function CustomerLoginPage() {
           </span>
         </label>
 
-        <AuthError message={error} />
+        <AuthError id="login-error" message={error} />
 
         <AuthActions
           loading={loading}

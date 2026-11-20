@@ -4,21 +4,18 @@ export const SECTIONS = {
   promo: {
     category: "promo",
     title: "Promo Spesial",
-    subtitle: "Potongan harga pilihan",
     icon: BadgePercent,
     tabs: ["semua", "set"],
   },
   layanan: {
     category: "Treatment Care & Beauty",
     title: "Layanan",
-    subtitle: "Treatment di klinik",
     icon: Scissors,
     tabs: ["semua", "promo", "set"],
   },
   produk: {
     category: "Product Care & Beauty",
     title: "Produk",
-    subtitle: "Skincare & perawatan",
     icon: ShoppingBag,
     tabs: ["semua", "promo", "set"],
   },

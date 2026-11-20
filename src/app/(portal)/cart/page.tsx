@@ -99,7 +99,7 @@ export default function CartPage() {
   if (cart.length === 0) {
     return (
       <div className="min-h-screen">
-        <PageHero title="Keranjang" subtitle="Lengkapi pesanan Anda" onBack={() => router.back()} />
+        <PageHero title="Keranjang" onBack={() => router.back()} />
         <EmptyCart onShop={() => router.push("/")} />
       </div>
     );
@@ -111,7 +111,7 @@ export default function CartPage() {
     <div className="min-h-screen animate-in fade-in duration-500">
       <PageHero
         title="Keranjang"
-        subtitle={`${totalItems} item siap dipesan`}
+        subtitle={`${totalItems} item`}
         onBack={() => router.back()}
       />
 

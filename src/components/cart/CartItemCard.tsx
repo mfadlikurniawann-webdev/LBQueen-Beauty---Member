@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { isTreatmentItem } from "./cart-utils";
 import { CARD } from "./ui";
 
-const STEP = "w-8 h-8 rounded-full flex items-center justify-center transition-colors";
+const STEP = "w-11 h-11 rounded-full flex items-center justify-center transition-colors";
 
 export function CartItemCard({
   item,
@@ -43,15 +43,15 @@ export function CartItemCard({
       />
       <div className="flex-1 min-w-0 flex flex-col">
         <div className="flex items-start gap-2">
-          <h3 className="flex-1 min-w-0 text-[14px] font-semibold! text-[#2D2926] leading-snug line-clamp-2">
+          <p className="flex-1 min-w-0 text-[14px] font-semibold! text-[#2D2926] leading-snug line-clamp-2">
             {item.name}
-          </h3>
+          </p>
           <button
             type="button"
             aria-label="Hapus Item"
             onClick={remove}
             className={cn(
-              "w-8 h-8 -mt-1 -mr-1 shrink-0 rounded-xl flex items-center justify-center text-[#766B68]",
+              "w-11 h-11 -mt-2 -mr-2 shrink-0 rounded-xl flex items-center justify-center text-[#766B68]",
               "hover:text-rose-600 hover:bg-rose-50 transition-colors",
             )}
           >

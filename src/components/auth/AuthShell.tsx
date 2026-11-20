@@ -24,7 +24,6 @@ export function AuthShell({
           <div className="rounded-[28px] overflow-hidden" style={{ background: BANNER_BG }}>
             <BannerCarousel intervalMs={4000} />
           </div>
-          <p className="eyebrow mt-4 mb-2 ml-4">LBQueen Care & Beauty Clinic</p>
         </div>
       </div>
 

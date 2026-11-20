@@ -14,7 +14,7 @@ import {
 } from "./order-utils";
 
 const PILL = cn(
-  "h-9 px-3.5 rounded-full text-[13px] font-bold flex items-center justify-center gap-1.5 transition-colors",
+  "h-11 px-3.5 rounded-full text-[13px] font-bold flex items-center justify-center gap-1.5 transition-colors",
   "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20",
 );
 
@@ -47,7 +47,6 @@ export function OrderCard({
       <button
         type="button"
         onClick={onDetail}
-        aria-label={`Rincian pesanan ${parsed.mainName}`}
         className="w-full flex gap-3.5 text-left rounded-2xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20"
       >
         <div className={cn(muted && "grayscale opacity-70")}>
@@ -60,14 +59,14 @@ export function OrderCard({
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-start gap-2">
-            <h3
+            <p
               className={cn(
                 "flex-1 min-w-0 text-[15px] font-semibold! leading-snug line-clamp-2",
                 muted ? "text-[#8C8280]" : "text-[#2D2926]",
               )}
             >
               {parsed.mainName}
-            </h3>
+            </p>
             <p
               className={cn(
                 "shrink-0 text-[14px] font-semibold tabular-nums",

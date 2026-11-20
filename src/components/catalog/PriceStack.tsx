@@ -19,7 +19,7 @@ export function PriceStack({
         </p>
       )}
       <p className="text-[15px] font-bold text-[#A83960] leading-tight">
-        {from && <span className="text-[11px] font-semibold text-[#766B68]">Mulai </span>}
+        {from && <span className="text-[12px] font-semibold text-[#766B68]">Mulai </span>}
         <Rupiah value={Math.max(0, price - discount)} />
       </p>
     </div>
