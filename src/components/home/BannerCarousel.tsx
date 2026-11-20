@@ -85,7 +85,7 @@ export function BannerCarousel({
             className={cn(
               "relative shrink-0 aspect-[1440/956]",
               peek
-                ? "w-[78%] sm:w-[56%] md:w-full snap-start overflow-hidden rounded-[20px] md:rounded-none border-[3px] border-white md:border-0 shadow-[0_12px_26px_-16px_rgba(90,24,52,0.55)] md:shadow-none"
+                ? "w-[80%] sm:w-[56%] md:w-full snap-start overflow-hidden rounded-[22px] md:rounded-none border border-white/90 md:border-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_14px_30px_-18px_rgba(122,34,64,0.45)] md:shadow-none"
                 : "w-full snap-center",
             )}
             style={peek ? { background: BANNER_BG } : undefined}
@@ -124,7 +124,7 @@ export function BannerCarousel({
               <span
                 className={cn(
                   "block h-1.5 rounded-full transition-all duration-300",
-                  active === i ? "w-5 bg-[#C94F78]" : "w-1.5 bg-[#C94F78]/30",
+                  active === i ? "w-6 bg-[#C94F78]" : "w-1.5 bg-[#C94F78]/30",
                 )}
               />
             </button>

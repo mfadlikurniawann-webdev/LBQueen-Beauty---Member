@@ -36,7 +36,7 @@ export function OrderCard({
   const muted = o.status === "cancelled";
 
   return (
-    <article className="bg-white rounded-[22px] border border-[#F0E4E8] p-4 shadow-[0_8px_24px_-18px_rgba(122,34,64,0.4)]">
+    <article data-reveal className="glass-soft spotlight rounded-[26px] p-4">
       <div className="flex items-center justify-between gap-3 mb-3">
         <p className="text-[13px] font-medium text-[#5F5552] tabular-nums">
           {formatOrderDate(o.ordered_at)}
@@ -94,14 +94,14 @@ export function OrderCard({
         <ChevronRight className="w-5 h-5 shrink-0 self-center text-[#B9ADA9]" aria-hidden="true" />
       </button>
 
-      <div className="flex flex-wrap justify-end gap-2 mt-3.5 pt-3.5 border-t border-dashed border-[#EEDFE3]">
+      <div className="flex flex-wrap justify-end gap-2 mt-3.5 pt-3.5 border-t border-[#C94F78]/10">
         {o.status === "completed" && (
           <button
             type="button"
             onClick={onReview}
             className={cn(
               PILL,
-              "bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100",
+              "bg-amber-50/85 text-amber-800 border border-white shadow-[0_0_0_1px_rgba(184,134,26,0.25)] hover:bg-amber-50",
             )}
           >
             <Star className="w-4 h-4 text-amber-500" fill="currentColor" aria-hidden="true" /> Beri
@@ -111,7 +111,7 @@ export function OrderCard({
         <button
           type="button"
           onClick={() => openWhatsApp(orderQuestion(o, invoiceNum))}
-          className={cn(PILL, "bg-[#FFE3EE] text-[#A83960] hover:bg-[#FFD3E3]")}
+          className={cn(PILL, "chip-glass text-[#A83960] hover:bg-white/90")}
         >
           <MessageCircle className="w-4 h-4" aria-hidden="true" /> Chat admin
         </button>

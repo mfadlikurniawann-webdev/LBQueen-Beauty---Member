@@ -11,13 +11,13 @@ const METHODS = [
   { id: "qris", label: "QRIS / E-Wallet", icon: QrCode },
 ] as const;
 const BANK_ACCOUNT = "1447575021";
-const PANEL = "bg-[#FAF7F5] rounded-2xl border border-[#EEDFE3]";
+const PANEL = "chip-glass rounded-[20px]";
 
 function BankTransferInfo({ copied, onCopy }: { copied: boolean; onCopy: () => void }) {
   return (
     <div className={`p-4 ${PANEL} flex flex-wrap items-center justify-between gap-3`}>
       <div className="min-w-0">
-        <p className="text-[11px] text-[#766B68] font-bold uppercase tracking-[0.1em]">Bank BNI</p>
+        <p className="text-[12px] text-[#766B68] font-bold">Bank BNI</p>
         <p className="text-[18px] font-bold text-[#2D2926] tracking-wide tabular-nums leading-tight mt-0.5">
           {BANK_ACCOUNT}
         </p>
@@ -27,10 +27,10 @@ function BankTransferInfo({ copied, onCopy }: { copied: boolean; onCopy: () => v
         type="button"
         onClick={onCopy}
         className={cn(
-          "h-10 px-4 rounded-2xl text-[12px] font-bold flex items-center gap-1.5 transition-all border",
+          "h-10 px-4 rounded-full text-[12px] font-bold flex items-center gap-1.5 transition-all duration-300 border",
           copied
-            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-            : "bg-white text-[#A83960] border-[#F0CBD8] hover:bg-[#FDF2F5]",
+            ? "bg-emerald-50/90 text-emerald-700 border-emerald-200"
+            : "bg-white/80 text-[#A83960] border-white hover:bg-white shadow-[0_0_0_1px_rgba(201,79,120,0.16)]",
         )}
       >
         {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -67,17 +67,17 @@ export function PaymentMethodCard({
               aria-pressed={active}
               onClick={() => onChange(id)}
               className={cn(
-                "relative min-h-[76px] rounded-2xl border-2 px-3 py-3 flex flex-col items-start",
-                "justify-between gap-2 text-left transition-all active:scale-[0.98]",
+                "relative min-h-[76px] rounded-[20px] px-3 py-3 flex flex-col items-start",
+                "justify-between gap-2 text-left transition-all duration-300 active:scale-[0.98]",
                 active
-                  ? "border-[#C94F78] bg-[#FDF2F5] shadow-[0_6px_16px_rgba(201,79,120,0.12)]"
-                  : "border-[#EEDFE3] bg-white hover:border-[#E3C3CE]",
+                  ? "bg-white/90 shadow-[inset_0_1px_0_rgba(255,255,255,1),0_0_0_1.5px_#C94F78,0_10px_22px_-12px_rgba(168,57,96,0.55)]"
+                  : "chip-glass hover:bg-white/85",
               )}
             >
               <span
                 className={cn(
                   "w-8 h-8 rounded-xl flex items-center justify-center",
-                  active ? "bg-white text-[#C94F78]" : "bg-[#FAF7F5] text-[#766B68]",
+                  active ? "chip-active" : "bg-white/70 text-[#766B68]",
                 )}
               >
                 <MethodIcon className="w-4 h-4" aria-hidden="true" />
@@ -109,7 +109,7 @@ export function PaymentMethodCard({
         <div className={`flex flex-col gap-3 items-center p-4 ${PANEL}`}>
           <div
             className={cn(
-              "relative w-44 h-44 rounded-2xl border border-[#EEDFE3] p-2 bg-white shadow-sm",
+              "relative w-44 h-44 rounded-[20px] border border-white p-2 bg-white shadow-[0_10px_24px_-14px_rgba(122,34,64,0.4)]",
               "overflow-hidden flex items-center justify-center",
             )}
           >

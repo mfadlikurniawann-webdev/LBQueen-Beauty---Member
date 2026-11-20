@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Crown, Search } from "lucide-react";
+import { useScrolled } from "@/hooks/useScrolled";
 import type { Customer } from "@/lib/customer";
 import { tierOf } from "@/lib/membership";
 import { cn } from "@/lib/utils";
 
-export const HEADER_GRADIENT = "linear-gradient(90deg,#D9668D 0%,#C94F78 50%,#A83960 100%)";
 
 const initials = (name?: string) =>
   (name || "?")
@@ -25,15 +25,21 @@ export function HomeHeader({
   onSearch: (value: string) => void;
 }) {
   const tier = tierOf(customer);
+  const scrolled = useScrolled();
   return (
     <header
-      className="sticky top-0 z-40 md:static px-4 sm:px-8 lg:px-12 pb-3 md:pb-4"
-      style={{
-        background: HEADER_GRADIENT,
-        paddingTop: "max(env(safe-area-inset-top, 0px), 12px)",
-      }}
+      className="sticky top-0 z-40 md:static px-3 sm:px-8 lg:px-12 pb-2 md:pb-4"
+      style={{ paddingTop: "max(env(safe-area-inset-top, 0px), 10px)" }}
     >
-      <div className="flex items-center gap-2 md:gap-3">
+      {/* Di HP bar menyatu dengan latar; saat digulir menjadi pil kaca melayang. */}
+      <div
+        className={cn(
+          "morph-bar mx-auto flex items-center gap-2 md:gap-3 rounded-full border",
+          scrolled
+            ? "glass p-1.5 max-w-[640px] md:max-w-none md:p-0 md:bg-transparent md:border-transparent md:shadow-none md:backdrop-blur-none"
+            : "p-0 border-transparent",
+        )}
+      >
         <label className="relative flex-1 min-w-0">
           <span className="sr-only">Cari treatment atau produk</span>
           <Search
@@ -46,8 +52,8 @@ export function HomeHeader({
             value={searchQuery}
             onChange={(e) => onSearch(e.target.value)}
             className={cn(
-              "w-full h-11 rounded-full bg-white pl-11 pr-4 text-[15px] text-[#2D2926] outline-none",
-              "placeholder:text-[#8C8280] focus:ring-4 focus:ring-white/30 transition-shadow",
+              "chip-glass w-full h-11 rounded-full pl-11 pr-4 text-[15px] text-[#2D2926] outline-none",
+              "placeholder:text-[#8C8280] focus:bg-white/90 focus:ring-4 focus:ring-[#C94F78]/15 transition-[box-shadow,background-color]",
             )}
           />
         </label>

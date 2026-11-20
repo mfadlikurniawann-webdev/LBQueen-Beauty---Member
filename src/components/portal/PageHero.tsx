@@ -1,49 +1,46 @@
 import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+/** Judul halaman di atas lapisan ambient: tombol kembali berkaca, judul besar, aksi di kanan. */
 export function PageHero({
   title,
   subtitle,
   onBack,
   tall = false,
-  transparent = false,
   actions,
 }: {
   title: string;
   subtitle?: string;
   onBack?: () => void;
   tall?: boolean;
+  /** Tidak lagi mengubah tampilan (hero selalu transparan di atas ambient); dipertahankan untuk kompatibilitas. */
   transparent?: boolean;
   actions?: React.ReactNode;
 }) {
   return (
     <div
-      className={cn("relative px-4 sm:px-8", tall ? "pb-16 rounded-b-[32px]" : "pb-4")}
-      style={{
-        paddingTop: "max(env(safe-area-inset-top, 0px), 20px)",
-        background: transparent
-          ? "transparent"
-          : tall
-            ? "linear-gradient(160deg,#FFC9DC 0%,#FFE3EE 55%,#FCEFC9 100%)"
-            : "linear-gradient(180deg,#FFE3EE 0%,rgba(255,236,244,0) 100%)",
-      }}
+      className={cn(
+        "relative px-4 sm:px-8",
+        tall ? "pb-14" : "pb-5",
+      )}
+      style={{ paddingTop: "max(env(safe-area-inset-top, 0px), 20px)" }}
     >
-      <div className="flex items-center gap-3 min-h-12">
+      <div data-reveal className="flex items-center gap-3 min-h-12">
         {onBack && (
           <button
             type="button"
             aria-label="Kembali"
             onClick={onBack}
             className={cn(
-              "w-11 h-11 shrink-0 -ml-1 rounded-full flex items-center justify-center text-[#2D2926]",
-              "hover:bg-white/70 active:scale-95 transition-all",
+              "chip-glass w-11 h-11 shrink-0 rounded-full flex items-center justify-center text-[#2D2926]",
+              "hover:bg-white/90 active:scale-95 transition-[background-color,transform]",
             )}
           >
-            <ArrowLeft className="w-6 h-6" strokeWidth={2.4} />
+            <ArrowLeft className="w-5 h-5" strokeWidth={2.4} />
           </button>
         )}
         <div className="min-w-0 flex-1">
-          <h1 className="text-[24px] font-bold! text-[#2D2926] tracking-tight leading-tight truncate">
+          <h1 className="text-[26px] md:text-[30px] font-bold! text-[#2D2926] tracking-tight leading-tight truncate">
             {title}
           </h1>
           {subtitle && (

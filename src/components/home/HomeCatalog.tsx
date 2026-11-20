@@ -28,7 +28,7 @@ export function HomeCatalog({
         {products.length > 0 && (
           <span
             className={cn(
-              "mb-3.5 shrink-0 rounded-full bg-[#FFE3EE] px-3 py-1 text-[12px] font-semibold text-[#A83960]",
+              "chip-glass mb-3.5 shrink-0 rounded-full px-3 py-1 text-[12px] font-semibold text-[#A83960]",
               "tabular-nums",
             )}
           >
@@ -40,7 +40,7 @@ export function HomeCatalog({
         <div className="portal-catalog-grid" aria-busy="true">
           <span className="sr-only">Memuat katalog</span>
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-[240px] rounded-[24px] bg-[#F3E7EA] animate-pulse" />
+            <div key={i} className="skeleton-glass h-[240px] rounded-[24px]" />
           ))}
         </div>
       ) : products.length > 0 ? (
@@ -52,11 +52,10 @@ export function HomeCatalog({
       ) : (
         <div
           className={cn(
-            "py-12 px-6 flex flex-col items-center justify-center text-center bg-white",
-            "border border-[#EEDFE3] rounded-[32px]",
+            "glass py-12 px-6 flex flex-col items-center justify-center text-center rounded-[32px]",
           )}
         >
-          <div className="w-16 h-16 rounded-full bg-[#FDF2F5] flex items-center justify-center mb-4">
+          <div className="chip-glass w-16 h-16 rounded-full flex items-center justify-center mb-4">
             <EmptyIcon className="w-7 h-7 text-[#A83960]" aria-hidden="true" />
           </div>
           <p className="text-[15px] font-bold text-[#2D2926]">

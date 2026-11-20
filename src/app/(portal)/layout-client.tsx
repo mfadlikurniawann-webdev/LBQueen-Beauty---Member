@@ -8,6 +8,7 @@ import { CartBar } from "@/components/portal/CartBar";
 import { TopNav } from "@/components/portal/TopNav";
 import { CartProvider, useCart } from "@/context/CartContext";
 import { CustomerProvider, useCustomer } from "@/context/CustomerContext";
+import { useSpotlight } from "@/hooks/useSpotlight";
 
 const SUB_PAGES = ["/cart", "/orders", "/profile", "/membership"];
 
@@ -19,15 +20,19 @@ function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { totalItems } = useCart();
   const { customer, loading, error } = useCustomer();
+  useSpotlight();
 
   useEffect(() => {
     if (!loading && !error && !customer && SUB_PAGES.includes(pathname)) router.replace("/login");
   }, [customer, loading, error, pathname, router]);
 
   const isAuthPage = ["/login", "/register"].includes(pathname);
+  // Lapisan cahaya tetap di belakang semua halaman; permukaan glass membiaskannya.
+  const ambient = <div className="ambient fixed inset-0 -z-10 pointer-events-none" aria-hidden="true" />;
   if (isAuthPage)
     return (
-      <main id="main-content" className="min-h-dvh">
+      <main id="main-content" className="relative isolate min-h-dvh">
+        {ambient}
         {children}
       </main>
     );
@@ -37,8 +42,9 @@ function Layout({ children }: { children: React.ReactNode }) {
   const mobilePad = !customer ? 0 : checkout ? 168 : cartBar ? 196 : 112;
 
   return (
-    <div className="min-h-screen bg-[#F7F4F5] flex flex-col items-center">
-      <div className="w-full max-w-7xl min-h-dvh relative flex flex-col bg-[#FBF9F9] md:border-x md:border-[#EEDFE3]">
+    <div className="relative isolate min-h-screen flex flex-col items-center">
+      {ambient}
+      <div className="w-full max-w-7xl min-h-dvh relative flex flex-col">
         {customer && <TopNav pathname={pathname} customer={customer} totalItems={totalItems} />}
         <main
           id="main-content"

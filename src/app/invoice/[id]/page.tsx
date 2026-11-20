@@ -58,8 +58,10 @@ export default function OnlineInvoicePage() {
     return (
       <div
         role="status"
-        className="min-h-screen flex flex-col items-center justify-center gap-3 bg-[#FAF7F5]"
+        className="relative isolate min-h-screen flex flex-col items-center justify-center gap-3"
       >
+        <div className="ambient fixed inset-0 -z-10 pointer-events-none print:hidden" aria-hidden="true" />
+
         <Loader2 className="w-8 h-8 text-[#C94F78] animate-spin" />
         <p className="text-[13px] font-medium text-[#766B68]">Memuat invoice...</p>
       </div>
@@ -70,18 +72,19 @@ export default function OnlineInvoicePage() {
     return (
       <main
         id="main-content"
-        className="min-h-screen flex items-center justify-center bg-[#FAF7F5] px-4"
+        className="relative isolate min-h-screen flex items-center justify-center px-4"
       >
+        <div className="ambient fixed inset-0 -z-10 pointer-events-none print:hidden" aria-hidden="true" />
+
         <div
           role="alert"
           className={cn(
-            "w-full max-w-sm bg-white rounded-[32px] border border-[#EEDFE3] p-8 flex flex-col items-center",
-            "text-center shadow-[0_8px_30px_rgba(201,79,120,0.08)]",
+            "glass-lit w-full max-w-sm rounded-[32px] p-8 flex flex-col items-center text-center",
           )}
         >
           <div
             className={cn(
-              "w-16 h-16 rounded-full bg-rose-50 border border-rose-200 flex items-center",
+              "chip-glass w-16 h-16 rounded-full flex items-center",
               "justify-center mb-4",
             )}
           >
@@ -94,8 +97,7 @@ export default function OnlineInvoicePage() {
             type="button"
             onClick={() => window.close()}
             className={cn(
-              "mt-6 h-12 px-8 rounded-2xl bg-white border border-[#E8D5DB] text-[14px] font-bold",
-              "text-[#766B68] hover:bg-[#FAF7F5] transition-colors",
+              "btn-glass mt-6 h-12 px-8 text-[14px] text-[#5F5552]",
             )}
           >
             Tutup
@@ -109,10 +111,12 @@ export default function OnlineInvoicePage() {
     <main
       id="main-content"
       className={cn(
-        "min-h-screen bg-[#F5EFF1] font-mono flex flex-col items-center px-4 py-6 sm:py-8",
+        "relative isolate min-h-screen font-mono flex flex-col items-center px-4 py-6 sm:py-8",
         "print:bg-white print:p-0 print:min-h-0 print:block",
       )}
     >
+        <div className="ambient fixed inset-0 -z-10 pointer-events-none print:hidden" aria-hidden="true" />
+
       <PrintSettings size={size} onSize={setSize} />
       <InvoiceReceipt order={order} fallbackPrice={price} cashierName={cashierName} size={size} />
     </main>

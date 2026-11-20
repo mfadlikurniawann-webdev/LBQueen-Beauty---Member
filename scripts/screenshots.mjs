@@ -297,7 +297,8 @@ async function shoot(page, name, viewport, { full = true } = {}) {
       width: viewport.width,
       height: Math.max(viewport.height, height),
     });
-    await page.waitForTimeout(400);
+    // Animasi reveal (blur-up bertahap) butuh ~1,3 detik sebelum konten diam.
+    await page.waitForTimeout(1400);
   }
   const file = path.join(outDir, `${name}.png`);
   await page.screenshot({ path: file });

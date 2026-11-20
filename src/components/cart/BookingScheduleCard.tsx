@@ -23,7 +23,7 @@ function BookingField({
     <div className="min-w-0">
       <label
         htmlFor={id}
-        className="block text-[11px] font-bold text-[#766B68] mb-1.5 uppercase tracking-[0.1em]"
+        className="block text-[12px] font-bold text-[#766B68] mb-1.5"
       >
         {label}
       </label>
@@ -38,9 +38,7 @@ function BookingField({
           onChange={(e) => onChange(e.target.value)}
           min={min}
           className={cn(
-            "block w-full min-w-0 h-12 pl-9 pr-2 text-[14px] text-[#2D2926] bg-[#FDFAFB] border",
-            "border-[#E8D5DB] rounded-2xl outline-none focus:bg-white focus:border-[#C94F78] focus:ring-4",
-            "focus:ring-[#C94F78]/10 transition-all",
+            "input-glass block min-w-0 min-h-12 h-12 pl-9 pr-2 text-[14px]",
           )}
         />
       </div>

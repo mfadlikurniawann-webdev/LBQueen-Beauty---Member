@@ -24,8 +24,7 @@ export function VoucherTicket({ voucher, className }: { voucher: MyVoucher; clas
   return (
     <div
       className={cn(
-        "flex items-center gap-3.5 rounded-[20px] bg-white border border-[#F0E4E8] p-3.5",
-        "shadow-[0_8px_24px_-18px_rgba(122,34,64,0.4)]",
+        "glass-soft spotlight lift flex items-center gap-3.5 rounded-[24px] p-3.5",
         className,
       )}
     >
@@ -56,7 +55,10 @@ export function VoucherTicket({ voucher, className }: { voucher: MyVoucher; clas
         type="button"
         onClick={copy}
         aria-label={`Salin kode ${voucher.code}`}
-        className="shrink-0 inline-flex items-center gap-1 rounded-full border border-[#E9C2D2] px-3 h-9 text-[12px] font-bold text-[#A83960] hover:bg-[#FFF3F7]"
+        className={cn(
+          "shrink-0 inline-flex items-center gap-1 rounded-full px-3 h-9 text-[12px] font-bold transition-all duration-300 active:scale-95",
+          copied ? "chip-active" : "chip-glass text-[#A83960] hover:bg-white/90",
+        )}
       >
         {copied ? (
           <Check className="w-3.5 h-3.5" aria-hidden="true" />
@@ -71,7 +73,7 @@ export function VoucherTicket({ voucher, className }: { voucher: MyVoucher; clas
 
 export function EmptyVouchers() {
   return (
-    <div className="w-full rounded-[20px] border border-[#F0E4E8] bg-white p-4 flex items-center gap-3.5">
+    <div className="glass w-full rounded-[24px] p-4 flex items-center gap-3.5">
       <IconChip icon={Ticket} tone="gold" size="md" />
       <div>
         <p className="text-[14px] text-[#2D2926] font-semibold">Belum ada voucher</p>

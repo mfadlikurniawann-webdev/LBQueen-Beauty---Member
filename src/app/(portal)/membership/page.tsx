@@ -71,7 +71,8 @@ export default function MembershipPage() {
       <div
         className="transition-[background] duration-500 pb-6"
         style={{
-          background: `linear-gradient(180deg, ${tier.stage} 0%, rgba(251,249,249,0) 100%)`,
+          // Cahaya lembut berwarna tier di belakang kartu, memudar tanpa tepi.
+          background: `radial-gradient(75% 65% at 50% 40%, ${tier.stage} 0%, transparent 72%)`,
         }}
       >
         <PageHero
@@ -83,7 +84,7 @@ export default function MembershipPage() {
 
         <div
           ref={track}
-          className="flex gap-3 overflow-x-auto snap-x snap-mandatory no-scrollbar px-[12%] sm:px-[calc(50%-170px)] pt-2 pb-4"
+          className="flex gap-3 overflow-x-auto snap-x snap-mandatory no-scrollbar px-[12%] sm:px-[calc(50%-170px)] pt-2 pb-10 -mb-6"
         >
           {TIERS.map((t, i) => {
             const mine = i === currentIndex;
@@ -97,9 +98,14 @@ export default function MembershipPage() {
                 aria-hidden={viewed !== i}
               >
                 <div
-                  className="relative aspect-[1.45/1] rounded-[24px] p-5 flex flex-col justify-between overflow-hidden shadow-[0_18px_36px_-20px_rgba(90,24,52,0.6)]"
+                  className="spotlight relative aspect-[1.45/1] rounded-[28px] p-5 flex flex-col justify-between overflow-hidden border border-white/50 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_22px_44px_-22px_rgba(90,24,52,0.65)]"
                   style={{ background: t.card, color: t.ink }}
                 >
+                  {/* Kilau kaca diagonal di atas kartu tier. */}
+                  <span
+                    className="absolute inset-0 pointer-events-none bg-[linear-gradient(122deg,rgba(255,255,255,0.45)_0%,rgba(255,255,255,0)_44%)]"
+                    aria-hidden="true"
+                  />
                   <span
                     className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/15"
                     aria-hidden="true"
@@ -109,7 +115,7 @@ export default function MembershipPage() {
                       <p className="text-[12px] font-semibold opacity-80">LBQueen Member</p>
                       <p className="text-[24px] font-extrabold leading-tight">{t.label}</p>
                     </div>
-                    <span className="w-11 h-11 rounded-full bg-white/25 flex items-center justify-center">
+                    <span className="w-11 h-11 rounded-full bg-white/25 border border-white/40 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] flex items-center justify-center">
                       <Crown className="w-6 h-6" aria-hidden="true" />
                     </span>
                   </div>
@@ -122,7 +128,7 @@ export default function MembershipPage() {
                           </p>
                           <p className="text-[12px] font-semibold opacity-80 mt-1">Poin</p>
                         </div>
-                        <span className="rounded-full bg-white/90 px-3 py-1 text-[12px] font-bold text-[#2D2926]">
+                        <span className="rounded-full bg-white/80 backdrop-blur-md border border-white px-3 py-1 text-[12px] font-bold text-[#2D2926]">
                           Tier Anda
                         </span>
                       </>
@@ -159,11 +165,12 @@ export default function MembershipPage() {
         </div>
       </div>
 
-      <div className="px-4 sm:px-8 max-w-2xl mx-auto pb-6">
-        <h2 className="text-[18px] font-bold! text-[#2D2926] mb-3.5">
+      <div data-reveal className="px-4 sm:px-8 max-w-2xl mx-auto pb-6">
+        <p className="eyebrow mb-2">Benefit</p>
+        <h2 className="text-[20px] font-bold! text-[#2D2926] mb-3.5">
           Nikmati {benefits.length} benefit{isCurrent ? "" : ` ${tier.label}`}
         </h2>
-        <ul className="rounded-[22px] bg-white border border-[#F0E4E8] divide-y divide-[#F3EAEE] shadow-[0_10px_30px_-20px_rgba(122,34,64,0.4)]">
+        <ul className="glass rounded-[26px] divide-y divide-[#C94F78]/10">
           {benefits.map((b, i) => (
             <li key={b.title} className="flex items-center gap-3.5 px-4 py-3.5">
               <IconChip
@@ -185,7 +192,7 @@ export default function MembershipPage() {
           )}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-5 w-full h-[52px] rounded-full flex items-center justify-center gap-2 text-[15px] font-bold text-white bg-gradient-to-r from-[#C94F78] to-[#9B3055] shadow-[0_10px_24px_-12px_rgba(168,57,96,0.7)]"
+          className="btn-primary mt-5 w-full h-[52px] text-[15px]"
         >
           <CalendarHeart className="w-5 h-5" aria-hidden="true" />
           {current.id === "regular" ? "Ajukan upgrade membership" : "Hubungi admin"}

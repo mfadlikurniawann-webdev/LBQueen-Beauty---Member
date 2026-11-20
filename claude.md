@@ -1,5 +1,15 @@
 # Architectural Decisions & Changes Log (LBQueen Member)
 
+## 2026-11-20 (lanjutan): Tampilan liquid glass
+
+- Seluruh tampilan member dirombak ke bahasa liquid glass (acuan portfolio `PORTFOLIO-Fadli`: `.glass`, ambient, spotlight, reveal blur-up), memakai palet rose LBQueen; rute, alur, data, dan teks tidak berubah.
+- Sistem di `src/app/globals.css`: `.glass` (blur 22px + saturate, highlight inset atas) untuk chrome/kartu unggulan, `.glass-lit` (kilau diagonal), `.glass-strong` (sheet/dialog), `.glass-soft` (kaca tanpa backdrop-filter untuk kartu berulang di grid/daftar agar gulir ringan), `.panel-rose` (panel kontras gelap-rose: pita Promo Spesial, strip member, bar keranjang), `.spotlight` + `.lift` (cahaya mengikuti kursor dan terangkat saat hover, hanya perangkat ber-hover), `.btn-primary`/`.btn-glass`, `.chip-glass`/`.chip-active`, `.input-glass`, `.skeleton-glass`, `.eyebrow`, `.morph-bar`. Fallback `@supports not (backdrop-filter)` memakai permukaan pekat; reduced motion mematikan ambient, shimmer, dan reveal.
+- Lapisan `.ambient` (medan cahaya rose/peach/emas yang bergeser 28 detik) dipasang tetap di belakang layout portal, halaman login/daftar, dan nota; latar halaman tidak lagi opak.
+- Motion: `components/motion/Reveal.tsx` kini IntersectionObserver + CSS (tanpa animejs/framer-motion). Elemen ber-`data-reveal` naik dari blur saat masuk layar, bertahap 70 ms, konten yang dimuat belakangan dipantau MutationObserver; animasi memakai fill-mode `backwards` sehingga tidak meninggalkan transform/filter yang mengganggu elemen `fixed`. `hooks/useSpotlight.ts` (satu listener dokumen) dan `hooks/useScrolled.ts`.
+- Header: `TopNav` (tablet/desktop) membentang di puncak lalu menyusut menjadi pil kaca melayang saat digulir; header beranda ponsel (pencarian, lencana tier, avatar) juga menjadi pil kaca saat digulir. Navigasi bawah berupa pil kaca dengan item aktif `chip-active`.
+- Beranda: sapaan dengan eyebrow + nama besar di atas ambient (pita gradien lama dihapus), banner dibingkai kaca di layar lebar, kartu poin + grid layanan menjadi `glass-lit` (struktur tetap), ubin ikon `IconChip` bertint kaca. Kartu produk, voucher, pesanan, dan keranjang memakai `glass-soft`; sheet detail produk, rincian pesanan, ulasan, dan toast memakai `glass-strong`.
+- Label huruf kapital lebar (uppercase + tracking) diganti label biasa sesuai acuan. `npm run screenshots` menunggu 1,4 detik setelah resize agar animasi reveal selesai sebelum dipotret.
+
 ## 2026-11-20: Optimasi beban server & banner baru
 
 - Profil sesi memakai satu key SWR (`customer-profile`) dengan refresh 120 detik; navigasi tetap memperbarui profil bila data lebih tua dari 15 detik. Login, daftar, logout, dan checkout memanggil `refresh()` dari `useCustomer` secara eksplisit.

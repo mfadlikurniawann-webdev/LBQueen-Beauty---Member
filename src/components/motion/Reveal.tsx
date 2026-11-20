@@ -3,34 +3,55 @@
 import { useEffect, useRef, type ComponentProps } from "react";
 import { usePathname } from "next/navigation";
 
+const STAGGER_MS = 70;
+const MAX_STAGGER = 6;
+
+/**
+ * Elemen bertanda `data-reveal` di dalam root naik dari blur saat masuk layar
+ * (gaya Reveal portfolio, tanpa framer-motion). Elemen yang masuk bersamaan
+ * dibuat bertahap; konten yang dimuat belakangan ikut terpantau lewat MutationObserver.
+ */
 export function Reveal({ children, ...props }: ComponentProps<"div">) {
   const root = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
   useEffect(() => {
+    const el = root.current;
+    if (!el || !("IntersectionObserver" in window)) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let disposed = false;
-    let cleanup: (() => void) | undefined;
-    void import("animejs")
-      .then(({ animate, createScope, stagger }) => {
-        if (disposed || !root.current) return;
-        const scope = createScope({ root: root.current }).add(() => {
-          const targets = root.current?.querySelectorAll("[data-reveal]");
-          if (targets?.length)
-            animate(targets, {
-              opacity: [0.65, 1],
-              translateY: [8, 0],
-              duration: 320,
-              delay: stagger(35),
-              ease: "outCubic",
-            });
+    document.documentElement.classList.add("lbq-reveal");
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        let order = 0;
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const target = entry.target as HTMLElement;
+          target.style.setProperty("--reveal-delay", `${Math.min(order++, MAX_STAGGER) * STAGGER_MS}ms`);
+          target.classList.add("is-revealed");
+          io.unobserve(target);
+        }
+      },
+      { rootMargin: "0px 0px -6% 0px", threshold: 0.04 },
+    );
+    const scan = () =>
+      el
+        .querySelectorAll<HTMLElement>("[data-reveal]:not(.is-revealed):not([data-reveal-watch])")
+        .forEach((target) => {
+          target.setAttribute("data-reveal-watch", "");
+          io.observe(target);
         });
-        cleanup = () => scope.revert();
-      })
-      .catch(() => {});
+    scan();
+    const mutations = new MutationObserver(scan);
+    mutations.observe(el, { childList: true, subtree: true });
+
     return () => {
-      disposed = true;
-      cleanup?.();
+      io.disconnect();
+      mutations.disconnect();
+      // Elemen yang belum sempat tampil harus bisa dipantau ulang oleh effect berikutnya.
+      el.querySelectorAll("[data-reveal-watch]:not(.is-revealed)").forEach((t) =>
+        t.removeAttribute("data-reveal-watch"),
+      );
     };
   }, [pathname]);
 

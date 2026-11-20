@@ -18,7 +18,7 @@ export function ItemThumb({
   const box = size === "lg" ? "w-20 h-20" : "w-[72px] h-[72px]";
   const Icon = treatment ? Scissors : Package;
   return (
-    <div className={`${box} rounded-2xl border border-[#EEDFE3] overflow-hidden shrink-0 relative`}>
+    <div className={`${box} rounded-[18px] border border-white/90 shadow-[0_6px_14px_-8px_rgba(122,34,64,0.4)] overflow-hidden shrink-0 relative`}>
       {src ? (
         <Image src={src} alt={alt} fill sizes={sizes} className="object-cover" />
       ) : (

@@ -3,7 +3,6 @@ import { Clock3 } from "lucide-react";
 import type { Customer } from "@/lib/customer";
 import { cn } from "@/lib/utils";
 import { BannerCarousel } from "./BannerCarousel";
-import { HEADER_GRADIENT } from "./HomeHeader";
 
 const ZONE = "Asia/Jakarta";
 
@@ -63,44 +62,41 @@ export function HomeHero({
   const firstName = customer.name?.trim().split(/\s+/)[0] || "Kak";
 
   return (
-    <section data-reveal aria-label="Beranda LBQueen" className="relative">
-      <div
-        className="absolute inset-x-0 top-0 h-[190px] sm:h-[200px] md:h-[220px] lg:h-[240px] rounded-b-[32px] overflow-hidden"
-        style={{ background: HEADER_GRADIENT }}
-        aria-hidden="true"
-      >
-        <span className="absolute -right-16 -top-10 w-56 h-56 rounded-full bg-white/10" />
-        <span className="absolute left-1/3 top-16 w-24 h-24 rounded-full bg-white/[0.06]" />
-      </div>
+    <section aria-label="Beranda LBQueen" className="relative">
       <div className="relative px-4 sm:px-8 lg:px-12">
-        <div className="pt-1 text-white">
-          <p className="text-[14px] font-medium text-white/85">{greeting(hour)},</p>
-          <h1 className="mt-0.5 text-[24px] md:text-[28px] font-bold! leading-tight tracking-tight text-white! truncate">
+        <div data-reveal className="pt-2 md:pt-4">
+          <p className="eyebrow">{greeting(hour)}</p>
+          <h1 className="mt-2 text-[30px] md:text-[38px] font-bold! leading-[1.1] tracking-tight text-[#2D2926] truncate">
             {firstName}
+            <span className="text-[#C94F78]">.</span>
           </h1>
-          <p className="mt-1 text-[14px] text-white/90">{subtitle(hour)}</p>
+          <p className="mt-1.5 text-[15px] text-[#5F5552]">{subtitle(hour)}</p>
           <p
             className={cn(
-              "mt-3 inline-flex items-center gap-1.5 h-7 rounded-full bg-white/20 px-2.5",
-              "text-[12px] font-semibold text-white backdrop-blur-sm capitalize tabular-nums",
+              "chip-glass mt-3.5 inline-flex items-center gap-1.5 h-8 rounded-full px-3",
+              "text-[12px] font-semibold text-[#5F4A55] capitalize tabular-nums",
             )}
           >
-            <Clock3 className="w-3.5 h-3.5" aria-hidden="true" />
+            <Clock3 className="w-3.5 h-3.5 text-[#A83960]" aria-hidden="true" />
             {date} · {time} WIB
           </p>
         </div>
 
-        <div className="mt-4 grid gap-4 md:grid-cols-2 md:items-start xl:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
+        <div className="mt-5 grid gap-4 md:grid-cols-2 md:items-start xl:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
           <div
+            data-reveal
             className={cn(
               "-mr-4 sm:-mr-8 md:mr-0",
-              "md:rounded-[22px] md:overflow-hidden md:border-[3px] md:border-white",
-              "md:shadow-[0_16px_34px_-18px_rgba(90,24,52,0.55)]",
+              // Layar lebar: banner dibingkai kaca; di HP tiap slide sudah berupa kartu kaca sendiri.
+              "md:p-1.5 md:rounded-[28px] md:bg-white/55 md:border md:border-white/85 md:backdrop-blur-xl",
+              "md:shadow-[inset_0_1px_0_rgba(255,255,255,1),0_16px_40px_-18px_rgba(122,34,64,0.3)]",
             )}
           >
-            <BannerCarousel peek />
+            <div className="md:rounded-[22px] md:overflow-hidden">
+              <BannerCarousel peek />
+            </div>
           </div>
-          {children}
+          <div data-reveal>{children}</div>
         </div>
       </div>
     </section>

@@ -13,7 +13,7 @@ export function MenuPanel({
   cartCount: number;
 }) {
   return (
-    <div className="rounded-[24px] bg-white border border-[#F0E4E8] shadow-[0_16px_40px_-24px_rgba(90,24,52,0.5)]">
+    <div className="glass-lit spotlight rounded-[28px]">
       <div className="px-4 py-3.5">
         <PointsCard
           bare
@@ -23,7 +23,7 @@ export function MenuPanel({
           cartCount={cartCount}
         />
       </div>
-      <div className="border-t border-dashed border-[#F0DDE5] px-3 pt-4 pb-3.5">
+      <div className="border-t border-white/80 shadow-[0_-1px_0_rgba(122,34,64,0.06)] px-3 pt-4 pb-3.5">
         <ServiceGrid voucherCount={voucherCount} cartCount={cartCount} />
       </div>
     </div>

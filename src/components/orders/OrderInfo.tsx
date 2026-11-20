@@ -6,7 +6,7 @@ import { HEADING, MUTED, ROW, VALUE } from "./order-styles";
 export function OrderInfo({ order: o, invoiceNum }: { order: Order; invoiceNum: string }) {
   const { toast } = useToast();
   return (
-    <div className="space-y-3 pt-4 border-t border-[#F4E8EC]">
+    <div className="space-y-3 pt-4 border-t border-[#C94F78]/10">
       <h5 className={`${HEADING} mb-1`}>Info Pesanan</h5>
 
       <div className={`${ROW} items-center`}>
@@ -20,7 +20,7 @@ export function OrderInfo({ order: o, invoiceNum }: { order: Order; invoiceNum: 
               toast("Nomor pesanan disalin!", "success");
             }}
             className={cn(
-              "h-8 px-3 rounded-xl bg-[#FDF2F5] hover:bg-[#FBE7EE] border border-[#F0CBD8] text-[12px]",
+              "chip-glass h-8 px-3 rounded-full hover:bg-white/90 text-[12px]",
               "font-bold text-[#A83960] transition-colors",
             )}
           >

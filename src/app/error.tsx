@@ -17,13 +17,12 @@ export default function ErrorPage({ error, reset }: { error: Error; reset: () =>
       <div
         role="alert"
         className={cn(
-          "w-full max-w-lg rounded-[32px] border border-[#EEDFE3] bg-white p-8 text-center",
-          "shadow-[0_8px_30px_rgba(201,79,120,0.08)]",
+          "glass-lit w-full max-w-lg rounded-[32px] p-8 text-center",
         )}
       >
         <div
           className={cn(
-            "mx-auto mb-5 w-16 h-16 rounded-full bg-[#FDF2F5] border border-[#F6DDE6] flex",
+            "chip-glass mx-auto mb-5 w-16 h-16 rounded-full flex",
             "items-center justify-center",
           )}
         >
@@ -36,10 +35,10 @@ export default function ErrorPage({ error, reset }: { error: Error; reset: () =>
           Silakan coba kembali. Jika masalah berlanjut, hubungi pengelola LBQueen.
         </p>
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
-          <button type="button" className="btn-pink" onClick={reset}>
+          <button type="button" className="btn-primary" onClick={reset}>
             <RotateCcw className="w-4 h-4" aria-hidden="true" /> Coba lagi
           </button>
-          <Link href="/" className="btn-outline">
+          <Link href="/" className="btn-glass">
             Ke Beranda
           </Link>
         </div>

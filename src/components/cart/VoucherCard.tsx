@@ -1,5 +1,4 @@
 import { Check, Loader2, Ticket, X } from "lucide-react";
-import { PRIMARY_GRADIENT } from "@/lib/constants";
 import { formatRupiah } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { membershipLabel } from "@/lib/vouchers";
@@ -19,7 +18,7 @@ export function VoucherCard({ voucher }: { voucher: CartVoucher }) {
   return (
     <div className={`${CARD} p-4 flex flex-col gap-3`}>
       <div className="flex items-center gap-3 min-w-0">
-        <div className="w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center bg-[#FDF2F5]">
+        <div className="chip-glass w-10 h-10 shrink-0 rounded-full flex items-center justify-center">
           <Ticket className="w-5 h-5 text-[#C94F78]" aria-hidden="true" />
         </div>
         <div className="min-w-0 flex-1">
@@ -38,7 +37,7 @@ export function VoucherCard({ voucher }: { voucher: CartVoucher }) {
           <button
             type="button"
             onClick={voucher.remove}
-            className="shrink-0 h-9 px-4 rounded-2xl border text-[12px] font-bold bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100 transition-colors"
+            className="chip-glass shrink-0 h-9 px-4 rounded-full text-[12px] font-bold text-rose-700 hover:bg-white/90 transition-colors"
           >
             Hapus
           </button>
@@ -46,7 +45,7 @@ export function VoucherCard({ voucher }: { voucher: CartVoucher }) {
       </div>
 
       {!applied && (
-        <div className="flex flex-col gap-3 pt-3 border-t border-[#F4E8EC] animate-in fade-in duration-300">
+        <div className="flex flex-col gap-3 pt-3 border-t border-[#C94F78]/10 animate-in fade-in duration-300">
           <form
             className="flex gap-2"
             onSubmit={(e) => {
@@ -70,17 +69,14 @@ export function VoucherCard({ voucher }: { voucher: CartVoucher }) {
                 voucher.setError("");
               }}
               className={cn(
-                "flex-1 min-w-0 h-11 px-3.5 rounded-2xl border border-[#E8D5DB] bg-[#FDFAFB] text-[14px]",
-                "font-semibold text-[#2D2926] placeholder:font-normal placeholder:normal-case",
-                "placeholder:text-[#8C8280] outline-none focus:bg-white focus:border-[#C94F78] focus:ring-4",
-                "focus:ring-[#C94F78]/10 uppercase transition-all",
+                "input-glass flex-1 min-w-0 min-h-11 h-11 px-3.5 rounded-full text-[14px]",
+                "font-semibold placeholder:font-normal placeholder:normal-case uppercase",
               )}
             />
             <button
               type="submit"
               disabled={voucher.validating || !voucher.code.trim()}
-              className="shrink-0 h-11 px-4 rounded-2xl text-white text-[12px] font-bold flex items-center justify-center disabled:opacity-60 transition-opacity"
-              style={{ background: PRIMARY_GRADIENT }}
+              className="btn-primary shrink-0 min-h-11 h-11 px-5 text-[13px]"
             >
               {voucher.validating ? <Loader2 className="w-4 h-4 animate-spin" /> : "Pakai"}
             </button>
@@ -99,7 +95,7 @@ export function VoucherCard({ voucher }: { voucher: CartVoucher }) {
             <div>
               <p className="text-[12px] font-bold text-[#5F5552] mb-2">Voucher Saya</p>
               {voucher.loadingMine ? (
-                <div className="h-16 rounded-2xl bg-[#F3E7EA] animate-pulse" />
+                <div className="skeleton-glass h-16 rounded-[20px]" />
               ) : (
                 <ul className="flex flex-col gap-2 max-h-[260px] overflow-y-auto no-scrollbar">
                   {myVouchers.map((v) => {
@@ -112,11 +108,11 @@ export function VoucherCard({ voucher }: { voucher: CartVoucher }) {
                           disabled={!!problem}
                           onClick={() => voucher.choose(v)}
                           className={cn(
-                            "w-full flex items-center gap-3 rounded-2xl border px-3 py-2.5 text-left transition-all",
+                            "w-full flex items-center gap-3 rounded-[20px] px-3 py-2.5 text-left transition-all duration-300",
                             "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/15",
                             problem
-                              ? "border-[#EFE6E8] bg-[#FAF7F8] opacity-70 cursor-not-allowed"
-                              : "border-[#F0CBD8] bg-white hover:border-[#C94F78] hover:bg-[#FFF7FA] active:scale-[0.99]",
+                              ? "bg-white/40 border border-white/70 opacity-70 cursor-not-allowed"
+                              : "chip-glass hover:bg-white/90 active:scale-[0.99]",
                           )}
                         >
                           <span className="min-w-0 flex-1">
@@ -135,7 +131,7 @@ export function VoucherCard({ voucher }: { voucher: CartVoucher }) {
                             </span>
                           </span>
                           {!problem && (
-                            <span className="shrink-0 inline-flex items-center gap-1 h-8 px-3 rounded-full bg-[#FFE3EE] text-[12px] font-bold text-[#A83960]">
+                            <span className="chip-active shrink-0 inline-flex items-center gap-1 h-8 px-3 rounded-full text-[12px] font-bold">
                               <Check className="w-3.5 h-3.5" aria-hidden="true" />
                               Pakai
                             </span>

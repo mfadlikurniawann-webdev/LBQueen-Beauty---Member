@@ -18,18 +18,18 @@ export type MenuRow = {
 };
 
 const ROW = cn(
-  "w-full flex items-center gap-3.5 px-4 min-h-[60px] text-left transition-colors hover:bg-[#FBF5F7]",
-  "focus-visible:outline-none focus-visible:bg-[#FBF5F7]",
+  "w-full flex items-center gap-3.5 px-4 min-h-[60px] text-left transition-colors hover:bg-white/60",
+  "focus-visible:outline-none focus-visible:bg-white/60",
 );
 
 function RowBody({ row }: { row: MenuRow }) {
   return (
     <>
       <IconChip icon={row.icon} tone={row.tone ?? "rose"} size="sm" />
-      <span className="flex-1 min-w-0 flex items-center gap-2 py-4 border-b border-[#F1E8EB] group-last:border-b-0">
+      <span className="flex-1 min-w-0 flex items-center gap-2 py-4 border-b border-[#C94F78]/10 group-last:border-b-0">
         <span className="text-[15px] font-semibold text-[#2D2926] truncate">{row.label}</span>
         {row.badge && (
-          <span className="shrink-0 rounded-full bg-[#C94F78] px-2.5 py-0.5 text-[12px] font-bold text-white">
+          <span className="chip-active shrink-0 rounded-full px-2.5 py-0.5 text-[12px] font-bold">
             {row.badge}
           </span>
         )}
@@ -51,9 +51,9 @@ function RowBody({ row }: { row: MenuRow }) {
 
 export function MenuList({ title, rows }: { title: string; rows: MenuRow[] }) {
   return (
-    <section>
-      <h2 className="px-1 mb-2 text-[14px] font-semibold! text-[#766B68]">{title}</h2>
-      <ul className="rounded-[20px] bg-white border border-[#F0E4E8] overflow-hidden shadow-[0_8px_24px_-18px_rgba(122,34,64,0.35)]">
+    <section data-reveal>
+      <h2 className="eyebrow mb-2.5 ml-1">{title}</h2>
+      <ul className="glass rounded-[26px] overflow-hidden">
         {rows.map((row) => (
           <li key={row.label} className="group">
             {row.href && row.external ? (

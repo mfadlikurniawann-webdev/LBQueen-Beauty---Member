@@ -6,9 +6,7 @@ const chipClass = (active: boolean) =>
   cn(
     "whitespace-nowrap px-4 min-h-10 rounded-full text-[13px] font-semibold capitalize transition-all",
     "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20",
-    active
-      ? "bg-[#FFE3EE] text-[#A83960] border border-[#E9A9C0] font-bold"
-      : "bg-white text-[#3F3734] border border-[#E6D3DA] hover:border-[#C94F78]/40 hover:text-[#A83960]",
+    active ? "chip-active font-bold" : "chip-glass text-[#3F3734] hover:text-[#A83960] hover:bg-white/85",
   );
 
 export function CategoryFilters({
@@ -42,9 +40,7 @@ export function CategoryFilters({
           aria-label={`Cari di ${section.title}`}
           placeholder={`Cari di ${section.title}...`}
           className={cn(
-            "w-full bg-white border border-[#E6D3DA] rounded-full h-12 pl-12 pr-4 text-base font-medium",
-            "text-[#2D2926] placeholder:text-[#8C8280] shadow-sm focus:outline-none focus:border-[#C94F78]",
-            "focus:ring-4 focus:ring-rose-100 transition-all",
+            "input-glass rounded-full! h-12 pl-12 pr-4 font-medium",
           )}
           value={searchQuery}
           onChange={(e) => onSearch(e.target.value)}
@@ -78,11 +74,11 @@ export function CategoryFilters({
         </div>
       )}
 
-      <div className="sticky top-[76px] md:top-[144px] z-30 bg-[#FBF9F9]/90 backdrop-blur-md -mx-5 px-5 py-3 mb-5">
+      <div className="sticky top-[78px] md:top-[154px] z-30 -mx-5 px-5 py-2 mb-4">
         <div
           className={cn(
-            `grid ${section.tabs.length === 2 ? "grid-cols-2" : "grid-cols-3"} gap-1 rounded-2xl`,
-            "border border-[#EEDFE3] bg-white p-1 shadow-sm max-w-sm",
+            `glass grid ${section.tabs.length === 2 ? "grid-cols-2" : "grid-cols-3"} gap-1 rounded-full`,
+            "p-1 max-w-sm",
           )}
           role="group"
           aria-label="Filter katalog"
@@ -94,11 +90,9 @@ export function CategoryFilters({
               aria-pressed={activeTab === tab}
               onClick={() => onTab(tab)}
               className={cn(
-                "min-h-10 rounded-xl text-[13px] font-bold capitalize transition-all",
+                "min-h-10 rounded-full text-[13px] font-bold capitalize transition-all duration-300",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C94F78]/30",
-                activeTab === tab
-                  ? "bg-[#FDF2F5] text-[#A83960] shadow-[inset_0_0_0_1px_rgba(201,79,120,0.25)]"
-                  : "text-[#5F5552] hover:text-[#A83960]",
+                activeTab === tab ? "chip-active" : "text-[#5F5552] hover:text-[#A83960]",
               )}
             >
               {TAB_LABEL[tab]}

@@ -120,8 +120,7 @@ export default function ProfilePage() {
           type="button"
           onClick={logout}
           className={cn(
-            "w-full h-14 bg-white border border-[#F0CBD8] text-[#A83960] rounded-2xl font-bold text-[15px]",
-            "flex items-center justify-center gap-3 hover:bg-[#FDF2F5] transition-all active:scale-[0.98]",
+            "btn-glass w-full h-14 text-[15px] gap-3",
           )}
         >
           <LogOut className="w-5 h-5" /> Keluar dari Akun

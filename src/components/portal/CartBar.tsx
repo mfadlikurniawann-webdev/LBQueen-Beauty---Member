@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ChevronRight, ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { PRIMARY_GRADIENT } from "@/lib/constants";
 import { formatRupiah } from "@/lib/format";
 import { useCartBump } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -27,12 +26,11 @@ export function CartBar() {
         href="/cart"
         aria-label={`Lihat keranjang, ${totalItems} item, ${formatRupiah(total)}`}
         className={cn(
-          "pointer-events-auto w-full max-w-lg flex items-center gap-3 rounded-[20px] px-4 py-3 text-white",
-          "animate-in fade-in slide-in-from-bottom-2 duration-300 active:scale-[0.99]",
+          "panel-rose spotlight pointer-events-auto w-full max-w-lg flex items-center gap-3 rounded-[26px] pl-2 pr-4 py-2",
+          "animate-in fade-in slide-in-from-bottom-2 duration-300 active:scale-[0.99] transition-transform",
         )}
-        style={{ background: PRIMARY_GRADIENT, boxShadow: "0 10px 28px rgba(168,57,96,0.35)" }}
       >
-        <span className="w-10 h-10 shrink-0 rounded-2xl bg-white/20 flex items-center justify-center">
+        <span className="glass w-11 h-11 shrink-0 rounded-full flex items-center justify-center">
           <ShoppingCart className="w-5 h-5" aria-hidden="true" />
         </span>
         <span className="min-w-0 flex-1">
@@ -43,7 +41,7 @@ export function CartBar() {
             {formatRupiah(total)}
           </span>
         </span>
-        <span className="flex items-center gap-1 text-[14px] font-bold">
+        <span className="flex items-center gap-1 text-[14px] font-bold text-[#FFC4D8]">
           Lihat
           <ChevronRight className="w-4 h-4" aria-hidden="true" />
         </span>

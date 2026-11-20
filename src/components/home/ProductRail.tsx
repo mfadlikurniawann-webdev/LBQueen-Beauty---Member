@@ -18,12 +18,11 @@ function RailCard({ product, onOpen }: { product: CatalogProduct; onOpen: () => 
       type="button"
       onClick={onOpen}
       className={cn(
-        "group snap-start shrink-0 w-[152px] sm:w-[168px] text-left rounded-[18px] bg-white overflow-hidden",
-        "border border-[#F0E4E8] shadow-[0_8px_20px_-16px_rgba(90,24,52,0.5)] active:scale-[0.98] transition-transform",
+        "glass-soft spotlight lift group snap-start shrink-0 w-[152px] sm:w-[168px] text-left rounded-[22px] p-1.5",
         "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25",
       )}
     >
-      <span className="relative block aspect-square bg-[#FBEFF3]">
+      <span className="relative block aspect-square rounded-[17px] overflow-hidden bg-[#FBEFF3]">
         {product.image_url ? (
           <Image
             src={product.image_url}
@@ -36,18 +35,18 @@ function RailCard({ product, onOpen }: { product: CatalogProduct; onOpen: () => 
           <ProductPlaceholder type={product.type} size="sm" />
         )}
         {percent > 0 && (
-          <span className="absolute left-0 top-2.5 rounded-r-full bg-[#E0263F] pl-2 pr-2.5 py-0.5 text-[12px] font-extrabold text-white">
+          <span className="absolute left-2 top-2 rounded-full bg-[#D3264A]/90 backdrop-blur-sm px-2 py-0.5 text-[12px] font-extrabold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
             -{percent}%
           </span>
         )}
         <span
-          className="absolute right-2 bottom-2 w-8 h-8 rounded-full bg-white text-[#A83960] shadow-md flex items-center justify-center group-hover:bg-[#C94F78] group-hover:text-white transition-colors"
+          className="absolute right-2 bottom-2 w-8 h-8 rounded-full bg-white/75 backdrop-blur-md border border-white/90 text-[#A83960] shadow-[0_6px_14px_-6px_rgba(122,34,64,0.45)] flex items-center justify-center group-hover:bg-[#C94F78] group-hover:text-white transition-colors duration-300"
           aria-hidden="true"
         >
           <Plus className="w-4 h-4" strokeWidth={2.6} />
         </span>
       </span>
-      <span className="block p-3">
+      <span className="block px-2 pt-2.5 pb-1.5">
         <span className="block text-[13px] font-semibold text-[#2D2926] leading-snug line-clamp-2 min-h-[2.6em]">
           {product.name}
         </span>
@@ -75,7 +74,7 @@ function RailSkeleton() {
       {[1, 2, 3].map((i) => (
         <span
           key={i}
-          className="shrink-0 w-[152px] sm:w-[168px] h-[250px] rounded-[18px] bg-white/70 animate-pulse"
+          className="skeleton-glass shrink-0 w-[152px] sm:w-[168px] h-[250px] rounded-[22px]"
         />
       ))}
     </>
@@ -102,21 +101,12 @@ export function ProductRail({
   if (!loading && products.length === 0) return null;
   return (
     <section
-      className={cn(
-        band
-          ? "-mx-4 sm:mx-0 sm:rounded-[28px] px-4 sm:px-5 pt-4 pb-5 overflow-hidden relative"
-          : "",
-      )}
-      style={band ? { background: "linear-gradient(135deg,#C94F78 0%,#9B3055 100%)" } : undefined}
+      data-reveal
+      className={cn(band && "panel-rose -mx-4 sm:mx-0 rounded-none sm:rounded-[30px] px-4 sm:px-5 pt-4 pb-5")}
     >
-      {band && (
-        <span
-          className="absolute -right-12 -top-12 w-44 h-44 rounded-full bg-white/10"
-          aria-hidden="true"
-        />
-      )}
       <div className="relative flex items-end justify-between gap-3 mb-3">
         <div className="min-w-0">
+          {band && <p className="eyebrow mb-1.5">Penawaran terbatas</p>}
           <h2
             className={cn(
               "text-[18px] font-extrabold! tracking-tight leading-tight",
@@ -129,7 +119,7 @@ export function ProductRail({
             <p
               className={cn(
                 "text-[13px] mt-0.5 truncate",
-                band ? "text-white/85" : "text-[#766B68]",
+                band ? "text-white/80" : "text-[#766B68]",
               )}
             >
               {subtitle}
@@ -139,15 +129,15 @@ export function ProductRail({
         <Link
           href={href}
           className={cn(
-            "shrink-0 inline-flex items-center gap-0.5 text-[13px] font-bold",
-            band ? "text-white" : "text-[#A83960]",
+            "chip-glass shrink-0 inline-flex items-center gap-0.5 h-9 rounded-full pl-3.5 pr-2.5 text-[13px] font-bold transition-colors",
+            band ? "text-white hover:bg-white/20" : "text-[#A83960] hover:bg-white/85",
           )}
         >
           Lihat semua
           <ChevronRight className="w-4 h-4" aria-hidden="true" />
         </Link>
       </div>
-      <div className="relative flex gap-3 overflow-x-auto no-scrollbar snap-x -mx-4 px-4 sm:-mx-5 sm:px-5 pb-1">
+      <div className="relative flex gap-3 overflow-x-auto no-scrollbar snap-x -mx-4 px-4 sm:-mx-5 sm:px-5 pt-1 pb-3">
         {loading ? (
           <RailSkeleton />
         ) : (

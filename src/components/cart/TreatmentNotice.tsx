@@ -8,7 +8,7 @@ export function TreatmentNotice({
   onChange: (agreed: boolean) => void;
 }) {
   return (
-    <div className="rounded-[24px] p-4 border border-amber-200 bg-amber-50 space-y-3">
+    <div className="rounded-[26px] p-4 bg-[#FFF8E6]/85 border border-white/90 shadow-[inset_0_1px_0_rgba(255,255,255,1),0_0_0_1px_rgba(184,134,26,0.2)] space-y-3">
       <div className="flex items-start gap-3">
         <div className="w-9 h-9 shrink-0 rounded-full bg-amber-100 flex items-center justify-center">
           <AlertTriangle className="w-4 h-4 text-amber-700" aria-hidden="true" />

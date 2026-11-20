@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { isTreatmentItem } from "./cart-utils";
 import { CARD } from "./ui";
 
-const STEP = "w-8 h-8 rounded-xl flex items-center justify-center transition-colors";
+const STEP = "w-8 h-8 rounded-full flex items-center justify-center transition-colors";
 
 export function CartItemCard({
   item,
@@ -79,7 +79,7 @@ export function CartItemCard({
               <Rupiah value={lineTotal} />
             </p>
           </div>
-          <div className="flex items-center gap-1 rounded-2xl p-1 border border-[#EEDFE3] bg-[#FDFAFB]">
+          <div className="chip-glass flex items-center gap-1 rounded-full p-1">
             <button
               type="button"
               aria-label="Kurangi Jumlah"

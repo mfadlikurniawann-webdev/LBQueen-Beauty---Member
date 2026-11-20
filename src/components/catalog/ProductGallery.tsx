@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { ProductPlaceholder } from "./ProductPlaceholder";
 
 const ARROW = cn(
-  "absolute top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 shadow-md",
+  "glass absolute top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full",
   "hidden md:flex items-center justify-center text-[#2D2926] transition-opacity",
   "opacity-0 group-hover:opacity-100 focus-visible:opacity-100 disabled:!opacity-0",
   "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25",
@@ -87,7 +87,7 @@ export function ProductGallery({
   return (
     <div className="space-y-2.5">
       <div
-        className="group relative aspect-square w-full overflow-hidden bg-[#FBEFF3] md:rounded-[22px]"
+        className="group relative aspect-square w-full overflow-hidden bg-[#FBEFF3] md:rounded-[24px] md:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.8)]"
         data-fly-source
         data-active-src={images[index] || undefined}
         role="region"
@@ -147,7 +147,7 @@ export function ProductGallery({
               <ChevronRight className="w-5 h-5" />
             </button>
             <span
-              className="absolute right-3 bottom-3 rounded-full bg-[#1B1416]/55 px-2.5 py-1 text-[12px] font-semibold text-white tabular-nums"
+              className="absolute right-3 bottom-3 rounded-full bg-[#2A1520]/45 backdrop-blur-md border border-white/25 px-2.5 py-1 text-[12px] font-semibold text-white tabular-nums"
               aria-live="polite"
             >
               {index + 1}/{count}
@@ -173,10 +173,10 @@ export function ProductGallery({
               onClick={() => go(i)}
               onMouseEnter={() => go(i, false)}
               className={cn(
-                "relative w-14 h-14 md:w-16 md:h-16 shrink-0 overflow-hidden rounded-xl border-2 transition-colors",
+                "relative w-14 h-14 md:w-16 md:h-16 shrink-0 overflow-hidden rounded-[14px] border-2 transition-all duration-300",
                 "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25",
                 i === index
-                  ? "border-[#C94F78]"
+                  ? "border-[#C94F78] shadow-[0_6px_14px_-6px_rgba(168,57,96,0.6)]"
                   : "border-transparent opacity-80 hover:opacity-100",
               )}
             >

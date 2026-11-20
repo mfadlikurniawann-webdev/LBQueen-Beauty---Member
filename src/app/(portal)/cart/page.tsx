@@ -16,7 +16,7 @@ import { VoucherCard } from "@/components/cart/VoucherCard";
 import { PageHero } from "@/components/portal/PageHero";
 import { useToast } from "@/components/Toast";
 import { useCart } from "@/context/CartContext";
-import { PRIMARY_GRADIENT, WA_NUMBER } from "@/lib/constants";
+import { WA_NUMBER } from "@/lib/constants";
 import { useCustomer } from "@/context/CustomerContext";
 import { formatRupiah } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -146,13 +146,12 @@ export default function CartPage() {
 
             <div
               className={cn(
-                "fixed inset-x-0 bottom-0 z-40 bg-white border-t border-[#F0E4E8] px-4 pt-3",
-                "shadow-[0_-10px_30px_-18px_rgba(122,34,64,0.35)]",
-                "md:static md:z-auto md:bg-transparent md:border-0 md:p-0 md:shadow-none",
+                "fixed inset-x-0 bottom-0 z-40 px-3 pt-0 md:static md:z-auto md:p-0",
               )}
-              style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 14px)" }}
+              style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 12px)" }}
             >
-              <div className="mx-auto max-w-lg md:max-w-none">
+              {/* HP: bar checkout kaca melayang; layar lebar: menyatu di kolom ringkasan. */}
+              <div className="glass mx-auto max-w-lg rounded-[28px] px-4 pt-3 pb-3 md:max-w-none md:rounded-none md:p-0 md:bg-transparent md:border-0 md:shadow-none md:backdrop-blur-none">
                 <div className="flex items-baseline justify-between gap-3 mb-2.5 md:hidden">
                   <span className="text-[13px] font-semibold text-[#5F5552]">Total pembayaran</span>
                   <span className="text-[19px] font-bold text-[#2D2926] tabular-nums">
@@ -166,19 +165,11 @@ export default function CartPage() {
                   aria-describedby={confirmBlocked ? "confirm-hint" : undefined}
                   className={cn(
                     "w-full h-[52px] rounded-full font-bold text-[15px] flex items-center justify-center",
-                    "gap-2.5 px-6 transition-all",
+                    "gap-2.5 px-6 transition-all duration-300",
                     confirmBlocked
-                      ? "bg-[#F1EBED] text-[#8C8280]"
-                      : "text-white active:scale-[0.98] disabled:cursor-wait disabled:opacity-90",
+                      ? "chip-glass text-[#8C8280]"
+                      : "btn-primary disabled:cursor-wait disabled:opacity-90",
                   )}
-                  style={
-                    confirmBlocked
-                      ? undefined
-                      : {
-                          background: PRIMARY_GRADIENT,
-                          boxShadow: "0 10px 26px -10px rgba(168,57,96,0.7)",
-                        }
-                  }
                 >
                   {processing ? (
                     <Loader2 className="w-5 h-5 animate-spin" />

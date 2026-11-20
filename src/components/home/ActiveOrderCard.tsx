@@ -36,7 +36,8 @@ export function ActiveOrderCard({ customerId }: { customerId: number }) {
   return (
     <Link
       href="/orders"
-      className="block rounded-[22px] bg-white border border-[#F0E4E8] p-4 shadow-[0_10px_30px_-20px_rgba(90,24,52,0.45)]"
+      data-reveal
+      className="glass spotlight lift block rounded-[24px] p-4"
     >
       <div className="flex items-center gap-3">
         <IconChip icon={Icon} tone="rose" size="md" />
@@ -52,7 +53,9 @@ export function ActiveOrderCard({ customerId }: { customerId: number }) {
             <span
               className={cn(
                 "block h-1.5 rounded-full",
-                i <= step ? "bg-[#C94F78]" : "bg-[#F3E4EA]",
+                i <= step
+                  ? "bg-gradient-to-r from-[#D4608A] to-[#B8416B] shadow-[0_2px_8px_-2px_rgba(168,57,96,0.6)]"
+                  : "bg-white/70 shadow-[inset_0_1px_2px_rgba(122,34,64,0.12)]",
               )}
             />
             <span

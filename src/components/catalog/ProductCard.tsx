@@ -8,14 +8,14 @@ import { ProductPlaceholder } from "./ProductPlaceholder";
 
 const LAYOUTS = {
   home: {
-    card: "overflow-hidden",
-    media: "relative w-full aspect-[4/3] shrink-0",
+    card: "p-1.5",
+    media: "relative w-full aspect-[4/3] shrink-0 rounded-[18px] overflow-hidden",
     badge: "top-2.5 left-2.5 z-10 px-2.5",
     plus: "top-2.5 right-2.5 backdrop-blur-md transition-colors",
-    body: "p-3.5 flex flex-1 flex-col",
+    body: "px-2 pt-3 pb-2 flex flex-1 flex-col",
   },
   category: {
-    card: "p-2.5",
+    card: "p-1.5",
     media: "aspect-square rounded-[18px] overflow-hidden relative mb-3",
     badge: "top-2 left-2 px-2",
     plus: "bottom-2 right-2 transition-all",
@@ -44,11 +44,10 @@ export function ProductCard({
   return (
     <button
       type="button"
+      data-reveal
       onClick={onOpen}
       className={cn(
-        "flex flex-col text-left bg-white rounded-[20px] border border-[#F0E4E8]",
-        "shadow-[0_8px_24px_-18px_rgba(122,34,64,0.4)] cursor-pointer group active:scale-[0.98]",
-        "transition-all hover:shadow-lg hover:shadow-rose-100",
+        "glass-soft spotlight lift flex flex-col text-left rounded-[24px] cursor-pointer group",
         "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/25",
         styles.card,
       )}
@@ -67,8 +66,8 @@ export function ProductCard({
         {discount > 0 && (
           <span
             className={cn(
-              "absolute inline-flex items-center gap-1 rounded-full bg-[#C94F78]",
-              "py-0.5 text-[11px] font-bold text-white shadow-sm",
+              "absolute inline-flex items-center gap-1 rounded-full bg-[#B8416B]/90 backdrop-blur-sm",
+              "py-0.5 text-[11px] font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]",
               styles.badge,
             )}
           >
@@ -78,8 +77,9 @@ export function ProductCard({
         )}
         <span
           className={cn(
-            "absolute w-8 h-8 rounded-xl bg-white/95 flex items-center justify-center shadow-sm",
-            "text-[#A83960] group-hover:bg-[#C94F78] group-hover:text-white",
+            "absolute w-8 h-8 rounded-full bg-white/75 backdrop-blur-md border border-white/90",
+            "flex items-center justify-center shadow-[0_6px_14px_-6px_rgba(122,34,64,0.45)]",
+            "text-[#A83960] group-hover:bg-[#C94F78] group-hover:text-white duration-300",
             styles.plus,
           )}
           aria-hidden="true"
@@ -88,7 +88,7 @@ export function ProductCard({
         </span>
       </div>
       <div className={styles.body}>
-        <p className="text-[11px] font-semibold text-[#A83960] uppercase tracking-[0.06em] truncate">
+        <p className="text-[12px] font-semibold text-[#A83960] truncate">
           {product.sub_category || fallbackLabel}
         </p>
         <Name className="mt-1 text-[14px] font-semibold text-[#2D2926] line-clamp-2 leading-snug min-h-[2.75em]">

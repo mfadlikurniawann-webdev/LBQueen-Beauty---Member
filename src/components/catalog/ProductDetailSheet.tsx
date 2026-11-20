@@ -24,7 +24,7 @@ function TreatmentReminder({
   onChange: (agreed: boolean) => void;
 }) {
   return (
-    <div className="rounded-[20px] bg-[#FFF8E6] border border-[#F1DFA6] p-4 space-y-3">
+    <div className="rounded-[22px] bg-[#FFF8E6]/85 border border-white/90 shadow-[inset_0_1px_0_rgba(255,255,255,1),0_0_0_1px_rgba(184,134,26,0.18)] p-4 space-y-3">
       <div className="flex items-start gap-3">
         <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5 text-[#8A6A0F]" aria-hidden="true" />
         <p className="text-[13px] text-[#4A4340] leading-relaxed">
@@ -35,7 +35,7 @@ function TreatmentReminder({
           kesehatan Anda kepada therapist.
         </p>
       </div>
-      <label className="flex items-center gap-3 rounded-2xl bg-white border border-[#F1DFA6] px-3 min-h-12 cursor-pointer">
+      <label className="chip-glass flex items-center gap-3 rounded-2xl px-3 min-h-12 cursor-pointer">
         <input
           type="checkbox"
           checked={agreed}
@@ -63,7 +63,7 @@ function PriceBlock({
   const showRange = !variant && range.finalMin !== range.finalMax;
   const percent = base > 0 && discount > 0 ? Math.round((discount / base) * 100) : 0;
   return (
-    <div className="rounded-2xl bg-[#FFF5F8] px-4 py-3 flex flex-wrap items-center gap-x-3 gap-y-1 tabular-nums">
+    <div className="glass-soft rounded-[22px] px-4 py-3 flex flex-wrap items-center gap-x-3 gap-y-1 tabular-nums">
       {discount > 0 && !showRange && (
         <span className="text-[14px] text-[#8C8280] line-through">{formatRupiah(base)}</span>
       )}
@@ -73,7 +73,7 @@ function PriceBlock({
           : formatRupiah(finalPrice)}
       </span>
       {percent > 0 && !showRange && (
-        <span className="rounded-md bg-[#E0263F] px-1.5 py-0.5 text-[12px] font-bold text-white">
+        <span className="rounded-full bg-[#D3264A] px-2 py-0.5 text-[12px] font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
           -{percent}%
         </span>
       )}
@@ -85,7 +85,7 @@ function Description({ text }: { text: string }) {
   const [expanded, setExpanded] = useState(false);
   const long = text.length > DESCRIPTION_PREVIEW;
   return (
-    <section className="pt-4 border-t border-dashed border-[#EEDFE3]">
+    <section className="pt-4 border-t border-[#C94F78]/12">
       <h4 className="text-[15px] font-bold text-[#2D2926] mb-2">Deskripsi</h4>
       <p className="text-[14px] text-[#4A4340] leading-relaxed whitespace-pre-line break-words">
         {long && !expanded ? `${text.slice(0, DESCRIPTION_PREVIEW).trimEnd()}…` : text}
@@ -134,7 +134,7 @@ function Actions({
             aria-label="Kurangi jumlah"
             disabled={qty <= 1}
             onClick={() => setQty(Math.max(1, qty - 1))}
-            className={cn(STEP, "border-2 border-[#E6D3DA] text-[#A83960]")}
+            className={cn(STEP, "chip-glass text-[#A83960]")}
           >
             <Minus className="w-4 h-4" />
           </button>
@@ -148,7 +148,7 @@ function Actions({
             aria-label="Tambah jumlah"
             disabled={qty >= maxQty}
             onClick={() => setQty(Math.min(maxQty, qty + 1))}
-            className={cn(STEP, "border-2 border-[#C94F78] text-[#A83960]")}
+            className={cn(STEP, "chip-active")}
           >
             <Plus className="w-4 h-4" />
           </button>
@@ -160,8 +160,7 @@ function Actions({
           onClick={selection.add}
           aria-label="Masukkan keranjang"
           className={cn(
-            "h-[52px] px-4 rounded-full border-2 border-[#C94F78] text-[#A83960] bg-white",
-            "flex items-center justify-center gap-2 text-[14px] font-bold hover:bg-[#FFF3F7] active:scale-[0.98]",
+            "btn-glass h-[52px] px-4 text-[14px]",
           )}
         >
           <ShoppingCart className="w-5 h-5" aria-hidden="true" />
@@ -173,10 +172,10 @@ function Actions({
           disabled={blocked}
           className={cn(
             "h-[52px] px-5 rounded-full text-[15px] font-bold flex items-center justify-between gap-2 whitespace-nowrap",
-            "active:scale-[0.98] transition-all",
+            "active:scale-[0.98] transition-all duration-300",
             blocked
-              ? "bg-[#F1EBED] text-[#8C8280] cursor-not-allowed"
-              : "text-white bg-gradient-to-r from-[#C94F78] to-[#9B3055] shadow-[0_10px_24px_-10px_rgba(168,57,96,0.7)]",
+              ? "chip-glass text-[#8C8280] cursor-not-allowed"
+              : "btn-primary justify-between! px-5!",
           )}
         >
           <span>
@@ -240,7 +239,7 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
     <div className="fixed inset-0 z-[110] flex flex-col justify-end md:justify-center md:p-6">
       <div
         className={cn(
-          "absolute inset-0 bg-[#1B1416]/60 backdrop-blur-[2px] duration-200",
+          "absolute inset-0 bg-[#2A1520]/45 backdrop-blur-[6px] duration-200",
           closing ? "animate-out fade-out fill-mode-forwards" : "animate-in fade-in",
         )}
         onClick={() => close()}
@@ -251,8 +250,8 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
         aria-modal="true"
         aria-labelledby="product-sheet-title"
         className={cn(
-          "relative w-full md:max-w-[960px] md:mx-auto bg-white rounded-t-[28px] md:rounded-[28px]",
-          "max-h-[94dvh] md:max-h-[88dvh] flex flex-col overflow-hidden shadow-2xl",
+          "glass-strong relative w-full md:max-w-[960px] md:mx-auto rounded-t-[32px] md:rounded-[32px]",
+          "max-h-[94dvh] md:max-h-[88dvh] flex flex-col overflow-hidden",
           closing
             ? "animate-out fade-out slide-out-to-bottom-10 md:slide-out-to-bottom-0 md:zoom-out-95 duration-200 fill-mode-forwards"
             : "animate-in fade-in slide-in-from-bottom-10 md:slide-in-from-bottom-0 md:zoom-in-95 duration-300 ease-out",
@@ -262,7 +261,7 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
           type="button"
           aria-label="Tutup"
           onClick={() => close()}
-          className="absolute top-3 right-3 z-20 w-10 h-10 rounded-full bg-white/95 flex items-center justify-center text-[#2D2926] shadow-md hover:bg-white"
+          className="glass absolute top-3 right-3 z-20 w-10 h-10 rounded-full flex items-center justify-center text-[#2D2926] hover:bg-white/90 active:scale-95 transition-transform"
         >
           <X className="w-5 h-5" />
         </button>
@@ -276,7 +275,7 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
               focusUrl={variant?.image_url}
               badge={
                 savings > 0 ? (
-                  <span className="absolute left-3 bottom-3 rounded-full bg-[#E0263F] px-3 py-1 text-[12px] font-bold text-white">
+                  <span className="absolute left-3 bottom-3 rounded-full bg-[#D3264A]/90 backdrop-blur-sm px-3 py-1 text-[12px] font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
                     Hemat {formatRupiah(savings)}
                   </span>
                 ) : null
@@ -330,7 +329,7 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
 
             <Actions
               {...actionProps}
-              className="hidden md:block pt-4 border-t border-dashed border-[#EEDFE3]"
+              className="hidden md:block pt-4 border-t border-[#C94F78]/12"
             />
 
             {product.description?.trim() && <Description text={product.description.trim()} />}
@@ -338,7 +337,7 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
         </div>
 
         <div
-          className="md:hidden border-t border-[#F0E4E8] bg-white px-4 pt-3"
+          className="md:hidden border-t border-white/80 bg-white/55 backdrop-blur-xl shadow-[0_-10px_24px_-18px_rgba(122,34,64,0.35)] px-4 pt-3"
           style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 16px)" }}
         >
           <Actions {...actionProps} />

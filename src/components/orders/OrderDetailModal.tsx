@@ -1,6 +1,5 @@
 import { ChevronLeft, ChevronRight, MessageCircle, ShoppingBag } from "lucide-react";
 import { ItemThumb } from "@/components/portal/ItemThumb";
-import { PRIMARY_GRADIENT } from "@/lib/constants";
 import { formatRupiah } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import {
@@ -30,7 +29,7 @@ export function OrderDetailModal({
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[110] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm",
+        "fixed inset-0 z-[110] flex items-end sm:items-center justify-center bg-[#2A1520]/45 backdrop-blur-[6px]",
         "p-0 sm:p-4 animate-in fade-in duration-300",
       )}
     >
@@ -39,14 +38,14 @@ export function OrderDetailModal({
         aria-modal="true"
         aria-labelledby="order-detail-title"
         className={cn(
-          "bg-white w-full sm:max-w-[480px] max-h-[92vh] sm:max-h-[85vh] rounded-t-[32px] sm:rounded-[32px]",
-          "flex flex-col shadow-2xl overflow-hidden animate-in slide-in-from-bottom duration-300",
+          "glass-strong w-full sm:max-w-[480px] max-h-[92vh] sm:max-h-[85vh] rounded-t-[32px] sm:rounded-[32px]",
+          "flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-300",
         )}
       >
         <div
           className={cn(
-            "px-5 py-4 border-b border-[#F4E8EC] flex items-center justify-between gap-3",
-            "shrink-0 bg-[#FDFAFB]",
+            "px-5 py-4 border-b border-[#C94F78]/10 flex items-center justify-between gap-3",
+            "shrink-0 bg-white/40",
           )}
         >
           <div className="flex items-center gap-3 min-w-0">
@@ -55,8 +54,8 @@ export function OrderDetailModal({
               aria-label="Tutup rincian"
               onClick={onClose}
               className={cn(
-                "w-10 h-10 shrink-0 rounded-2xl bg-white shadow-sm border border-[#EEDFE3] flex items-center",
-                "justify-center text-[#766B68] hover:text-[#A83960] transition-colors",
+                "chip-glass w-10 h-10 shrink-0 rounded-full flex items-center",
+                "justify-center text-[#5F5552] hover:text-[#A83960] transition-colors",
               )}
             >
               <ChevronLeft className="w-5 h-5" />
@@ -69,10 +68,10 @@ export function OrderDetailModal({
         </div>
 
         <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-5">
-          <div className="flex items-center gap-2.5 pb-4 border-b border-[#F4E8EC]">
+          <div className="flex items-center gap-2.5 pb-4 border-b border-[#C94F78]/10">
             <div
               className={cn(
-                "w-8 h-8 rounded-xl bg-[#FDF2F5] border border-[#F6DDE6] flex items-center",
+                "chip-glass w-8 h-8 rounded-full flex items-center",
                 "justify-center text-[#C94F78]",
               )}
             >
@@ -114,7 +113,7 @@ export function OrderDetailModal({
             </div>
           </div>
 
-          <div className="bg-[#FAF7F5] rounded-2xl p-4 border border-[#EEDFE3] space-y-3">
+          <div className="glass-soft rounded-[22px] p-4 space-y-3">
             <div className={ROW}>
               <span className={MUTED}>Harga Satuan</span>
               <span className="text-[#2D2926] font-semibold tabular-nums">{unitPrice}</span>
@@ -123,7 +122,7 @@ export function OrderDetailModal({
               <span className={MUTED}>Jumlah Pesanan</span>
               <span className="text-[#2D2926] font-semibold tabular-nums">{qty} produk</span>
             </div>
-            <div className="h-px bg-[#EEDFE3]" />
+            <div className="h-px bg-[#C94F78]/12" />
             <div className="flex justify-between items-center gap-3">
               <span className="text-[14px] text-[#2D2926] font-bold">Total Pesanan</span>
               <span className="text-[18px] font-bold text-[#A83960] tabular-nums">
@@ -140,12 +139,12 @@ export function OrderDetailModal({
                 openWhatsApp(`Halo, saya butuh bantuan terkait pesanan #${invoiceNum}`)
               }
               className={cn(
-                "w-full h-14 rounded-2xl border border-[#EEDFE3] bg-white hover:bg-[#FDF2F5]",
-                "hover:border-[#F0CBD8] transition-colors flex items-center justify-between px-4 group",
+                "chip-glass w-full h-14 rounded-[20px] hover:bg-white/90",
+                "transition-colors flex items-center justify-between px-4 group",
               )}
             >
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#FDF2F5] flex items-center justify-center text-[#C94F78]">
+                <div className="chip-glass w-9 h-9 rounded-full flex items-center justify-center text-[#C94F78]">
                   <MessageCircle className="w-4 h-4" aria-hidden="true" />
                 </div>
                 <span className="text-[14px] font-bold text-[#2D2926] group-hover:text-[#A83960] transition-colors">
@@ -163,27 +162,20 @@ export function OrderDetailModal({
         </div>
 
         <div
-          className="px-5 pt-4 border-t border-[#F4E8EC] bg-white grid grid-cols-2 gap-3 shrink-0"
+          className="px-5 pt-4 border-t border-[#C94F78]/10 bg-white/40 grid grid-cols-2 gap-3 shrink-0"
           style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 20px)" }}
         >
           <button
             type="button"
             onClick={onClose}
-            className={cn(
-              "h-12 rounded-2xl text-[14px] font-bold text-[#766B68] bg-white hover:bg-[#FAF7F5]",
-              "transition-colors border border-[#E8D5DB]",
-            )}
+            className="btn-glass h-12 text-[14px] text-[#5F5552]"
           >
             Tutup
           </button>
           <button
             type="button"
             onClick={() => openWhatsApp(orderQuestion(o, invoiceNum))}
-            className={cn(
-              "h-12 rounded-2xl text-[14px] font-bold text-white shadow-lg shadow-rose-100",
-              "hover:brightness-105 transition-all flex items-center justify-center gap-2",
-            )}
-            style={{ background: PRIMARY_GRADIENT }}
+            className="btn-primary h-12 text-[14px]"
           >
             <MessageCircle className="w-4 h-4" /> Chat Admin
           </button>

@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { parseProductName } from "./order-utils";
 import type { OrderReview } from "./useOrderReview";
 
-const FOOTER_BUTTON = "flex-1 h-12 rounded-2xl text-[14px] font-bold transition-colors";
+const FOOTER_BUTTON = "flex-1 h-12 rounded-full text-[14px] font-bold transition-colors";
 
 export function ReviewModal({ review }: { review: OrderReview }) {
   if (!review.open || !review.order) return null;
@@ -11,7 +11,7 @@ export function ReviewModal({ review }: { review: OrderReview }) {
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[120] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm",
+        "fixed inset-0 z-[120] flex items-end sm:items-center justify-center bg-[#2A1520]/45 backdrop-blur-[6px]",
         "p-0 sm:p-4 animate-in fade-in duration-300",
       )}
     >
@@ -20,15 +20,15 @@ export function ReviewModal({ review }: { review: OrderReview }) {
         aria-modal="true"
         aria-labelledby="review-title"
         className={cn(
-          "bg-white w-full sm:max-w-[400px] rounded-t-[32px] sm:rounded-[32px] p-6 shadow-2xl flex flex-col",
+          "glass-strong w-full sm:max-w-[400px] rounded-t-[32px] sm:rounded-[32px] p-6 flex flex-col",
           "items-center text-center animate-in slide-in-from-bottom duration-300",
         )}
         style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 24px)" }}
       >
         <div
           className={cn(
-            "w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center",
-            "text-amber-500 mb-4 border border-amber-200",
+            "glass-lit w-16 h-16 rounded-full flex items-center justify-center",
+            "text-amber-500 mb-4",
           )}
         >
           <Star className="w-8 h-8" fill="currentColor" aria-hidden="true" />
@@ -69,9 +69,7 @@ export function ReviewModal({ review }: { review: OrderReview }) {
           onChange={(e) => review.setText(e.target.value)}
           placeholder="Ceritakan pengalaman Anda di sini (opsional)..."
           className={cn(
-            "w-full h-24 p-3.5 mb-5 bg-[#FDFAFB] border border-[#E8D5DB] rounded-2xl text-[14px] text-[#2D2926]",
-            "placeholder:text-[#8C8280] outline-none focus:bg-white focus:border-[#C94F78] focus:ring-4",
-            "focus:ring-[#C94F78]/10 resize-none transition-all",
+            "input-glass h-24 p-3.5 mb-5 rounded-[20px] text-[14px] resize-none",
           )}
         />
 
@@ -79,7 +77,7 @@ export function ReviewModal({ review }: { review: OrderReview }) {
           <button
             type="button"
             onClick={review.close}
-            className={`${FOOTER_BUTTON} text-[#766B68] bg-white hover:bg-[#FAF7F5] border border-[#E8D5DB]`}
+            className={`${FOOTER_BUTTON} btn-glass text-[#5F5552]`}
           >
             Nanti Saja
           </button>
@@ -88,9 +86,10 @@ export function ReviewModal({ review }: { review: OrderReview }) {
             onClick={review.submit}
             disabled={review.submitting}
             className={cn(
-              "flex-1 h-12 rounded-2xl text-[14px] font-bold text-white shadow-lg shadow-amber-100",
-              "hover:brightness-105 transition-all flex items-center justify-center gap-2 bg-gradient-to-r",
-              "from-amber-500 to-amber-600 disabled:opacity-70 disabled:cursor-wait",
+              "flex-1 h-12 rounded-full text-[14px] font-bold text-white transition-all flex items-center",
+              "justify-center gap-2 bg-gradient-to-b from-amber-500 to-amber-600 hover:brightness-105",
+              "shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_10px_22px_-10px_rgba(184,134,26,0.7)]",
+              "active:scale-[0.97] disabled:opacity-70 disabled:cursor-wait",
             )}
           >
             {review.submitting && <Loader2 className="w-4 h-4 animate-spin" />}

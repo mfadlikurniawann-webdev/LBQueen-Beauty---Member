@@ -1,5 +1,4 @@
 import { ChevronLeft, Printer } from "lucide-react";
-import { PRIMARY_GRADIENT } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 export type PaperSize = "58mm" | "80mm";
@@ -14,17 +13,17 @@ export function PrintSettings({
   return (
     <div
       className={cn(
-        "no-print print:hidden bg-white p-5 rounded-[32px] shadow-[0_8px_30px_rgba(201,79,120,0.08)] mb-8",
-        "w-full max-w-md flex flex-col gap-4 border border-[#EEDFE3] font-sans",
+        "glass-lit no-print print:hidden p-5 rounded-[32px] mb-8",
+        "w-full max-w-md flex flex-col gap-4 font-sans",
       )}
     >
-      <div className="flex items-center justify-between gap-3 border-b border-[#F4E8EC] pb-4">
+      <div className="flex items-center justify-between gap-3 border-b border-[#C94F78]/10 pb-4">
         <button
           type="button"
           onClick={() => window.close()}
           className={cn(
-            "h-10 px-3 -ml-1 rounded-2xl flex items-center gap-1.5 text-[#766B68] hover:text-[#A83960]",
-            "hover:bg-[#FDF2F5] transition-colors text-[14px] font-bold",
+            "chip-glass h-10 pl-2.5 pr-3.5 rounded-full flex items-center gap-1.5 text-[#5F5552] hover:text-[#A83960]",
+            "hover:bg-white/90 transition-colors text-[14px] font-bold",
           )}
         >
           <ChevronLeft className="w-4 h-4" /> Kembali
@@ -33,7 +32,7 @@ export function PrintSettings({
       </div>
 
       <div>
-        <p className="text-[12px] font-bold text-[#766B68] uppercase tracking-[0.08em] mb-2">
+        <p className="text-[13px] font-bold text-[#5F5552] mb-2">
           Ukuran Kertas
         </p>
         <div className="grid grid-cols-2 gap-3">
@@ -46,10 +45,8 @@ export function PrintSettings({
                 aria-pressed={active}
                 onClick={() => onSize(option)}
                 className={cn(
-                  "h-12 rounded-2xl text-[14px] font-bold border-2 transition-all",
-                  active
-                    ? "border-[#C94F78] bg-[#FDF2F5] text-[#A83960]"
-                    : "border-[#EEDFE3] bg-white text-[#766B68] hover:border-[#E3C3CE]",
+                  "h-12 rounded-full text-[14px] font-bold transition-all duration-300",
+                  active ? "chip-active" : "chip-glass text-[#5F5552] hover:bg-white/90",
                 )}
               >
                 {option.replace("mm", " mm")}
@@ -62,11 +59,7 @@ export function PrintSettings({
       <button
         type="button"
         onClick={() => window.print()}
-        className={cn(
-          "w-full h-13 text-white rounded-2xl text-[15px] font-bold flex items-center justify-center gap-2",
-          "shadow-lg shadow-rose-200 hover:brightness-105 transition-all active:scale-95",
-        )}
-        style={{ background: PRIMARY_GRADIENT }}
+        className="btn-primary w-full h-13 text-[15px]"
       >
         <Printer className="w-5 h-5" /> Cetak Biasa (Browser)
       </button>

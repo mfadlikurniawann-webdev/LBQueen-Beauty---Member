@@ -47,17 +47,17 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           <div
             key={t.id}
             className={cn(
-              "flex items-center gap-3 px-4 py-3 bg-white rounded-2xl shadow-2xl border",
-              "border-slate-50 animate-in slide-in-from-right duration-300 min-w-[280px]",
+              "glass-strong flex items-center gap-3 px-3.5 py-3 rounded-[22px]",
+              "animate-in slide-in-from-right fade-in duration-300 min-w-[280px]",
             )}
           >
             <div
-              className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+              className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
                 t.type === "success"
-                  ? "bg-green-50 text-green-500"
+                  ? "bg-emerald-50 text-emerald-600"
                   : t.type === "error"
-                    ? "bg-red-50 text-red-500"
-                    : "bg-blue-50 text-blue-500"
+                    ? "bg-rose-50 text-rose-600"
+                    : "bg-[#FFEAF1] text-[#A83960]"
               }`}
             >
               {t.type === "success" ? (
@@ -68,11 +68,11 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 <Info className="w-4 h-4" />
               )}
             </div>
-            <p className="text-[12px] font-medium text-[#2D2926] flex-1">{t.message}</p>
+            <p className="text-[13px] font-medium text-[#2D2926] flex-1">{t.message}</p>
             <button
               aria-label="Tutup notifikasi"
               onClick={() => removeToast(t.id)}
-              className="text-slate-500 hover:text-slate-700"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-[#766B68] hover:text-[#2D2926] hover:bg-white/70 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>

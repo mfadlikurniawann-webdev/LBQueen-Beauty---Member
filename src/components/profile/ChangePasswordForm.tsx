@@ -2,17 +2,14 @@ import { useState } from "react";
 import { CheckCircle2, Loader2, Lock, ShieldCheck } from "lucide-react";
 import { updateCustomerPassword } from "@/app/actions/auth";
 import { PasswordToggle } from "@/components/PasswordToggle";
-import { PRIMARY_GRADIENT } from "@/lib/constants";
 import { PASSWORD_MIN } from "@/lib/validation";
 import { cn } from "@/lib/utils";
 
 const INPUT_CLASS = cn(
-  "w-full min-h-12 px-4 py-3 bg-[#FDFAFB] border border-[#E8D5DB] rounded-2xl text-base sm:text-[14px]",
-  "text-[#2D2926] outline-none focus:border-[#C94F78] focus:bg-white focus:ring-4 focus:ring-[#C94F78]/10",
-  "transition-all",
+  "input-glass min-h-12 px-4 py-3 text-base sm:text-[14px]",
 );
 const LABEL_CLASS =
-  "block text-[12px] font-bold text-[#766B68] uppercase tracking-[0.08em] mb-2 ml-1";
+  "block text-[13px] font-bold text-[#5F5552] mb-2 ml-1";
 const NOTICE = "mb-5 px-4 py-3 text-[13px] font-semibold rounded-2xl border";
 
 export function ChangePasswordForm({
@@ -65,14 +62,14 @@ export function ChangePasswordForm({
       className={
         embedded
           ? "px-4 pb-5 pt-1"
-          : "bg-white rounded-[32px] p-5 sm:p-8 shadow-xl shadow-rose-100/30 border border-[#EEDFE3]"
+          : "glass rounded-[32px] p-5 sm:p-8"
       }
     >
       <div className={embedded ? "hidden" : "flex items-center gap-4 mb-6"}>
         <div
           className={cn(
-            "w-12 h-12 shrink-0 rounded-2xl bg-[#FDF2F5] flex items-center justify-center",
-            "text-[#C94F78] border border-[#F6DDE6]",
+            "chip-glass w-12 h-12 shrink-0 rounded-full flex items-center justify-center",
+            "text-[#C94F78]",
           )}
         >
           <Lock className="w-6 h-6" aria-hidden="true" />
@@ -166,11 +163,8 @@ export function ChangePasswordForm({
           type="submit"
           disabled={loading}
           className={cn(
-            "w-full h-14 text-white rounded-2xl font-bold text-[15px] flex items-center justify-center gap-3",
-            "hover:brightness-105 transition-all disabled:opacity-70 disabled:cursor-wait shadow-xl",
-            "shadow-rose-100 active:scale-[0.98]",
+            "btn-primary w-full h-14 text-[15px] gap-3 disabled:cursor-wait",
           )}
-          style={{ background: PRIMARY_GRADIENT }}
         >
           {loading ? (
             <Loader2 className="w-5 h-5 animate-spin" />

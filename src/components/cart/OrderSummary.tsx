@@ -29,7 +29,7 @@ export function OrderSummary({
           </span>
         </div>
       </div>
-      <div className="h-px my-4 bg-[#F4E8EC]" />
+      <div className="h-px my-4 bg-[#C94F78]/12" />
       <div className="flex justify-between items-center gap-3">
         <span className="text-[14px] font-bold text-[#2D2926]">Total</span>
         <span className="text-[22px] font-bold tracking-tight tabular-nums text-[#A83960]">

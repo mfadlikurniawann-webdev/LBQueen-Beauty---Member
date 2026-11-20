@@ -4,7 +4,7 @@ import type { CatalogProduct } from "@/lib/catalog";
 import { cn } from "@/lib/utils";
 
 const GRID = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4";
-const BAR = "rounded-full bg-[#F3E7EA] animate-pulse";
+const BAR = "rounded-full skeleton-glass";
 
 export function CategoryGrid({
   products,
@@ -20,8 +20,8 @@ export function CategoryGrid({
       <div className={GRID} aria-busy="true">
         <span className="sr-only">Memuat...</span>
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="rounded-[24px] border border-[#EEDFE3] bg-white p-2.5">
-            <div className="aspect-square rounded-[18px] bg-[#F3E7EA] animate-pulse" />
+          <div key={i} className="glass-soft rounded-[24px] p-1.5">
+            <div className="skeleton-glass aspect-square rounded-[18px]" />
             <div className={`mt-3 h-3 w-1/2 ${BAR}`} />
             <div className={`mt-2 h-4 w-4/5 ${BAR}`} />
             <div className={`mt-3 mb-1 h-4 w-2/3 ${BAR}`} />
@@ -34,11 +34,10 @@ export function CategoryGrid({
     return (
       <div
         className={cn(
-          "py-14 px-6 text-center flex flex-col items-center bg-white border border-[#EEDFE3]",
-          "rounded-[32px]",
+          "glass py-14 px-6 text-center flex flex-col items-center rounded-[32px]",
         )}
       >
-        <div className="w-16 h-16 bg-[#FDF2F5] rounded-full flex items-center justify-center mb-4">
+        <div className="chip-glass w-16 h-16 rounded-full flex items-center justify-center mb-4">
           <SearchIcon className="w-7 h-7 text-[#A83960]" aria-hidden="true" />
         </div>
         <p className="text-[15px] font-bold text-[#2D2926]">Produk tidak ditemukan</p>

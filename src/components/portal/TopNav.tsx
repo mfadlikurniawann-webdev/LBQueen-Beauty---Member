@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ShoppingCart } from "lucide-react";
 import { BrandMark } from "@/components/BrandMark";
 import type { Customer } from "@/lib/customer";
+import { useScrolled } from "@/hooks/useScrolled";
 import { useCartBump } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS, isNavActive } from "./BottomNav";
@@ -16,9 +17,18 @@ export function TopNav({
   totalItems: number;
 }) {
   const cartRef = useCartBump<HTMLAnchorElement>();
+  const scrolled = useScrolled();
   return (
-    <header className="hidden md:block sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-[#F0E4E8]">
-      <div className="h-[68px] px-6 lg:px-12 flex items-center gap-4 lg:gap-8">
+    <header className="hidden md:block sticky top-0 z-50 px-4 lg:px-6 pt-3">
+      {/* Di puncak halaman bar membentang lebar; saat digulir menyusut jadi pil kaca melayang. */}
+      <div
+        className={cn(
+          "morph-bar mx-auto h-[64px] flex items-center gap-4 lg:gap-8 rounded-full border",
+          scrolled
+            ? "glass max-w-5xl px-3 lg:px-4"
+            : "max-w-7xl px-3 lg:px-6 bg-white/40 border-white/60 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]",
+        )}
+      >
         <Link
           href="/"
           className="flex items-center gap-2.5 shrink-0"
@@ -35,10 +45,10 @@ export function TopNav({
                 href={href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "h-10 px-3 lg:px-4 rounded-full flex items-center gap-2 text-[14px] transition-colors",
+                  "h-10 px-3 lg:px-4 rounded-full flex items-center gap-2 text-[14px] transition-colors duration-300",
                   active
-                    ? "bg-[#FFE3EE] text-[#A83960] font-bold"
-                    : "text-[#5F5552] font-semibold hover:bg-[#FBF3F6]",
+                    ? "chip-active font-bold"
+                    : "text-[#5F5552] font-semibold hover:bg-white/70",
                 )}
               >
                 <Icon
@@ -57,7 +67,7 @@ export function TopNav({
             data-cart-target
             href="/cart"
             aria-label={totalItems > 0 ? `Keranjang, ${totalItems} item` : "Keranjang"}
-            className="relative w-11 h-11 rounded-full bg-[#FFF3F7] border border-[#F6D9E4] flex items-center justify-center text-[#A83960]"
+            className="chip-glass relative w-11 h-11 rounded-full flex items-center justify-center text-[#A83960] transition-transform active:scale-95"
           >
             <ShoppingCart className="w-5 h-5" aria-hidden="true" />
             {totalItems > 0 && (
@@ -68,7 +78,7 @@ export function TopNav({
           </Link>
           <Link
             href="/profile"
-            className="flex items-center gap-2.5 h-11 pl-1 pr-4 rounded-full border border-[#F0E4E8] hover:bg-[#FBF3F6]"
+            className="chip-glass flex items-center gap-2.5 h-11 pl-1 pr-4 rounded-full hover:bg-white/80 transition-colors"
           >
             <span className="w-9 h-9 rounded-full bg-gradient-to-br from-[#D9648C] to-[#9B3055] text-white text-[14px] font-bold flex items-center justify-center">
               {customer.name?.charAt(0).toUpperCase()}

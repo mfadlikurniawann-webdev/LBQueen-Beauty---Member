@@ -10,7 +10,7 @@ export function OrderTabs({
 }) {
   return (
     <div
-      className="flex gap-5 -mx-4 px-4 sm:-mx-8 sm:px-8 overflow-x-auto no-scrollbar border-b border-[#F0E4E8] mb-4"
+      className="flex gap-2 -mx-4 px-4 sm:-mx-8 sm:px-8 overflow-x-auto no-scrollbar py-1 mb-4"
       role="group"
       aria-label="Filter status pesanan"
     >
@@ -23,20 +23,13 @@ export function OrderTabs({
             aria-pressed={isActive}
             onClick={() => onChange(t.id)}
             className={cn(
-              "relative shrink-0 h-11 text-[15px] whitespace-nowrap transition-colors",
+              "shrink-0 h-10 px-4 rounded-full text-[14px] whitespace-nowrap transition-all duration-300",
               isActive
-                ? "font-bold text-[#2D2926]"
-                : "font-medium text-[#8C8280] hover:text-[#5F5552]",
+                ? "chip-active font-bold"
+                : "chip-glass font-semibold text-[#5F5552] hover:bg-white/85",
             )}
           >
             {t.label}
-            <span
-              className={cn(
-                "absolute left-0 right-0 -bottom-px h-[3px] rounded-full transition-colors",
-                isActive ? "bg-[#C94F78]" : "bg-transparent",
-              )}
-              aria-hidden="true"
-            />
           </button>
         );
       })}

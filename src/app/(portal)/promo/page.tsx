@@ -62,8 +62,8 @@ export default function PromoPage() {
       <PageHero title="Promo" subtitle="Voucher dan potongan harga" />
 
       <div className="px-4 sm:px-8 lg:px-12 space-y-7 pb-6">
-        <div className="rounded-[22px] bg-white border border-[#F0E4E8] p-4 shadow-[0_10px_30px_-18px_rgba(122,34,64,0.4)]">
-          <div className="grid grid-cols-2 divide-x divide-[#F0E4E8]">
+        <div data-reveal className="glass-lit spotlight rounded-[28px] p-4">
+          <div className="grid grid-cols-2 divide-x divide-[#C94F78]/12">
             <a href="#voucher-tersedia" className="flex items-center gap-3 pr-3 min-w-0">
               <IconChip icon={Ticket} tone="gold" size="md" />
               <span className="min-w-0">
@@ -92,7 +92,7 @@ export default function PromoPage() {
           </div>
           <Link
             href="/cart"
-            className="mt-4 flex items-center gap-3 rounded-full border border-[#E6D3DA] bg-[#FBF7F8] px-4 h-12 text-[15px] text-[#766B68]"
+            className="chip-glass mt-4 flex items-center gap-3 rounded-full px-4 h-12 text-[15px] text-[#5F5552] hover:bg-white/85 transition-colors"
           >
             <BadgePercent className="w-5 h-5 text-[#5F5552]" aria-hidden="true" />
             <span className="flex-1 truncate">Masukkan kode promo di keranjang</span>
@@ -100,10 +100,10 @@ export default function PromoPage() {
           </Link>
         </div>
 
-        <section id="voucher-tersedia" className="scroll-mt-6">
+        <section id="voucher-tersedia" data-reveal className="scroll-mt-6">
           <SectionHeading title="Voucher Saya" />
           {myVouchers.isLoading ? (
-            <div className="h-[118px] rounded-[20px] bg-[#F3E7EA] animate-pulse" />
+            <div className="skeleton-glass h-[118px] rounded-[22px]" />
           ) : vouchers.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {vouchers.map((v) => (
@@ -132,10 +132,10 @@ export default function PromoPage() {
                   setFilter(f.id);
                 }}
                 className={cn(
-                  "shrink-0 h-11 px-5 rounded-full border text-[14px] font-semibold transition-colors",
+                  "shrink-0 h-11 px-5 rounded-full text-[14px] font-semibold transition-all duration-300",
                   filter === f.id
-                    ? "bg-[#FFE3EE] border-[#E9A9C0] text-[#A83960] font-bold"
-                    : "bg-white border-[#E6D3DA] text-[#3F3734] hover:border-[#C94F78]/40",
+                    ? "chip-active font-bold"
+                    : "chip-glass text-[#3F3734] hover:bg-white/85",
                 )}
               >
                 {f.label}
@@ -148,7 +148,7 @@ export default function PromoPage() {
           ) : isLoading ? (
             <div className="portal-catalog-grid" aria-busy="true">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-[240px] rounded-[24px] bg-[#F3E7EA] animate-pulse" />
+                <div key={i} className="skeleton-glass h-[240px] rounded-[24px]" />
               ))}
             </div>
           ) : products.length > 0 ? (
@@ -163,7 +163,7 @@ export default function PromoPage() {
               ))}
             </div>
           ) : (
-            <div className="py-12 px-6 text-center bg-white border border-[#EEDFE3] rounded-[24px]">
+            <div className="glass py-12 px-6 text-center rounded-[28px]">
               <p className="text-[15px] font-bold text-[#2D2926]">
                 Belum ada promo di kategori ini
               </p>

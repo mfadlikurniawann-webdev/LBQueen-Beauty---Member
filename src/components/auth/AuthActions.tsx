@@ -20,15 +20,7 @@ export function AuthActions({
       <button
         type="submit"
         disabled={loading}
-        className={cn(
-          "w-full h-[52px] rounded-full text-white font-bold text-[15px] flex items-center justify-center",
-          "gap-2 transition-all active:scale-[0.98] hover:brightness-105 disabled:opacity-80",
-          "disabled:cursor-wait cursor-pointer",
-        )}
-        style={{
-          background: "linear-gradient(135deg, #D4608A 0%, #C94F78 50%, #9B3055 100%)",
-          boxShadow: "0 8px 24px rgba(201,79,120,0.30)",
-        }}
+        className="btn-primary w-full h-[52px] text-[15px] disabled:opacity-80 disabled:cursor-wait cursor-pointer"
       >
         {loading ? (
           <Loader2 className="w-5 h-5 animate-spin" />
@@ -43,9 +35,7 @@ export function AuthActions({
       <Link
         href={href}
         className={cn(
-          "w-full h-[52px] rounded-full font-bold text-[14px] flex items-center justify-center gap-1.5",
-          "transition-all active:scale-[0.98] border border-[#EEDFE3] bg-white text-[#766B68]",
-          "hover:bg-[#FDF2F5] hover:border-[#F0CBD8]",
+          "btn-glass w-full h-[52px] text-[14px] gap-1.5 text-[#5F5552]",
         )}
       >
         {`${prompt} `}

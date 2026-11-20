@@ -22,13 +22,7 @@ export function BottomNav({ pathname }: { pathname: string }) {
       className="md:hidden fixed left-0 right-0 z-50 flex justify-center pointer-events-none px-3 sm:px-4"
       style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 12px)" }}
     >
-      <div
-        className={cn(
-          "pointer-events-auto w-full max-w-lg grid grid-cols-4 gap-1 p-1.5 rounded-[30px]",
-          "bg-white/95 backdrop-blur-2xl border border-[#F0E4E8]",
-        )}
-        style={{ boxShadow: "0 10px 36px rgba(45,41,38,0.14)" }}
-      >
+      <div className="glass pointer-events-auto w-full max-w-lg grid grid-cols-4 gap-1 p-1.5 rounded-[30px]">
         {NAV_ITEMS.map(({ icon: Icon, label, href }) => {
           const active = isNavActive(pathname, href);
           return (
@@ -38,8 +32,10 @@ export function BottomNav({ pathname }: { pathname: string }) {
               aria-current={active ? "page" : undefined}
               className={cn(
                 "flex min-w-0 flex-col items-center justify-center gap-0.5 h-[58px] rounded-[24px]",
-                "transition-colors duration-200 active:scale-95",
-                active ? "bg-[#FFE3EE] text-[#A83960]" : "text-[#6F6461] hover:bg-[#FBF3F6]",
+                "transition-[background-color,color,transform,box-shadow] duration-300 active:scale-95",
+                active
+                  ? "chip-active text-white"
+                  : "text-[#5F5552] hover:bg-white/60",
               )}
             >
               <Icon

@@ -32,7 +32,7 @@ export function OnboardingView() {
   const text = SLIDES[slide % SLIDES.length];
 
   return (
-    <div className="min-h-dvh bg-white flex flex-col">
+    <div className="min-h-dvh flex flex-col">
       <div
         className="w-full max-w-md mx-auto flex-1 flex flex-col px-5"
         style={{
@@ -46,15 +46,17 @@ export function OnboardingView() {
             href={waLink("Halo admin LBQueen, saya ingin bertanya.")}
             target="_blank"
             rel="noopener noreferrer"
-            className="h-10 px-4 rounded-full border border-[#E6D3DA] flex items-center gap-2 text-[14px] font-semibold text-[#3F3734]"
+            className="chip-glass h-10 px-4 rounded-full flex items-center gap-2 text-[14px] font-semibold text-[#3F3734] hover:bg-white/90 transition-colors"
           >
             <MessageCircle className="w-4 h-4" aria-hidden="true" /> Bantuan
           </a>
         </div>
 
         <div className="flex-1 flex flex-col justify-center py-6">
-          <div className="rounded-[28px] overflow-hidden">
-            <BannerCarousel intervalMs={4000} dots={false} onIndexChange={setSlide} />
+          <div data-reveal className="glass-lit rounded-[32px] p-1.5">
+            <div className="rounded-[26px] overflow-hidden">
+              <BannerCarousel intervalMs={4000} dots={false} onIndexChange={setSlide} />
+            </div>
           </div>
           <div className="mt-7 text-center min-h-[104px]" aria-live="polite">
             <h1
@@ -75,26 +77,26 @@ export function OnboardingView() {
               <span
                 key={banner.src}
                 className={cn(
-                  "w-2 h-2 rounded-full transition-colors duration-300",
-                  slide === i ? "bg-[#C94F78]" : "bg-[#E3D3D9]",
+                  "h-2 rounded-full transition-all duration-300",
+                  slide === i ? "w-6 bg-[#C94F78]" : "w-2 bg-[#C94F78]/25",
                 )}
               />
             ))}
           </div>
         </div>
 
-        <div className="space-y-3">
+        <div data-reveal className="space-y-3">
           <button
             type="button"
             onClick={() => router.push("/login")}
-            className="w-full h-[54px] rounded-full bg-[#C94F78] text-white text-[17px] font-bold active:scale-[0.98] transition-transform focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/30"
+            className="btn-primary w-full h-[54px] text-[17px]"
           >
             Masuk
           </button>
           <button
             type="button"
             onClick={() => router.push("/register")}
-            className="w-full h-[54px] rounded-full border-2 border-[#C94F78] text-[#A83960] text-[17px] font-bold active:scale-[0.98] transition-transform focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20"
+            className="btn-glass w-full h-[54px] text-[17px]"
           >
             Belum ada akun? Daftar dulu
           </button>

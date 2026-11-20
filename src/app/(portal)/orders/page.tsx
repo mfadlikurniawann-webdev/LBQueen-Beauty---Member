@@ -114,7 +114,7 @@ export default function OrdersPage() {
   const productOf = (o: Order) => (o.product_id ? productsMap[o.product_id] : undefined);
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 min-h-screen bg-[#FDFBFB]">
+    <div className="min-h-screen">
       <PageHero
         title="Pesanan"
         subtitle="Riwayat dan status pesanan"
@@ -124,7 +124,7 @@ export default function OrdersPage() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Bantuan pesanan"
-            className="w-11 h-11 rounded-full bg-[#2D2926] text-white flex items-center justify-center"
+            className="chip-glass w-11 h-11 rounded-full text-[#A83960] flex items-center justify-center hover:bg-white/90 transition-colors"
           >
             <CircleHelp className="w-5 h-5" aria-hidden="true" />
           </a>
@@ -136,12 +136,13 @@ export default function OrdersPage() {
 
         <Link
           href="/cart"
-          className="mb-4 flex items-center gap-3 rounded-[18px] border border-[#E6D3DA] bg-white px-4 h-14"
+          data-reveal
+          className="glass spotlight lift mb-4 flex items-center gap-3 rounded-[24px] px-3 h-16"
         >
           <IconChip icon={ShoppingCart} tone="berry" size="sm" bare />
           <span className="flex-1 text-[15px] text-[#3F3734]">Keranjang belanja</span>
           {totalItems > 0 && (
-            <span className="rounded-full bg-[#C94F78] px-2.5 py-0.5 text-[12px] font-bold text-white tabular-nums">
+            <span className="chip-active rounded-full px-2.5 py-0.5 text-[12px] font-bold tabular-nums">
               {totalItems} item
             </span>
           )}
@@ -152,7 +153,7 @@ export default function OrdersPage() {
           <p
             role="alert"
             className={cn(
-              "mb-4 px-4 py-3 rounded-2xl bg-rose-50 border border-rose-200 text-[13px] font-medium",
+              "mb-4 px-4 py-3 rounded-[20px] bg-rose-50/85 border border-white text-[13px] font-medium shadow-[0_0_0_1px_rgba(225,29,72,0.2)]",
               "text-rose-700 text-center",
             )}
           >
@@ -166,13 +167,8 @@ export default function OrdersPage() {
             <p className="text-[13px] font-medium text-[#766B68]">Memuat pesanan...</p>
           </div>
         ) : filtered.length === 0 ? (
-          <div className="py-16 px-6 flex flex-col items-center text-center">
-            <div
-              className={cn(
-                "w-20 h-20 rounded-full flex items-center justify-center mb-5 bg-[#FDF2F5] border",
-                "border-[#F6DDE6]",
-              )}
-            >
+          <div data-reveal className="glass py-14 px-6 flex flex-col items-center text-center rounded-[32px]">
+            <div className="glass-lit w-20 h-20 rounded-full flex items-center justify-center mb-5">
               <ShoppingBag className="w-8 h-8 text-[#C94F78]" aria-hidden="true" />
             </div>
             <h2 className="text-[18px] font-bold! text-[#2D2926] tracking-tight">

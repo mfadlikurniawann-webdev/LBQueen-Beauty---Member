@@ -55,7 +55,7 @@ export function PointsCard({
       className={cn(
         "flex items-center gap-2",
         !bare &&
-          "rounded-[22px] bg-white border border-[#F0E4E8] p-3.5 sm:p-4 shadow-[0_10px_30px_-16px_rgba(122,34,64,0.35)]",
+          "glass-lit rounded-[24px] p-3.5 sm:p-4",
       )}
     >
       <Link href="/membership" className="flex items-center gap-3 min-w-0 flex-1 rounded-2xl">

@@ -18,13 +18,13 @@ export function AuthShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-dvh flex bg-white">
-      <div
-        className="hidden lg:flex w-[48%] items-center justify-center p-12"
-        style={{ background: BANNER_BG }}
-      >
-        <div className="w-full max-w-[560px] rounded-[32px] overflow-hidden shadow-[0_24px_60px_-30px_rgba(90,24,52,0.5)]">
-          <BannerCarousel intervalMs={4000} />
+    <div className="min-h-dvh flex">
+      <div className="hidden lg:flex w-[48%] items-center justify-center p-10 xl:p-12">
+        <div data-reveal className="glass-lit w-full max-w-[580px] rounded-[36px] p-2">
+          <div className="rounded-[28px] overflow-hidden" style={{ background: BANNER_BG }}>
+            <BannerCarousel intervalMs={4000} />
+          </div>
+          <p className="eyebrow mt-4 mb-2 ml-4">LBQueen Care & Beauty Clinic</p>
         </div>
       </div>
 
@@ -36,14 +36,19 @@ export function AuthShell({
           <Link
             href="/"
             aria-label="Kembali"
-            className="w-11 h-11 -ml-1 rounded-full flex items-center justify-center text-[#2D2926] hover:bg-[#FBF3F6]"
+            className="chip-glass w-11 h-11 rounded-full flex items-center justify-center text-[#2D2926] hover:bg-white/90 active:scale-95 transition-[background-color,transform]"
           >
-            <ArrowLeft className="w-6 h-6" strokeWidth={2.4} />
+            <ArrowLeft className="w-5 h-5" strokeWidth={2.4} />
           </Link>
           <BrandMark size={40} />
         </div>
-        <div className="flex-1 flex justify-center px-5 pt-6 pb-10 sm:px-8 lg:items-center">
-          <div className={contentClassName}>{children}</div>
+        <div className="flex-1 flex justify-center px-4 pt-5 pb-10 sm:px-8 lg:items-center">
+          <div
+            data-reveal
+            className={cn("glass-lit h-fit rounded-[32px] px-5 py-7 sm:px-8 sm:py-9", contentClassName)}
+          >
+            {children}
+          </div>
         </div>
       </div>
     </div>
