@@ -32,7 +32,7 @@ export function OrderDetailModal({
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[110] flex items-end sm:items-center justify-center bg-scrim md:bg-scrim md:backdrop-blur-[6px]",
+        "fixed inset-0 z-[110] flex items-end sm:items-center justify-center bg-scrim",
         "p-0 sm:p-4 animate-in fade-in duration-300",
       )}
     >

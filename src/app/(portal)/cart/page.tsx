@@ -125,7 +125,7 @@ export default function CartPage() {
       className="btn-primary h-12 px-6 text-[15px] shrink-0 disabled:cursor-wait"
     >
       {processing && <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />}
-      Pesan
+      Buat pesanan
     </button>
   );
 
@@ -169,7 +169,7 @@ export default function CartPage() {
           </div>
 
           {/* Layar lebar: rincian dan tombol menempel di kolom kanan. */}
-          <div className="hidden md:block glass-lit rounded-[24px] p-5 md:sticky md:top-[96px]">
+          <div className="hidden md:block surface rounded-[24px] p-5 md:sticky md:top-[96px]">
             <dl className="space-y-2 text-[14px]">
               <div className="flex justify-between gap-3">
                 <dt className="text-ink-muted">Subtotal</dt>
@@ -196,7 +196,7 @@ export default function CartPage() {
         className="md:hidden fixed inset-x-0 bottom-0 z-40 px-3"
         style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 12px)" }}
       >
-        <div className="glass mx-auto max-w-lg rounded-[28px] pl-5 pr-2 py-2 flex items-center gap-3">
+        <div className="surface mx-auto max-w-lg rounded-[28px] pl-5 pr-2 py-2 flex items-center gap-3">
           <div className="flex-1 min-w-0">
             <p className="text-[12px] text-ink-muted">Total</p>
             <p className="text-[18px] font-semibold text-ink tabular-nums leading-tight truncate">

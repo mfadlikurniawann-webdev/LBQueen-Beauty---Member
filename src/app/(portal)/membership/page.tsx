@@ -180,7 +180,7 @@ export default function MembershipPage() {
         <h2 className="text-[20px] font-semibold! text-ink mb-3.5">
           Nikmati {benefits.length} benefit{isCurrent ? "" : ` ${tier.label}`}
         </h2>
-        <ul className="glass rounded-[26px] divide-y divide-brand/10">
+        <ul className="surface rounded-[26px] divide-y divide-brand/10">
           {benefits.map((b, i) => (
             <li key={b.title} className="flex items-center gap-3.5 px-4 py-3.5">
               <IconChip

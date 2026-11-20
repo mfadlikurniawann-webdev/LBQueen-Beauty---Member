@@ -73,7 +73,7 @@ export function VoucherTicket({ voucher, className }: { voucher: MyVoucher; clas
 
 export function EmptyVouchers() {
   return (
-    <div className="glass w-full rounded-[24px] p-4 flex items-center gap-3.5">
+    <div className="surface w-full rounded-[24px] p-4 flex items-center gap-3.5">
       <IconChip icon={Ticket} tone="gold" size="md" />
       <div>
         <p className="text-[14px] text-ink font-semibold">Belum ada voucher</p>

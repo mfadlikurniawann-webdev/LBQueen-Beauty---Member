@@ -40,7 +40,7 @@ export function ThemeSwitcher() {
         role="radiogroup"
         aria-labelledby="theme-heading"
         onKeyDown={onKeyDown}
-        className="glass rounded-[26px] p-1.5 grid grid-cols-3 gap-1.5"
+        className="surface rounded-[26px] p-1.5 grid grid-cols-3 gap-1.5"
       >
         {OPTIONS.map(({ mode: value, label, icon: Icon }, i) => {
           const active = value === mode;

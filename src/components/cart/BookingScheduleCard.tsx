@@ -44,6 +44,9 @@ export function BookingScheduleCard({
           />
         </label>
       </div>
+      <p className="mt-2.5 text-[13px] text-ink-muted">
+        Jadwal dikonfirmasi admin sesuai ketersediaan terapis.
+      </p>
       {invalid && (
         <p id="booking-error" role="alert" className={cn("mt-2 text-[13px] font-semibold text-danger")}>
           {invalid}

@@ -140,7 +140,7 @@ export default function OrdersPage() {
         <Link
           href="/cart"
           data-reveal
-          className="glass spotlight lift mb-4 flex items-center gap-3 rounded-[24px] px-3 h-16"
+          className="surface lift mb-4 flex items-center gap-3 rounded-[24px] px-3 h-16"
         >
           <IconChip icon={ShoppingCart} tone="berry" size="sm" bare />
           <span className="flex-1 text-[15px] text-ink-2">Keranjang belanja</span>
@@ -170,7 +170,7 @@ export default function OrdersPage() {
             <p className="text-[13px] font-medium text-ink-muted">Memuat pesanan</p>
           </div>
         ) : filtered.length === 0 ? (
-          <div data-reveal className="glass py-14 px-6 flex flex-col items-center text-center rounded-[32px]">
+          <div data-reveal className="surface py-14 px-6 flex flex-col items-center text-center rounded-[32px]">
             <div className="glass-lit w-20 h-20 rounded-full flex items-center justify-center mb-5">
               <ShoppingBag className="w-8 h-8 text-brand" aria-hidden="true" />
             </div>

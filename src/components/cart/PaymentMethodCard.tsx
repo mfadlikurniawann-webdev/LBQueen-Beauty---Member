@@ -82,6 +82,9 @@ export function PaymentMethodCard({
           <p className="text-[13px] text-ink-muted">Pindai dengan m-banking atau e-wallet.</p>
         </div>
       )}
+      <p className="mt-3 text-[13px] text-ink-muted">
+        Pembayaran diperiksa admin. Setelah membuat pesanan, lanjutkan konfirmasi di WhatsApp.
+      </p>
     </div>
   );
 }

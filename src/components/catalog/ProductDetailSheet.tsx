@@ -238,7 +238,7 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
     <div className="fixed inset-0 z-[110] flex flex-col justify-end md:justify-center md:p-6">
       <div
         className={cn(
-          "absolute inset-0 bg-scrim md:bg-scrim md:backdrop-blur-[6px] duration-200",
+          "absolute inset-0 bg-scrim duration-200",
           closing ? "animate-out fade-out fill-mode-forwards" : "animate-in fade-in",
         )}
         onClick={() => close()}

@@ -37,7 +37,7 @@ export function ActiveOrderCard({ customerId }: { customerId: number }) {
     <Link
       href="/orders"
       data-reveal
-      className="glass spotlight lift block rounded-[24px] p-4"
+      className="surface lift block rounded-[24px] p-4"
     >
       <div className="flex items-center gap-3">
         <IconChip icon={Icon} tone="rose" size="md" />

@@ -1,5 +1,13 @@
 # Architectural Decisions & Changes Log (LBQueen Member)
 
+## 2026-11-21: Clean UI dengan aksen liquid glass
+
+- Kaca dibatasi pada navigasi, banner, kartu poin/membership, dan area unggulan. `.surface` serta alias `.glass-soft` kini solid di kedua tema dengan garis tipis dan bayangan ringan; katalog, daftar voucher/pesanan, menu profil, form autentikasi, dan ringkasan checkout tidak membiaskan latar.
+- Input, chip, tombol sekunder, dan dialog memakai permukaan solid. Blur navigasi dikurangi; ambient dibuat statis dan lebih redup. Scrim detail produk/pesanan/ulasan tidak lagi memburamkan seluruh layar. `prefers-reduced-transparency` menonaktifkan kaca navigasi/unggulan.
+- Tombol checkout menjadi "Buat pesanan"; keterangan jadwal dan pembayaran memperjelas konfirmasi manual oleh admin. Tidak mengubah checkout, harga, stok, akses katalog publik, atau logika sesi. Tema dan nota cetak tetap dipertahankan.
+- Audit pada permukaan solid menemukan teks kecil `ink-faint` kurang kontras di tema terang; token digelapkan ke `#766b68` agar label poin dan harga lama terbaca.
+- Verifikasi: build/TypeScript, lint komponen yang diubah, sesi dan environment lulus. Harness visual menghasilkan 133 screenshot tanpa kegagalan permukaan solid, CSP, atau runtime; sesudah koreksi kontras, 18 audit terarah beranda/detail produk/akun reguler pada kedua tema dan tiga ukuran layar tidak menemukan pelanggaran WCAG. `test-browser.mjs` lama masih menunggu judul "Voucher Tersedia" yang sudah menjadi "Voucher Saya"; tidak diubah dalam pekerjaan visual ini.
+
 ## 2026-11-20 (lanjutan 4): Mode gelap
 
 - Tiga pilihan tema di Profil, bagian "Tampilan" (`components/profile/ThemeSwitcher.tsx`, radiogroup Terang/Gelap/Sistem, panah kiri/kanan). Bawaan mengikuti sistem (`prefers-color-scheme`). Hanya preferensi yang disimpan di localStorage `lbq-theme` (tanpa nilai berarti sistem). Halaman sambutan, masuk, dan daftar ikut preferensi yang sama.

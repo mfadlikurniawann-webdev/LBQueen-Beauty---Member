@@ -395,6 +395,20 @@ async function shoot(page, name, viewport, { full = true } = {}) {
   }
   const file = path.join(shotDir, `${name}.png`);
   await page.screenshot({ path: file });
+  const translucentWorkSurfaces = await page.evaluate(() =>
+    [...document.querySelectorAll(".surface, .glass-soft, .input-glass, .glass-strong")]
+      .filter((el) => {
+        if (!el.getClientRects().length) return false;
+        const style = getComputedStyle(el);
+        const alpha = style.backgroundColor.startsWith("rgba(")
+          ? parseFloat(style.backgroundColor.split(",").at(-1))
+          : 1;
+        return alpha < 1 || style.backgroundColor === "transparent" || style.backdropFilter !== "none";
+      })
+      .map((el) => el.className),
+  );
+  if (translucentWorkSurfaces.length)
+    failures.push(`${theme}/${name}: permukaan kerja tidak solid: ${translucentWorkSurfaces.join("; ")}`);
   await page.setViewportSize(viewport);
   shots.push(file);
   await audit(page, `${name}`);
@@ -537,7 +551,7 @@ try {
     p.getByText("Daily Cleanser").first().waitFor(),
   );
   await both(member, "09-keranjang", "/cart", (p) =>
-    p.getByRole("button", { name: "Pesan", exact: true }).first().waitFor(),
+    p.getByRole("button", { name: "Buat pesanan", exact: true }).first().waitFor(),
   );
   await both(member, "10-pesanan", "/orders", (p) =>
     p.getByText("Daily Cleanser").first().waitFor(),
@@ -551,7 +565,7 @@ try {
   await both(member, "13-nota-online", "/invoice/1");
   // Checkout membuka WhatsApp lewat window.open: tidak boleh diblokir CSP/COOP.
   await visit(member, "/cart", (p) =>
-    p.getByRole("button", { name: "Pesan", exact: true }).first().waitFor(),
+    p.getByRole("button", { name: "Buat pesanan", exact: true }).first().waitFor(),
   );
   const [popup] = await Promise.all([
     memberContext.waitForEvent("page"),
@@ -612,7 +626,7 @@ try {
     ["desktop", DESKTOP],
   ]) {
     await visit(member, "/cart", (p) =>
-      p.getByRole("button", { name: "Pesan", exact: true }).first().waitFor(),
+      p.getByRole("button", { name: "Buat pesanan", exact: true }).first().waitFor(),
     viewport);
     await member.getByRole("button", { name: /^Voucher/ }).click();
     await member.getByRole("dialog", { name: "Pilih voucher" }).waitFor();
@@ -632,7 +646,7 @@ try {
     CART.filter((item) => item.type !== "Treatment Care & Beauty"),
   );
   await both(await productContext.newPage(), "20-keranjang-produk", "/cart", (p) =>
-    p.getByRole("button", { name: "Pesan", exact: true }).first().waitFor(),
+    p.getByRole("button", { name: "Buat pesanan", exact: true }).first().waitFor(),
   );
 
   // Layar pertama beranda tanpa menggulir (HP sentuh + WebKit iPhone): tidak boleh ada yang tersembunyi.
@@ -743,6 +757,7 @@ try {
     const list = axeResults[mode];
     console.log(`axe ${mode}: ${list.length} pelanggaran, ${list.reduce((n, v) => n + v.nodes, 0)} node`);
     for (const v of list.slice(0, 40)) console.log(`  ${v.name} ${v.id} (${v.nodes}) ${v.sample.join(" | ")}`);
+    if (list.length) failures.push(`${mode}: ${list.length} pelanggaran aksesibilitas`);
   }
   console.log(`Pelanggaran CSP: ${cspViolations.length}, error konsol: ${consoleErrors.length}`);
   for (const line of [...cspViolations, ...consoleErrors].slice(0, 20)) console.log(`  ${line}`);

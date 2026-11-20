@@ -53,7 +53,7 @@ export function MenuList({ title, rows }: { title: string; rows: MenuRow[] }) {
   return (
     <section data-reveal>
       <h2 className="eyebrow mb-2.5 ml-1">{title}</h2>
-      <ul className="glass rounded-[26px] overflow-hidden">
+      <ul className="surface rounded-[26px] overflow-hidden">
         {rows.map((row) => (
           <li key={row.label} className="group">
             {row.href && row.external ? (

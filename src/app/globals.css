@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 
 /* ─────────────────────────────────────────────────────
-   LBQUEEN DESIGN SYSTEM v3: Gradient + Vector Premium
+   LBQUEEN DESIGN SYSTEM: clean surfaces + selective glass
    ───────────────────────────────────────────────────── */
 :root {
   --lb-pink: #c94f78;
@@ -54,7 +54,7 @@
 :root,
 .light-scope {
   color-scheme: light;
-  --page: #fbf6f8;
+  --page: #f8f7f9;
   --surface: #ffffff;
   --fill: #ffffff;
   --edge: #ffffff;
@@ -63,7 +63,7 @@
   --ink-2: #3f3734;
   --ink-3: #5f5552;
   --ink-muted: #766b68;
-  --ink-faint: #8c8280;
+  --ink-faint: #766b68;
   --ink-disabled: #b9ada9;
   --brand: #c94f78;
   --brand-ink: #a83960;
@@ -97,17 +97,18 @@
   --glass-shadow: rgb(122 34 64 / 0.24);
   --glass-sheen: rgb(255 255 255 / 0.74);
   --glass-lit-bg: rgb(255 255 255 / 0.62);
-  --sheet-bg: linear-gradient(160deg, rgb(255 255 255 / 0.995) 0%, rgb(255 246 249 / 0.985) 100%), #fffafc;
+  --sheet-bg: var(--surface);
   --sheet-shadow: rgb(90 24 52 / 0.35);
-  --soft-bg: linear-gradient(150deg, rgb(255 255 255 / 0.92) 0%, rgb(255 255 255 / 0.72) 100%);
-  --chip-bg: rgb(255 255 255 / 0.62);
-  --chip-bg-mobile: rgb(255 255 255 / 0.84);
+  --soft-bg: var(--surface);
+  --surface-shadow: 0 2px 8px rgb(42 21 32 / 0.04);
+  --chip-bg: var(--surface);
+  --chip-bg-mobile: var(--surface);
   --chip-ring: rgb(122 34 64 / 0.07);
-  --btn-glass-bg: rgb(255 255 255 / 0.66);
-  --btn-glass-hover: rgb(255 255 255 / 0.85);
+  --btn-glass-bg: var(--surface);
+  --btn-glass-hover: var(--blush);
   --btn-glass-ring: rgb(201 79 120 / 0.16);
-  --input-bg: rgb(255 255 255 / 0.68);
-  --input-bg-focus: rgb(255 255 255 / 0.94);
+  --input-bg: var(--surface);
+  --input-bg-focus: var(--surface);
   --input-ring: rgb(122 34 64 / 0.1);
   --input-inset: rgb(122 34 64 / 0.06);
   --skeleton-base: rgb(243 228 234 / 0.75);
@@ -187,17 +188,18 @@
     --glass-shadow: rgb(0 0 0 / 0.6);
     --glass-sheen: rgb(255 255 255 / 0.07);
     --glass-lit-bg: rgb(255 255 255 / 0.05);
-    --sheet-bg: linear-gradient(160deg, #241a20 0%, #1b1418 100%), #1b1418;
+    --sheet-bg: var(--surface);
     --sheet-shadow: rgb(0 0 0 / 0.7);
-    --soft-bg: linear-gradient(150deg, rgb(255 255 255 / 0.075) 0%, rgb(255 255 255 / 0.045) 100%);
-    --chip-bg: rgb(255 255 255 / 0.08);
-    --chip-bg-mobile: rgb(38 28 34 / 0.92);
+    --soft-bg: var(--surface);
+    --surface-shadow: 0 2px 8px rgb(0 0 0 / 0.16);
+    --chip-bg: var(--surface);
+    --chip-bg-mobile: var(--surface);
     --chip-ring: rgb(0 0 0 / 0.25);
-    --btn-glass-bg: rgb(255 255 255 / 0.08);
-    --btn-glass-hover: rgb(255 255 255 / 0.14);
+    --btn-glass-bg: var(--surface);
+    --btn-glass-hover: var(--blush);
     --btn-glass-ring: rgb(238 127 165 / 0.22);
-    --input-bg: rgb(255 255 255 / 0.06);
-    --input-bg-focus: rgb(255 255 255 / 0.09);
+    --input-bg: #241b20;
+    --input-bg-focus: #241b20;
     --input-ring: rgb(255 255 255 / 0.24);
     --input-inset: rgb(0 0 0 / 0.25);
     --skeleton-base: rgb(255 255 255 / 0.06);
@@ -484,8 +486,7 @@ button:disabled {
     color: var(--brand);
   }
 
-  /* Lapisan cahaya ambient tetap di belakang halaman: glass butuh warna di belakangnya
-     untuk dibiaskan, jadi beberapa medan rose/peach/emas bergeser perlahan. */
+  /* Cahaya brand tetap halus dan diam agar navigasi kaca tidak diburamkan ulang setiap frame. */
   .ambient {
     overflow: hidden;
   }
@@ -498,8 +499,7 @@ button:disabled {
       radial-gradient(38% 34% at 94% 22%, var(--ambient-2), transparent 70%),
       radial-gradient(40% 36% at 18% 72%, var(--ambient-3), transparent 70%),
       radial-gradient(46% 40% at 82% 100%, var(--ambient-4), transparent 70%);
-    will-change: transform;
-    animation: lbq-ambient-drift 28s ease-in-out infinite alternate;
+    opacity: 0.5;
   }
   /* Di perangkat sentuh (umumnya HP) cahaya dibiarkan diam: tampilannya nyaris sama,
      tetapi permukaan kaca di atasnya tidak perlu diburamkan ulang setiap frame. */
@@ -526,8 +526,8 @@ button:disabled {
       inset 0 -1px 0 var(--glass-lo),
       0 0 0 1px var(--glass-ring),
       0 12px 32px -16px var(--glass-shadow);
-    -webkit-backdrop-filter: blur(22px) saturate(1.6);
-    backdrop-filter: blur(22px) saturate(1.6);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    backdrop-filter: blur(14px) saturate(1.2);
   }
 
   /* Kaca lebih terang dengan kilau diagonal untuk elemen yang perlu menonjol. */
@@ -541,8 +541,8 @@ button:disabled {
       inset 0 -1px 0 var(--glass-lo),
       0 0 0 1px var(--glass-ring),
       0 16px 40px -18px var(--glass-shadow);
-    -webkit-backdrop-filter: blur(24px) saturate(1.8);
-    backdrop-filter: blur(24px) saturate(1.8);
+    -webkit-backdrop-filter: blur(16px) saturate(1.3);
+    backdrop-filter: blur(16px) saturate(1.3);
   }
 
   /* Kaca pekat untuk sheet/dialog di atas konten yang ramai. */
@@ -556,14 +556,12 @@ button:disabled {
       0 24px 60px -20px var(--sheet-shadow);
   }
 
-  /* Kartu berulang (grid/daftar): tampilan kaca tanpa backdrop-filter agar gulir tetap ringan. */
+  /* Nama lama dipertahankan untuk kartu katalog; data dan form selalu di permukaan solid. */
+  .surface,
   .glass-soft {
     background: var(--soft-bg);
-    border: 1px solid var(--glass-edge);
-    box-shadow:
-      inset 0 1px 0 var(--glass-hi),
-      0 0 0 1px var(--glass-ring),
-      0 10px 28px -18px var(--glass-shadow);
+    border: 1px solid var(--line);
+    box-shadow: var(--surface-shadow);
   }
 
   /* Panel kontras gelap-rose (CTA, pita promo); kaca di dalamnya otomatis versi gelap. */
@@ -582,10 +580,7 @@ button:disabled {
   }
   /* Kartu produk di atas panel gelap tetap terang agar teks gelapnya terbaca. */
   .panel-rose .glass-soft {
-    background: linear-gradient(150deg, rgb(255 255 255 / 0.98) 0%, rgb(255 244 248 / 0.94) 100%);
-  }
-  .dark .panel-rose .glass-soft {
-    background: linear-gradient(150deg, rgb(40 26 34 / 0.97) 0%, rgb(27 20 24 / 0.95) 100%);
+    background: var(--surface);
   }
   .panel-rose .glass,
   .panel-rose .chip-glass {
@@ -661,10 +656,8 @@ button:disabled {
     font-weight: 600;
     font-size: 15px;
     color: #fff;
-    background: linear-gradient(180deg, #d4608a 0%, #b8416b 100%);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.32),
-      0 10px 24px -10px rgb(168 57 96 / 0.7);
+    background: #a83960;
+    box-shadow: 0 2px 6px rgb(122 34 64 / 0.15);
     transition:
       transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
       box-shadow 0.3s ease,
@@ -672,9 +665,7 @@ button:disabled {
   }
   .btn-primary:hover:not(:disabled) {
     filter: brightness(1.05);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.35),
-      0 14px 30px -10px rgb(168 57 96 / 0.75);
+    box-shadow: 0 3px 8px rgb(122 34 64 / 0.2);
   }
   .btn-primary:active:not(:disabled) {
     transform: scale(0.97);
@@ -695,13 +686,8 @@ button:disabled {
     font-size: 15px;
     color: var(--brand-ink);
     background: var(--btn-glass-bg);
-    border: 1px solid var(--glass-edge);
-    box-shadow:
-      inset 0 1px 0 var(--glass-hi),
-      0 0 0 1px var(--btn-glass-ring),
-      0 8px 20px -12px var(--glass-shadow);
-    -webkit-backdrop-filter: blur(16px) saturate(1.5);
-    backdrop-filter: blur(16px) saturate(1.5);
+    border: 1px solid var(--line);
+    box-shadow: none;
     transition:
       transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
       background-color 0.3s ease;
@@ -716,15 +702,12 @@ button:disabled {
   /* Pil kecil berkaca untuk chip filter, lencana, dan tombol ikon. */
   .chip-glass {
     background: var(--chip-bg);
-    border: 1px solid var(--glass-edge);
-    box-shadow:
-      inset 0 1px 0 var(--glass-hi),
-      0 0 0 1px var(--chip-ring),
-      0 6px 16px -10px var(--glass-shadow);
+    border: 1px solid var(--line);
+    box-shadow: none;
   }
   .chip-active {
     color: #fff;
-    background: linear-gradient(180deg, #d4608a 0%, #b8416b 100%);
+    background: #a83960;
     border: 1px solid rgb(255 255 255 / 0.35);
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.3),
@@ -739,10 +722,8 @@ button:disabled {
     font-size: 16px;
     color: var(--ink);
     background: var(--input-bg);
-    border: 1px solid var(--glass-edge);
-    box-shadow:
-      inset 0 1px 2px var(--input-inset),
-      0 0 0 1px var(--input-ring);
+    border: 1px solid var(--input-ring);
+    box-shadow: none;
     outline: none;
     transition:
       background-color 0.25s ease,
@@ -786,11 +767,8 @@ button:disabled {
 /* Hover terangkat hanya untuk perangkat ber-pointer (di HP sentuhan tidak "tersangkut"). */
 @media (hover: hover) {
   .lift:hover {
-    transform: translateY(-4px);
-    box-shadow:
-      inset 0 1px 0 var(--glass-hi),
-      0 0 0 1px rgb(201 79 120 / 0.18),
-      0 22px 44px -22px var(--glass-shadow);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--glass-ring);
   }
 }
 
@@ -906,6 +884,18 @@ html.lbq-reveal-lite [data-reveal].is-revealed {
   }
   html.lbq-reveal [data-reveal]:not(.is-revealed) {
     opacity: 1;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-lit {
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .panel-rose .glass {
+    background: #3a1526;
   }
 }
 

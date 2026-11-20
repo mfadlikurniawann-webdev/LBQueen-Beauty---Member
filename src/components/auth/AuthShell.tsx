@@ -44,7 +44,7 @@ export function AuthShell({
         <div className="flex-1 flex justify-center px-4 pt-5 pb-10 sm:px-8 lg:items-center">
           <div
             data-reveal
-            className={cn("glass-lit h-fit rounded-[32px] px-5 py-7 sm:px-8 sm:py-9", contentClassName)}
+            className={cn("surface h-fit rounded-[32px] px-5 py-7 sm:px-8 sm:py-9", contentClassName)}
           >
             {children}
           </div>
