@@ -43,7 +43,11 @@ export default function OrdersPage() {
     setPage(1);
     updateTab(value);
   };
-  const review = useOrderReview();
+  const review = useOrderReview((id) =>
+    setOrders((list) =>
+      list.map((o) => (o.id === id ? { ...o, reviewed_at: new Date().toISOString() } : o)),
+    ),
+  );
 
   const fetchOrders = useCallback(
     async (custId: number) => {
@@ -52,7 +56,7 @@ export default function OrdersPage() {
       setLoadError("");
       let query = supabase
         .from("customer_orders")
-        .select("id,product_name,status,ordered_at,completed_at,customer_id,price,qty,total_price,product_id")
+        .select("id,product_name,status,ordered_at,completed_at,customer_id,price,qty,total_price,product_id,reviewed_at")
         .eq("customer_id", custId)
         .order("ordered_at", { ascending: false })
         .order("id", { ascending: false })
@@ -141,7 +145,7 @@ export default function OrdersPage() {
           <IconChip icon={ShoppingCart} tone="berry" size="sm" bare />
           <span className="flex-1 text-[15px] text-[#3F3734]">Keranjang belanja</span>
           {totalItems > 0 && (
-            <span className="chip-active rounded-full px-2.5 py-0.5 text-[12px] font-bold tabular-nums">
+            <span className="chip-active rounded-full px-2.5 py-0.5 text-[12px] font-semibold tabular-nums">
               {totalItems} item
             </span>
           )}
@@ -163,14 +167,14 @@ export default function OrdersPage() {
         {loading ? (
           <div className="py-20 flex flex-col items-center gap-3" role="status">
             <Loader2 className="w-8 h-8 animate-spin text-[#C94F78]" />
-            <p className="text-[13px] font-medium text-[#766B68]">Memuat pesanan...</p>
+            <p className="text-[13px] font-medium text-[#766B68]">Memuat pesanan</p>
           </div>
         ) : filtered.length === 0 ? (
           <div data-reveal className="glass py-14 px-6 flex flex-col items-center text-center rounded-[32px]">
             <div className="glass-lit w-20 h-20 rounded-full flex items-center justify-center mb-5">
               <ShoppingBag className="w-8 h-8 text-[#C94F78]" aria-hidden="true" />
             </div>
-            <h2 className="text-[18px] font-bold! text-[#2D2926] tracking-tight">
+            <h2 className="text-[18px] font-semibold! text-[#2D2926] tracking-tight">
               Belum Ada Pesanan
             </h2>
             <p className="text-[14px] text-[#766B68] leading-relaxed mt-1.5 max-w-[280px]">
@@ -203,7 +207,7 @@ export default function OrdersPage() {
         />
       )}
 
-      <ReviewModal review={review} />
+      <ReviewModal review={review} product={review.order ? productOf(review.order) : undefined} />
     </div>
   );
 }

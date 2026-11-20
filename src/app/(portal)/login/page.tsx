@@ -54,7 +54,6 @@ export default function CustomerLoginPage() {
         localStorage.removeItem("lbqueen_remember_customer");
       }
 
-      localStorage.setItem("lbqueen_customer", JSON.stringify(res.data));
       await refresh();
       router.push("/");
     } catch (err) {
@@ -71,7 +70,7 @@ export default function CustomerLoginPage() {
       footer="PT. LBQueen Care Beauty"
       contentClassName="w-full max-w-[400px]"
     >
-      <h1 className="text-[28px] font-extrabold! text-[#2D2926] tracking-tight leading-tight">
+      <h1 className="text-[28px] font-bold! text-[#2D2926] tracking-tight leading-tight">
         Masuk
       </h1>
       <p className="text-[15px] text-[#766B68] mt-1.5 mb-7">Pakai username atau nomor HP Anda.</p>

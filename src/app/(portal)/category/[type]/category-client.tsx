@@ -102,7 +102,7 @@ function CategoryContent() {
     <div className="min-h-screen bg-transparent font-sans pb-6 max-w-7xl mx-auto md:px-8">
       <CategoryHeader section={section} page={page} />
 
-      <div className="px-5 mt-6">
+      <div className="px-5 mt-3">
         <CategoryFilters
           section={section}
           searchQuery={searchQuery}
@@ -116,7 +116,9 @@ function CategoryContent() {
           activeTab={activeTab}
           onTab={setActiveTab}
         />
-        <CategoryGrid products={products} loading={loading} onOpen={selection.open} />
+        <div className="mt-4">
+          <CategoryGrid products={products} loading={loading} onOpen={selection.open} />
+        </div>
       </div>
 
       {error && <CatalogLoadError onRetry={() => mutate()} />}

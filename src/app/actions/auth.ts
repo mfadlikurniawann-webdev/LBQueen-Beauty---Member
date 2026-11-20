@@ -1,7 +1,9 @@
 "use server";
 
 import { serverDatabase } from "@/lib/supabase-server";
-import { createSession, verifySession } from "@/lib/session";
+import { getCustomerSession } from "@/lib/customer-auth";
+import { likeEscape, phoneCandidates } from "@/lib/customer-lookup";
+import { CUSTOMER_COOKIE, forgetSessionVersion, issueCustomerSession } from "@/lib/customer-session";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import { clientIp, consumeLimit } from "@/lib/rate-limit";
@@ -38,16 +40,35 @@ function publicProfile(user: Record<string, unknown>) {
   );
 }
 
-async function setSession(id: number) {
-  const maxAge = 60 * 60 * 24 * 30;
-  const value = await createSession(id, "customer", maxAge);
-  (await cookies()).set("lbqueen_customer", value, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge,
-    path: "/",
-  });
+async function setSession(id: number, version: unknown) {
+  const { value, options } = await issueCustomerSession(id, Number(version ?? 0) || 0);
+  (await cookies()).set(CUSTOMER_COOKIE, value, options);
+}
+
+type Db = ReturnType<typeof serverDatabase>;
+
+/**
+ * Naikkan versi sesi agar semua cookie lama (perangkat lain) tidak berlaku lagi.
+ * null bila kolom session_version belum ada (migrasi POS belum jalan) atau gagal.
+ */
+async function bumpSessionVersion(db: Db, id: number): Promise<number | null> {
+  const { data, error } = await db
+    .from("customers")
+    .select("session_version")
+    .eq("id", id)
+    .maybeSingle();
+  if (error || !data) return null;
+  const current = Number(data.session_version ?? 0);
+  const { data: updated, error: updateError } = await db
+    .from("customers")
+    .update({ session_version: current + 1 })
+    .eq("id", id)
+    .eq("session_version", current)
+    .select("session_version")
+    .maybeSingle();
+  if (updateError || !updated) return null;
+  forgetSessionVersion(id);
+  return current + 1;
 }
 
 const unavailable =
@@ -55,12 +76,6 @@ const unavailable =
 
 const tooMany = "Terlalu banyak percobaan. Coba kembali dalam beberapa menit.";
 
-const likeEscape = (value: string) => value.replace(/[\\%_]/g, (c) => `\\${c}`);
-
-function phoneCandidates(phone: string, raw: string) {
-  const local = phone.slice(1);
-  return [...new Set([phone, `62${local}`, `+62${local}`, raw])];
-}
 
 export async function loginCustomer(identifier: string, passwordPlain: string) {
   const value = identifier.trim();
@@ -117,7 +132,7 @@ export async function loginCustomer(identifier: string, passwordPlain: string) {
         .eq("id", customer.id);
       if (migrationError && upgrade.password_hash) return { error: unavailable };
     }
-    await setSession(customer.id as number);
+    await setSession(customer.id as number, customer.session_version);
     return { data: publicProfile(customer) };
   } catch {
     return { error: unavailable };
@@ -179,7 +194,7 @@ export async function registerCustomer(input: {
       .select()
       .single();
     if (error) return { error: duplicateMessage(error) || unavailable };
-    await setSession(data.id);
+    await setSession(data.id, (data as Record<string, unknown>).session_version);
     return { data: publicProfile(data) };
   } catch {
     return { error: unavailable };
@@ -187,7 +202,7 @@ export async function registerCustomer(input: {
 }
 
 export async function updateCustomerPassword(oldPassword: string, newPassword: string) {
-  const session = await verifySession((await cookies()).get("lbqueen_customer")?.value, "customer");
+  const session = await getCustomerSession();
   if (!session) return { error: "Sesi berakhir. Silakan masuk kembali." };
   const invalidPassword = passwordError(newPassword, true);
   if (invalidPassword) return { error: invalidPassword };
@@ -209,12 +224,31 @@ export async function updateCustomerPassword(oldPassword: string, newPassword: s
         password_encrypted: sealPassword(newPassword),
       })
       .eq("id", session.id);
-    return updateError ? { error: "Password gagal diperbarui." } : { success: true };
+    if (updateError) return { error: "Password gagal diperbarui." };
+    // Password baru: perangkat lain dikeluarkan, perangkat ini tetap masuk dengan versi baru.
+    const version = await bumpSessionVersion(db, session.id);
+    if (version !== null) await setSession(session.id, version);
+    return { success: true };
   } catch {
     return { error: unavailable };
   }
 }
 
 export async function logoutCustomer() {
-  (await cookies()).delete("lbqueen_customer");
+  (await cookies()).delete(CUSTOMER_COOKIE);
+}
+
+/** Cabut semua sesi akun ini (mis. HP hilang), termasuk perangkat yang sedang dipakai. */
+export async function logoutAllDevices() {
+  const session = await getCustomerSession();
+  if (!session) return { error: "Sesi berakhir. Silakan masuk kembali." };
+  try {
+    if (!(await consumeLimit("customer-logout-all", session.id))) return { error: tooMany };
+    const version = await bumpSessionVersion(serverDatabase(), session.id);
+    if (version === null) return { error: "Fitur ini belum aktif. Coba lagi nanti." };
+    (await cookies()).delete(CUSTOMER_COOKIE);
+    return { success: true };
+  } catch {
+    return { error: unavailable };
+  }
 }

@@ -1,7 +1,6 @@
 "use server";
 
-import { cookies } from "next/headers";
-import { verifySession } from "@/lib/session";
+import { getCustomerSession } from "@/lib/customer-auth";
 import { serverDatabase } from "@/lib/supabase-server";
 import { consumeLimit } from "@/lib/rate-limit";
 
@@ -14,7 +13,7 @@ export async function checkoutOnline(input: {
   expectedTotal: number;
   requestKey: string;
 }) {
-  const session = await verifySession((await cookies()).get("lbqueen_customer")?.value, "customer");
+  const session = await getCustomerSession();
   if (!session) return { error: "Sesi berakhir. Silakan masuk kembali." };
   if (
     !Array.isArray(input.items) ||

@@ -8,7 +8,7 @@ export function CategoryHeader({ section, page }: { section: Section; page: numb
   const SectionIcon = section.icon;
   return (
     <header
-      className="sticky top-0 md:top-[76px] z-40 px-3 sm:px-5 pb-2"
+      className="sticky top-0 md:top-[76px] z-40 px-3 sm:px-5"
       style={{ paddingTop: "max(env(safe-area-inset-top, 0px), 10px)" }}
     >
       <div className="glass rounded-full h-[60px] pl-1.5 pr-1.5 flex items-center gap-3">
@@ -25,7 +25,7 @@ export function CategoryHeader({ section, page }: { section: Section; page: numb
         <ArrowLeft className="w-6 h-6" strokeWidth={2.4} />
       </button>
       <div className="min-w-0 flex-1">
-        <h1 className="text-[18px] font-bold text-[#2D2926] leading-tight tracking-tight truncate">
+        <h1 className="text-[18px] font-semibold text-[#2D2926] leading-tight tracking-tight truncate">
           {section.title}
         </h1>
         {page > 1 && (

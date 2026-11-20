@@ -1,7 +1,10 @@
-import { Check, Loader2, Ticket, X } from "lucide-react";
+import { useState } from "react";
+import { createPortal } from "react-dom";
+import { Check, ChevronRight, Loader2, Ticket, X } from "lucide-react";
 import { formatRupiah } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { membershipLabel } from "@/lib/vouchers";
+import { useDialogFocus } from "@/hooks/useDialogFocus";
 import { CARD } from "./ui";
 import type { CartVoucher } from "./useCartVoucher";
 
@@ -12,140 +15,170 @@ const valueLabel = (v: { type: string; discount_amount: number }) =>
       ? "Gratis layanan"
       : formatRupiah(Number(v.discount_amount));
 
-/** Voucher di keranjang: ketik kode, atau pilih dari voucher milik membership pelanggan. */
+/** Satu baris voucher; ketuk untuk membuka pemilih (ketik kode atau pilih Voucher Saya). */
 export function VoucherCard({ voucher }: { voucher: CartVoucher }) {
-  const { applied, myVouchers } = voucher;
+  const [open, setOpen] = useState(false);
+  const { applied } = voucher;
   return (
-    <div className={`${CARD} p-4 flex flex-col gap-3`}>
-      <div className="flex items-center gap-3 min-w-0">
-        <div className="chip-glass w-10 h-10 shrink-0 rounded-full flex items-center justify-center">
-          <Ticket className="w-5 h-5 text-[#C94F78]" aria-hidden="true" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-[14px] font-semibold text-[#2D2926] leading-tight">Voucher LBQueen</p>
-          {applied ? (
-            <p className="text-[12px] text-emerald-700 font-semibold leading-snug mt-0.5 truncate">
-              {applied.code} dipakai · hemat {formatRupiah(voucher.discount)}
-            </p>
-          ) : (
-            <p className="text-[12px] text-[#766B68] leading-snug mt-0.5">
-              Ketik kode atau pilih voucher Anda
-            </p>
-          )}
-        </div>
+    <>
+      <div className={`${CARD} flex items-center gap-3 pl-4 pr-2 min-h-14`}>
+        <Ticket className="w-5 h-5 text-[#C94F78] shrink-0" aria-hidden="true" />
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="flex-1 min-w-0 min-h-12 flex items-center gap-2 text-left rounded-2xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20"
+        >
+          <span className="text-[15px] font-semibold text-[#2D2926]">Voucher</span>
+          <span
+            className={cn(
+              "flex-1 min-w-0 text-right text-[14px] truncate",
+              applied ? "font-semibold text-emerald-700" : "text-[#766B68]",
+            )}
+          >
+            {applied ? `${applied.code}, hemat ${formatRupiah(voucher.discount)}` : "Pilih voucher"}
+          </span>
+          {!applied && <ChevronRight className="w-5 h-5 text-[#766B68] shrink-0" aria-hidden="true" />}
+        </button>
         {applied && (
           <button
             type="button"
             onClick={voucher.remove}
-            className="chip-glass shrink-0 h-11 px-4 rounded-full text-[13px] font-bold text-rose-700 hover:bg-white/90 transition-colors"
+            aria-label="Hapus voucher"
+            className="w-11 h-11 shrink-0 rounded-full flex items-center justify-center text-[#766B68] hover:text-rose-700 hover:bg-rose-50"
           >
-            Hapus
+            <X className="w-4 h-4" aria-hidden="true" />
           </button>
         )}
       </div>
+      {/* Portal ke body: overlay fixed tidak boleh mewarisi margin/transform dari kolom keranjang. */}
+      {open && createPortal(<VoucherSheet voucher={voucher} onClose={() => setOpen(false)} />, document.body)}
+    </>
+  );
+}
 
-      {!applied && (
-        <div className="flex flex-col gap-3 pt-3 border-t border-[#C94F78]/10 animate-in fade-in duration-300">
-          <form
-            className="flex gap-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-              void voucher.apply();
-            }}
+function VoucherSheet({ voucher, onClose }: { voucher: CartVoucher; onClose: () => void }) {
+  const dialogRef = useDialogFocus<HTMLDivElement>(true, onClose);
+  const { myVouchers } = voucher;
+  const choose = (v: (typeof myVouchers)[number]) => {
+    if (voucher.choose(v)) onClose();
+  };
+  return (
+    <div className="fixed inset-0 z-[120] flex items-end sm:items-center justify-center bg-[#2A1520]/50 sm:p-4 animate-in fade-in duration-200">
+      <div className="absolute inset-0" onClick={onClose} aria-hidden="true" />
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="voucher-title"
+        className="glass-strong relative w-full sm:max-w-[440px] max-h-[85dvh] rounded-t-[28px] sm:rounded-[28px] flex flex-col animate-in slide-in-from-bottom-6 duration-300"
+        style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 16px)" }}
+      >
+        <div className="flex items-center justify-between gap-3 pl-5 pr-3 pt-3">
+          <h2 id="voucher-title" className="text-[17px] font-semibold text-[#2D2926]">
+            Pilih voucher
+          </h2>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Tutup"
+            className="chip-glass w-11 h-11 rounded-full flex items-center justify-center text-[#5F5552]"
           >
-            <label htmlFor="voucher-code" className="sr-only">
-              Kode voucher
-            </label>
-            <input
-              id="voucher-code"
-              type="text"
-              autoComplete="off"
-              autoCapitalize="characters"
-              maxLength={50}
-              placeholder="Masukkan kode voucher"
-              value={voucher.code}
-              onChange={(e) => {
-                voucher.setCode(e.target.value.toUpperCase());
-                voucher.setError("");
-              }}
-              className={cn(
-                "input-glass flex-1 min-w-0 min-h-11 h-11 px-3.5 rounded-full text-[16px]",
-                "font-semibold placeholder:font-normal placeholder:normal-case uppercase",
-              )}
-            />
-            <button
-              type="submit"
-              disabled={voucher.validating || !voucher.code.trim()}
-              className="btn-primary shrink-0 min-h-11 h-11 px-5 text-[13px]"
-            >
-              {voucher.validating ? <Loader2 className="w-4 h-4 animate-spin" /> : "Pakai"}
-            </button>
-          </form>
-          {voucher.error && (
-            <p
-              role="alert"
-              className="flex items-center gap-1.5 text-[12px] text-rose-700 font-semibold"
-            >
-              <X className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-              {voucher.error}
-            </p>
-          )}
+            <X className="w-5 h-5" aria-hidden="true" />
+          </button>
+        </div>
 
-          {(voucher.loadingMine || myVouchers.length > 0) && (
-            <div>
-              <p className="text-[12px] font-bold text-[#5F5552] mb-2">Voucher Saya</p>
-              {voucher.loadingMine ? (
-                <div className="skeleton-glass h-16 rounded-[20px]" />
-              ) : (
-                <ul className="flex flex-col gap-2 max-h-[260px] overflow-y-auto no-scrollbar">
-                  {myVouchers.map((v) => {
-                    const problem = voucher.problemFor(v);
-                    const scope = membershipLabel(v.membership_types);
-                    return (
-                      <li key={v.id}>
-                        <button
-                          type="button"
-                          disabled={!!problem}
-                          onClick={() => voucher.choose(v)}
-                          className={cn(
-                            "w-full flex items-center gap-3 rounded-[20px] px-3 py-2.5 text-left transition-all duration-300",
-                            "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/15",
-                            problem
-                              ? "bg-white/40 border border-white/70 opacity-70 cursor-not-allowed"
-                              : "chip-glass hover:bg-white/90 active:scale-[0.99]",
-                          )}
-                        >
-                          <span className="min-w-0 flex-1">
-                            <span className="block text-[13px] font-bold text-[#2D2926] truncate">
-                              {valueLabel(v)} · {v.name}
-                            </span>
-                            <span className="block text-[12px] font-semibold text-[#A83960] truncate">
-                              {v.code}
-                              {scope ? ` · Khusus ${scope}` : ""}
-                            </span>
-                            <span className="block text-[12px] text-[#766B68] truncate">
-                              {problem ||
-                                (Number(v.min_transaction) > 0
-                                  ? `Min. belanja ${formatRupiah(Number(v.min_transaction))}`
-                                  : "Tanpa minimal belanja")}
-                            </span>
-                          </span>
-                          {!problem && (
-                            <span className="chip-active shrink-0 inline-flex items-center gap-1 h-8 px-3 rounded-full text-[12px] font-bold">
-                              <Check className="w-3.5 h-3.5" aria-hidden="true" />
-                              Pakai
-                            </span>
-                          )}
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </div>
+        <form
+          className="flex gap-2 px-5 pt-3"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await voucher.apply();
+          }}
+        >
+          <label htmlFor="voucher-code" className="sr-only">
+            Kode voucher
+          </label>
+          <input
+            id="voucher-code"
+            type="text"
+            autoComplete="off"
+            autoCapitalize="characters"
+            maxLength={50}
+            placeholder="Kode voucher"
+            value={voucher.code}
+            aria-invalid={!!voucher.error}
+            aria-describedby={voucher.error ? "voucher-error" : undefined}
+            onChange={(e) => {
+              voucher.setCode(e.target.value.toUpperCase());
+              voucher.setError("");
+            }}
+            className="input-glass flex-1 min-w-0 h-12 px-4 rounded-full text-[16px] font-semibold placeholder:font-normal uppercase placeholder:normal-case"
+          />
+          <button
+            type="submit"
+            disabled={voucher.validating || !voucher.code.trim()}
+            className="btn-primary shrink-0 h-12 px-5 text-[14px]"
+          >
+            {voucher.validating ? <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" /> : "Pakai"}
+          </button>
+        </form>
+        {voucher.error && (
+          <p id="voucher-error" role="alert" className="px-5 pt-2 text-[13px] text-rose-700 font-semibold">
+            {voucher.error}
+          </p>
+        )}
+        {voucher.applied && !voucher.error && (
+          <p className="px-5 pt-2 text-[13px] text-emerald-700 font-semibold">
+            {voucher.applied.code} dipakai
+          </p>
+        )}
+
+        <div className="scroll-thin flex-1 min-h-0 overflow-y-auto px-5 pt-4">
+          <p className="text-[13px] font-semibold text-[#5F5552] mb-2">Voucher Saya</p>
+          {voucher.loadingMine ? (
+            <div className="skeleton-glass h-16 rounded-[20px]" />
+          ) : myVouchers.length === 0 ? (
+            <p className="text-[14px] text-[#766B68] py-2">Belum ada voucher.</p>
+          ) : (
+            <ul className="flex flex-col gap-2 pb-2">
+              {myVouchers.map((v) => {
+                const problem = voucher.problemFor(v);
+                const scope = membershipLabel(v.membership_types);
+                return (
+                  <li key={v.id}>
+                    <button
+                      type="button"
+                      disabled={!!problem}
+                      onClick={() => choose(v)}
+                      className={cn(
+                        "w-full flex items-center gap-3 rounded-[20px] px-3 py-2.5 text-left",
+                        "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/15",
+                        problem ? "bg-white/50 opacity-70 cursor-not-allowed" : "chip-glass hover:bg-white/90",
+                      )}
+                    >
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-[14px] font-semibold text-[#2D2926] truncate">
+                          {valueLabel(v)}, {v.name}
+                        </span>
+                        <span className="block text-[12px] font-semibold text-[#A83960] truncate">
+                          {v.code}
+                          {scope ? `, ${scope}` : ""}
+                        </span>
+                        <span className="block text-[12px] text-[#766B68] truncate">
+                          {problem ||
+                            (Number(v.min_transaction) > 0
+                              ? `Min. belanja ${formatRupiah(Number(v.min_transaction))}`
+                              : "Tanpa minimal belanja")}
+                        </span>
+                      </span>
+                      {!problem && <Check className="w-5 h-5 text-[#C94F78] shrink-0" aria-hidden="true" />}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
           )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

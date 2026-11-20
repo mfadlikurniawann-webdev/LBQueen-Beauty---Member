@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { verifySession } from "@/lib/session";
+import { CUSTOMER_COOKIE, customerCookieOptions, readCustomerSession } from "@/lib/customer-session";
 
 const protectedRoutes = ["/cart", "/orders", "/profile", "/membership", "/invoice"];
 const categorySlugs = new Set(["promo", "layanan", "produk"]);
@@ -32,8 +32,21 @@ export async function proxy(request: NextRequest) {
   }
 
   if (protectedRoutes.some((route) => path === route || path.startsWith(`${route}/`))) {
-    if (!(await verifySession(request.cookies.get("lbqueen_customer")?.value, "customer"))) {
-      return NextResponse.redirect(new URL("/login", request.url));
+    const cookie = request.cookies.get(CUSTOMER_COOKIE)?.value;
+    const result = await readCustomerSession(cookie);
+    if (!result) {
+      const response = NextResponse.redirect(new URL("/login", request.url));
+      if (cookie) response.cookies.delete(CUSTOMER_COOKIE);
+      return response;
+    }
+    if (result.renewed) {
+      const response = NextResponse.next();
+      response.cookies.set(
+        CUSTOMER_COOKIE,
+        result.renewed.value,
+        customerCookieOptions(result.renewed.maxAge),
+      );
+      return response;
     }
   }
 

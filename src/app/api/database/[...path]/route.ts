@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { verifySession } from "@/lib/session";
+import { CUSTOMER_COOKIE, readCustomerSession } from "@/lib/customer-session";
 import { normalizeEnvValue } from "@/lib/env";
 import { clientIp, consumeLimit } from "@/lib/rate-limit";
 
@@ -9,7 +9,7 @@ const catalog = new Set(["products", "product_variants", "vouchers"]);
 const owned = new Set(["customers", "customer_orders"]);
 const maxRows = 100;
 const ORDER_COLUMNS =
-  "id,product_name,customer_name,status,ordered_at,completed_at,customer_id,price,qty,total_price,product_id";
+  "id,product_name,customer_name,status,ordered_at,completed_at,customer_id,price,qty,total_price,product_id,reviewed_at";
 const JSON_ACCEPT = /^application\/(json|vnd\.pgrst\.object\+json)(\s*;.*)?$/i;
 const SECRET_KEYS = [
   "password",
@@ -60,10 +60,8 @@ async function handle(request: NextRequest, context: { params: Promise<{ path: s
       }
     }
   } else {
-    const customer = await verifySession(
-      request.cookies.get("lbqueen_customer")?.value,
-      "customer",
-    );
+    const customer = (await readCustomerSession(request.cookies.get(CUSTOMER_COOKIE)?.value))
+      ?.session;
     if (!customer) return fail("Silakan masuk untuk melanjutkan.", 401);
     query.set(table === "customers" ? "id" : "customer_id", `eq.${customer.id}`);
     if (table === "customer_orders" && (query.get("select") || "*").includes("*"))

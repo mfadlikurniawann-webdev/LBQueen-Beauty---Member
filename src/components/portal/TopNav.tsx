@@ -6,6 +6,7 @@ import { useScrolled } from "@/hooks/useScrolled";
 import { useCartBump } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS, isNavActive } from "./BottomNav";
+import { CustomerAvatar } from "@/components/CustomerAvatar";
 
 export function TopNav({
   pathname,
@@ -47,7 +48,7 @@ export function TopNav({
                 className={cn(
                   "h-11 px-3 lg:px-4 rounded-full flex items-center gap-2 text-[14px] transition-colors duration-300",
                   active
-                    ? "chip-active font-bold"
+                    ? "chip-active font-semibold"
                     : "text-[#5F5552] font-semibold hover:bg-white/70",
                 )}
               >
@@ -71,7 +72,7 @@ export function TopNav({
           >
             <ShoppingCart className="w-5 h-5" aria-hidden="true" />
             {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-[#E0263F] text-white text-[12px] font-bold flex items-center justify-center ring-2 ring-white tabular-nums">
+              <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-[#E0263F] text-white text-[12px] font-semibold flex items-center justify-center ring-2 ring-white tabular-nums">
                 {totalItems > 9 ? "9+" : totalItems}
               </span>
             )}
@@ -80,8 +81,8 @@ export function TopNav({
             href="/profile"
             className="chip-glass flex items-center gap-2.5 h-11 pl-1 pr-4 rounded-full hover:bg-white/80 transition-colors"
           >
-            <span className="w-9 h-9 rounded-full bg-gradient-to-br from-[#D9648C] to-[#9B3055] text-white text-[14px] font-bold flex items-center justify-center">
-              {customer.name?.charAt(0).toUpperCase()}
+            <span className="w-9 h-9 shrink-0">
+              <CustomerAvatar name={customer.name} src={customer.avatar_url} size={36} className="text-[13px]" />
             </span>
             <span className="text-[14px] font-semibold text-[#2D2926] max-w-[160px] truncate">
               {customer.name?.split(" ")[0]}

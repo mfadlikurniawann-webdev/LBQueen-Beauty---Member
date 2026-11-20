@@ -1,12 +1,11 @@
 "use server";
 
-import { cookies } from "next/headers";
-import { verifySession } from "@/lib/session";
+import { getCustomerSession } from "@/lib/customer-auth";
 import { serverDatabase } from "@/lib/supabase-server";
 import { consumeLimit } from "@/lib/rate-limit";
 
 export async function submitOrderReview(orderId: number, rating: number, text: string) {
-  const session = await verifySession((await cookies()).get("lbqueen_customer")?.value, "customer");
+  const session = await getCustomerSession();
   if (!session) return { error: "Silakan masuk kembali." };
   if (
     !Number.isSafeInteger(orderId) ||

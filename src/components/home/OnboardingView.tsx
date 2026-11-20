@@ -61,7 +61,7 @@ export function OnboardingView() {
           <div className="mt-7 text-center min-h-[104px]" aria-live="polite">
             <h1
               key={text.title}
-              className="text-[24px] font-extrabold! tracking-tight text-[#2D2926] animate-in fade-in duration-500"
+              className="text-[24px] font-bold! tracking-tight text-[#2D2926] animate-in fade-in duration-500"
             >
               {text.title}
             </h1>

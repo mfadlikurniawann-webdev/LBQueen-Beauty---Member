@@ -1,5 +1,4 @@
-import { AlertTriangle } from "lucide-react";
-
+/** Persetujuan singkat sebelum treatment (wajib dicentang). */
 export function TreatmentNotice({
   agreed,
   onChange,
@@ -8,29 +7,18 @@ export function TreatmentNotice({
   onChange: (agreed: boolean) => void;
 }) {
   return (
-    <div className="rounded-[26px] p-4 bg-[#FFF8E6]/85 border border-white/90 shadow-[inset_0_1px_0_rgba(255,255,255,1),0_0_0_1px_rgba(184,134,26,0.2)] space-y-3">
-      <div className="flex items-start gap-3">
-        <div className="w-9 h-9 shrink-0 rounded-full bg-amber-100 flex items-center justify-center">
-          <AlertTriangle className="w-4 h-4 text-amber-700" aria-hidden="true" />
-        </div>
-        <div className="min-w-0">
-          <p className="text-[13px] font-bold text-amber-900">Perhatian Sebelum Treatment</p>
-          <p className="text-[13px] text-amber-800 leading-relaxed mt-0.5">
-            Hindari alkohol dan obat-obatan terlarang H-7 hingga H+7 treatment. Sampaikan kondisi
-            kesehatan Anda kepada therapist.
-          </p>
-        </div>
-      </div>
-      <label className="flex items-center gap-3 cursor-pointer border-t border-amber-200 pt-3">
-        <input
-          type="checkbox"
-          checked={agreed}
-          onChange={(e) => onChange(e.target.checked)}
-          className="w-5 h-5 shrink-0 rounded cursor-pointer"
-          style={{ accentColor: "#C94F78" }}
-        />
-        <span className="text-[13px] font-semibold text-amber-900">Saya mengerti & menyetujui</span>
-      </label>
-    </div>
+    <label className="glass-soft rounded-[24px] flex items-start gap-3 p-4 cursor-pointer">
+      <input
+        type="checkbox"
+        checked={agreed}
+        onChange={(e) => onChange(e.target.checked)}
+        className="mt-0.5 w-5 h-5 shrink-0 cursor-pointer"
+        style={{ accentColor: "#C94F78" }}
+      />
+      <span className="text-[14px] text-[#2D2926] leading-snug">
+        Saya tidak mengonsumsi alkohol dan obat terlarang H-7 s/d H+7 treatment, dan akan
+        menyampaikan kondisi kesehatan ke therapist.
+      </span>
+    </label>
   );
 }

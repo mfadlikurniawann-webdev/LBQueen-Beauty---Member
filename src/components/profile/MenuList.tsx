@@ -29,7 +29,7 @@ function RowBody({ row }: { row: MenuRow }) {
       <span className="flex-1 min-w-0 flex items-center gap-2 py-4 border-b border-[#C94F78]/10 group-last:border-b-0">
         <span className="text-[15px] font-semibold text-[#2D2926] truncate">{row.label}</span>
         {row.badge && (
-          <span className="chip-active shrink-0 rounded-full px-2.5 py-0.5 text-[12px] font-bold">
+          <span className="chip-active shrink-0 rounded-full px-2.5 py-0.5 text-[12px] font-semibold">
             {row.badge}
           </span>
         )}

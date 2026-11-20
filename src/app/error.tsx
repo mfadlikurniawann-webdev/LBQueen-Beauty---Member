@@ -28,7 +28,7 @@ export default function ErrorPage({ error, reset }: { error: Error; reset: () =>
         >
           <AlertCircle className="w-8 h-8 text-[#C94F78]" aria-hidden="true" />
         </div>
-        <h1 className="text-[22px] font-bold! text-[#2D2926] tracking-tight">
+        <h1 className="text-[22px] font-semibold! text-[#2D2926] tracking-tight">
           Halaman belum dapat dimuat
         </h1>
         <p className="mt-2 mb-7 text-[14px] leading-relaxed text-[#766B68]">

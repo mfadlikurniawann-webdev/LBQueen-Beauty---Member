@@ -2,7 +2,7 @@ import http from "node:http";
 import { spawn } from "node:child_process";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
-import { chromium } from "@playwright/test";
+import { chromium, devices, webkit } from "@playwright/test";
 import { createSession } from "../src/lib/session.ts";
 
 const customers = [
@@ -154,6 +154,12 @@ const mock = http.createServer((request, response) => {
     method: request.method,
   });
   const table = url.pathname.split("/").at(-1);
+  // Storage (foto profil): unggah, buat bucket, dan hapus selalu berhasil.
+  if (url.pathname.startsWith("/storage/v1/")) {
+    response.writeHead(200, { "Content-Type": "application/json" });
+    response.end(JSON.stringify({ Key: url.pathname, Id: "qa", name: "qa" }));
+    return;
+  }
   let data = [];
   if (table === "consume_login_attempt") data = true;
   else if (table === "customers") data = customers;
@@ -285,6 +291,58 @@ orders.unshift(
     product_id: 2,
     ordered_at: new Date(Date.now() - 86400000).toISOString(),
   },
+  // Format lama dari database: jadwal dalam kurung siku, harga, dan jumlah di nama.
+  {
+    id: 5,
+    customer_id: 1,
+    customer_name: "QA Customer",
+    product_name:
+      "Breshaugmentation BRESH UP Premium Body Contouring Paket Lengkap [Jadwal: 2026-11-21 19:00] Rp 19.250.000 (x7)",
+    qty: 7,
+    price: 2750000,
+    total_price: 19250000,
+    status: "pending",
+    product_id: 1,
+    ordered_at: new Date(Date.now() - 3600000).toISOString(),
+  },
+  {
+    id: 6,
+    customer_id: 1,
+    customer_name: "QA Customer",
+    product_name: "Daily Cleanser (Paket 2 pcs) Rp 160.000 (x3)",
+    qty: 3,
+    price: 160000,
+    total_price: 480000,
+    status: "dp",
+    product_id: 2,
+    ordered_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+  },
+  {
+    id: 7,
+    customer_id: 1,
+    customer_name: "QA Customer",
+    product_name: "Facial Care (Gold) [Jadwal: 2026-11-25 10:30] Rp 140.000 (x1)",
+    qty: 1,
+    price: 140000,
+    total_price: 140000,
+    status: "cancelled",
+    product_id: 1,
+    ordered_at: new Date(Date.now() - 86400000 * 4).toISOString(),
+  },
+  {
+    id: 8,
+    customer_id: 1,
+    customer_name: "QA Customer",
+    product_name: "Facial Care Rp 140.000 (x2)",
+    qty: 2,
+    price: 140000,
+    total_price: 280000,
+    status: "completed",
+    product_id: 1,
+    ordered_at: new Date(Date.now() - 86400000 * 9).toISOString(),
+    completed_at: new Date(Date.now() - 86400000 * 8).toISOString(),
+    reviewed_at: new Date(Date.now() - 86400000 * 7).toISOString(),
+  },
 );
 let browser;
 const shots = [];
@@ -309,11 +367,36 @@ async function visit(page, url, ready, viewport = MOBILE) {
   await page.setViewportSize(viewport);
   await page.goto(base + url);
   if (ready) await ready(page);
-  await page.waitForLoadState("networkidle");
+  // Konten sudah ditunggu lewat ready(); networkidle hanya penenang, bukan syarat lulus.
+  await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(600);
 }
 const failures = [];
+// Pelanggaran CSP dan error konsol dikumpulkan dari semua halaman; harus nol.
+const cspViolations = [];
+const consoleErrors = [];
+async function watch(context) {
+  await context.addInitScript(() => {
+    document.addEventListener("securitypolicyviolation", (event) => {
+      console.error(`CSP: ${event.violatedDirective} ${event.blockedURI || "inline"}`);
+    });
+  });
+  context.on("console", (message) => {
+    if (message.type() !== "error") return;
+    // Hanya halaman aplikasi ini; skrip /_vercel/* hanya ada di Vercel (404 lokal wajar).
+    if (!message.page()?.url().startsWith(base)) return;
+    const text = message.text();
+    if (/_vercel\//.test(`${message.location()?.url || ""} ${text}`)) return;
+    if (text.startsWith("CSP:") || /Content Security Policy/i.test(text))
+      cspViolations.push(`${message.page()?.url() || ""} ${text}`);
+    else consoleErrors.push(`${message.page()?.url() || ""} ${text}`);
+  });
+  context.on("weberror", (error) => {
+    if (error.page()?.url().startsWith(base)) consoleErrors.push(`pageerror ${error.error().message}`);
+  });
+  return context;
+}
 async function both(page, name, url, ready) {
   for (const [label, viewport] of [
     ["mobile", MOBILE],
@@ -354,14 +437,14 @@ try {
     throw new Error("purchase_price bocor dari gateway member");
   console.log("Cek keamanan gateway member: lulus");
 
-  const guest = await (await browser.newContext({ viewport: MOBILE })).newPage();
+  const guest = await (await watch(await browser.newContext({ viewport: MOBILE }))).newPage();
   await both(guest, "01-selamat-datang", "/", (p) =>
     p.getByRole("button", { name: "Masuk", exact: true }).waitFor(),
   );
   await both(guest, "02-masuk", "/login");
   await both(guest, "03-daftar", "/register");
 
-  const memberContext = await browser.newContext({ viewport: MOBILE });
+  const memberContext = await watch(await browser.newContext({ viewport: MOBILE }));
   await memberContext.addCookies([
     { name: "lbqueen_customer", value: await createSession(1, "customer", 900), url: base },
   ]);
@@ -413,7 +496,7 @@ try {
     p.getByText("Daily Cleanser").first().waitFor(),
   );
   await both(member, "09-keranjang", "/cart", (p) =>
-    p.getByRole("button", { name: /Konfirmasi/ }).waitFor(),
+    p.getByRole("button", { name: "Pesan", exact: true }).first().waitFor(),
   );
   await both(member, "10-pesanan", "/orders", (p) =>
     p.getByText("Daily Cleanser").first().waitFor(),
@@ -425,8 +508,140 @@ try {
     p.getByRole("heading", { name: /Nikmati/ }).waitFor(),
   );
   await both(member, "13-nota-online", "/invoice/1");
+  // Checkout membuka WhatsApp lewat window.open: tidak boleh diblokir CSP/COOP.
+  await visit(member, "/cart", (p) =>
+    p.getByRole("button", { name: "Pesan", exact: true }).first().waitFor(),
+  );
+  const [popup] = await Promise.all([
+    memberContext.waitForEvent("page"),
+    member.evaluate(() => window.open("https://wa.me/6200000000?text=tes", "_blank")),
+  ]);
+  if (!popup) failures.push("window.open WhatsApp diblokir");
+  await popup?.close();
+  // Pesanan: nama format lama tampil bersih; modal ulasan dan rincian.
+  await visit(member, "/orders", (p) => p.getByText(/Breshaugmentation/).first().waitFor());
+  if (await member.getByText(/\[Jadwal|\(x\d+\)|Rp 19\.250\.000 \(x/).count())
+    failures.push("teks mentah nama pesanan tampil di daftar pesanan");
+  await member.getByRole("button", { name: "Beri Ulasan" }).first().click();
+  await member.getByRole("dialog").waitFor();
+  await member.waitForTimeout(400);
+  await shoot(member, "16-ulasan-mobile", MOBILE, { full: false });
+  await member.setViewportSize(DESKTOP);
+  await member.waitForTimeout(400);
+  await shoot(member, "16-ulasan-desktop", DESKTOP, { full: false });
+  await member.keyboard.press("Escape");
+  await member.setViewportSize(MOBILE);
+  await member.getByRole("button", { name: /Detail pesanan Breshaugmentation/ }).click();
+  await member.getByRole("dialog").waitFor();
+  await member.waitForTimeout(400);
+  await shoot(member, "17-rincian-pesanan-mobile", MOBILE, { full: false });
+  await member.setViewportSize(DESKTOP);
+  await member.waitForTimeout(400);
+  await shoot(member, "17-rincian-pesanan-desktop", DESKTOP, { full: false });
+  await member.keyboard.press("Escape");
 
-  const regularContext = await browser.newContext({ viewport: MOBILE });
+  // Profil: panel ubah profil, lalu unggah foto profil (Storage dimock).
+  await visit(member, "/profile", (p) => p.getByRole("heading", { name: "QA Customer" }).waitFor());
+  await member.getByRole("button", { name: /Ubah profil/ }).click();
+  await member.locator("#profile-name").waitFor();
+  await shoot(member, "18-profil-ubah-mobile", MOBILE);
+  await member.locator('input[type="file"]').setInputFiles(
+    path.resolve("public/banners/lbqueen-tenaga-medis.webp"),
+  );
+  try {
+    await member.getByText("Foto profil diperbarui.").waitFor({ timeout: 15000 });
+  } catch {
+    failures.push("unggah foto profil tidak selesai");
+  }
+  // Tampilan foto: URL Storage mock tidak diizinkan next/image, jadi sesi dibelokkan ke gambar lokal.
+  await memberContext.route("**/api/session", async (route) => {
+    const response = await route.fetch();
+    const body = await response.json();
+    if (body.profile) body.profile.avatar_url = "/banners/lbqueen-tenaga-medis.webp";
+    await route.fulfill({ response, json: body });
+  });
+  await both(member, "19-profil-foto", "/profile", (p) =>
+    p.getByRole("button", { name: "Hapus foto" }).waitFor(),
+  );
+  await memberContext.unroute("**/api/session");
+
+  // Pemilih voucher terbuka (sheet dengan isi bergulir dan scrollbar tipis).
+  for (const [label, viewport] of [
+    ["mobile", MOBILE],
+    ["desktop", DESKTOP],
+  ]) {
+    await visit(member, "/cart", (p) =>
+      p.getByRole("button", { name: "Pesan", exact: true }).first().waitFor(),
+    viewport);
+    await member.getByRole("button", { name: /^Voucher/ }).click();
+    await member.getByRole("dialog", { name: "Pilih voucher" }).waitFor();
+    await member.waitForTimeout(400);
+    await shoot(member, `22-pilih-voucher-${label}`, viewport, { full: false });
+    await member.keyboard.press("Escape");
+  }
+  await member.setViewportSize(MOBILE);
+
+  // Keranjang tanpa treatment.
+  const productContext = await watch(await browser.newContext({ viewport: MOBILE }));
+  await productContext.addCookies([
+    { name: "lbqueen_customer", value: await createSession(1, "customer", 900), url: base },
+  ]);
+  await productContext.addInitScript(
+    (cart) => localStorage.setItem("lbqueen_cart", JSON.stringify(cart)),
+    CART.filter((item) => item.type !== "Treatment Care & Beauty"),
+  );
+  await both(await productContext.newPage(), "20-keranjang-produk", "/cart", (p) =>
+    p.getByRole("button", { name: "Pesan", exact: true }).first().waitFor(),
+  );
+
+  // Layar pertama beranda tanpa menggulir (HP sentuh + WebKit iPhone): tidak boleh ada yang tersembunyi.
+  const hiddenInView = () =>
+    [...document.querySelectorAll("[data-reveal]")].filter((el) => {
+      const rect = el.getBoundingClientRect();
+      return rect.top < innerHeight && rect.bottom > 0 && Number(getComputedStyle(el).opacity) < 0.99;
+    }).length;
+  const firstScreen = async (context, name) => {
+    await context.addCookies([
+      { name: "lbqueen_customer", value: await createSession(1, "customer", 900), url: base },
+    ]);
+    await context.addInitScript(
+      (cart) => localStorage.setItem("lbqueen_cart", JSON.stringify(cart)),
+      CART,
+    );
+    const page = await context.newPage();
+    await page.goto(base + "/");
+    await page.getByRole("navigation", { name: "Menu layanan" }).waitFor();
+    await page.waitForTimeout(1200);
+    const hidden = await page.evaluate(hiddenInView);
+    if (hidden) failures.push(`${name}: ${hidden} elemen di layar masih tersembunyi`);
+    const file = path.join(outDir, `${name}.png`);
+    await page.screenshot({ path: file });
+    shots.push(file);
+    await context.close();
+  };
+  for (const width of [360, 390, 430])
+    await firstScreen(
+      await watch(
+        await browser.newContext({
+          viewport: { width, height: 844 },
+          isMobile: true,
+          hasTouch: true,
+          deviceScaleFactor: 2,
+        }),
+      ),
+      `21-beranda-layar-awal-${width}`,
+    );
+  const webkitBrowser = await webkit.launch();
+  try {
+    await firstScreen(
+      await webkitBrowser.newContext({ ...devices["iPhone 14"] }),
+      "21-beranda-layar-awal-webkit-iphone",
+    );
+  } finally {
+    await webkitBrowser.close();
+  }
+
+  const regularContext = await watch(await browser.newContext({ viewport: MOBILE }));
   await regularContext.addCookies([
     { name: "lbqueen_customer", value: await createSession(2, "customer", 900), url: base },
   ]);
@@ -437,6 +652,9 @@ try {
   );
 
   console.log(`Saved ${shots.length} screenshots to ${outDir}`);
+  console.log(`Pelanggaran CSP: ${cspViolations.length}, error konsol: ${consoleErrors.length}`);
+  for (const line of [...cspViolations, ...consoleErrors].slice(0, 20)) console.log(`  ${line}`);
+  if (cspViolations.length) failures.push(`${cspViolations.length} pelanggaran CSP`);
   if (failures.length) {
     console.error(["Gagal:", ...failures].join("\n"));
     process.exitCode = 1;

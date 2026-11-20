@@ -46,7 +46,7 @@ export function BottomNav({ pathname }: { pathname: string }) {
               <span
                 className={cn(
                   "text-[12px] leading-tight truncate",
-                  active ? "font-bold" : "font-semibold",
+                  active ? "font-semibold" : "font-semibold",
                 )}
               >
                 {label}

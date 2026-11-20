@@ -1,5 +1,27 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.NODE_ENV === "production";
+
+// CSP tanpa nonce agar halaman statis tetap statis. Inline script Next.js butuh 'unsafe-inline',
+// tetapi skrip dari domain lain dan pengiriman data ke domain lain diblokir.
+const CSP = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline'${isProd ? "" : " 'unsafe-eval' https://va.vercel-scripts.com"}`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://*.supabase.co https://images.unsplash.com",
+  "font-src 'self' data:",
+  `connect-src 'self'${isProd ? "" : " ws: https://va.vercel-scripts.com"}`,
+  "worker-src 'self'",
+  "manifest-src 'self'",
+  "media-src 'self'",
+  "frame-src 'none'",
+  "frame-ancestors 'none'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  ...(isProd && process.env.VERCEL ? ["upgrade-insecure-requests"] : []),
+].join("; ");
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
@@ -17,9 +39,9 @@ const nextConfig: NextConfig = {
         { key: 'X-Frame-Options', value: 'DENY' },
         { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
         { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-        { key: 'Content-Security-Policy', value: "frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'" },
+        { key: 'Content-Security-Policy', value: CSP },
         { key: 'Cross-Origin-Opener-Policy', value: 'same-origin-allow-popups' },
-        ...(process.env.NODE_ENV === 'production' ? [{ key: 'Strict-Transport-Security', value: 'max-age=31536000' }] : []),
+        ...(isProd ? [{ key: 'Strict-Transport-Security', value: 'max-age=31536000' }] : []),
       ],
     }];
   },

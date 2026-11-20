@@ -21,7 +21,7 @@ export function PageHero({
     <div
       className={cn(
         "relative px-4 sm:px-8",
-        tall ? "pb-14" : "pb-5",
+        tall ? "pb-14" : "pb-3",
       )}
       style={{ paddingTop: "max(env(safe-area-inset-top, 0px), 20px)" }}
     >
@@ -40,7 +40,7 @@ export function PageHero({
           </button>
         )}
         <div className="min-w-0 flex-1">
-          <h1 className="text-[26px] md:text-[30px] font-bold! text-[#2D2926] tracking-tight leading-tight truncate">
+          <h1 className="text-[26px] md:text-[30px] font-semibold! text-[#2D2926] tracking-tight leading-tight truncate">
             {title}
           </h1>
           {subtitle && (

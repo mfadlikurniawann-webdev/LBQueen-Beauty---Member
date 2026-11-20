@@ -58,7 +58,7 @@ export function HomeCatalog({
           <div className="chip-glass w-16 h-16 rounded-full flex items-center justify-center mb-4">
             <EmptyIcon className="w-7 h-7 text-[#A83960]" aria-hidden="true" />
           </div>
-          <p className="text-[15px] font-bold text-[#2D2926]">
+          <p className="text-[15px] font-semibold text-[#2D2926]">
             {searching ? "Tidak ada hasil ditemukan" : "Belum ada promo aktif"}
           </p>
           <p className="text-[13px] text-[#766B68] mt-1.5 max-w-[260px] leading-relaxed">

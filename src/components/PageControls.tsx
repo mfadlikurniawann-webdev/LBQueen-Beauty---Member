@@ -41,7 +41,7 @@ export function PageControls({
         aria-label={`Halaman ${page}`}
         className={cn(
           "chip-active inline-flex h-11 min-w-11 items-center justify-center rounded-full px-3",
-          "text-[14px] font-bold tabular-nums",
+          "text-[14px] font-semibold tabular-nums",
         )}
       >
         {loading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : page}

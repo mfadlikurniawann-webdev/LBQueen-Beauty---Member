@@ -2,6 +2,7 @@ import type { CartItem } from "@/context/CartContext";
 import { TREATMENT_TYPE } from "@/lib/constants";
 import { formatRupiah } from "@/lib/format";
 import type { Voucher } from "./useCartVoucher";
+import { parseProductName } from "@/components/orders/order-utils";
 
 export function isTreatmentItem(item: Pick<CartItem, "type" | "name">) {
   return (
@@ -30,7 +31,9 @@ export function buildOrderMessage({
 }) {
   let msg = `Halo LBQueen! Saya *${customer.name}*${customer.is_member ? " (Member)" : ""}.\n\nPesanan saya:\n\n`;
   orders.forEach((item, i) => {
-    msg += `${i + 1}. *${item.product_name}*\n   ${formatRupiah(item.total_price)}\n`;
+    const line = parseProductName(item.product_name);
+    const variant = line.variant ? ` (${line.variant})` : "";
+    msg += `${i + 1}. *${line.name}*${variant} x${line.qty || 1}\n   ${formatRupiah(item.total_price)}\n`;
   });
 
   if (booking) {

@@ -23,16 +23,16 @@ export function PrintSettings({
           onClick={() => window.close()}
           className={cn(
             "chip-glass h-11 pl-2.5 pr-3.5 rounded-full flex items-center gap-1.5 text-[#5F5552] hover:text-[#A83960]",
-            "hover:bg-white/90 transition-colors text-[14px] font-bold",
+            "hover:bg-white/90 transition-colors text-[14px] font-semibold",
           )}
         >
           <ChevronLeft className="w-4 h-4" /> Kembali
         </button>
-        <h1 className="text-[16px] font-bold! text-[#2D2926]">Pengaturan Cetak</h1>
+        <h1 className="text-[16px] font-semibold! text-[#2D2926]">Pengaturan Cetak</h1>
       </div>
 
       <div>
-        <p className="text-[13px] font-bold text-[#5F5552] mb-2">
+        <p className="text-[13px] font-semibold text-[#5F5552] mb-2">
           Ukuran Kertas
         </p>
         <div className="grid grid-cols-2 gap-3">
@@ -45,7 +45,7 @@ export function PrintSettings({
                 aria-pressed={active}
                 onClick={() => onSize(option)}
                 className={cn(
-                  "h-12 rounded-full text-[14px] font-bold transition-all duration-300",
+                  "h-12 rounded-full text-[14px] font-semibold transition-all duration-300",
                   active ? "chip-active" : "chip-glass text-[#5F5552] hover:bg-white/90",
                 )}
               >

@@ -6,7 +6,7 @@ const chipClass = (active: boolean) =>
   cn(
     "whitespace-nowrap px-4 min-h-11 rounded-full text-[13px] font-semibold capitalize transition-all",
     "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C94F78]/20",
-    active ? "chip-active font-bold" : "chip-glass text-[#3F3734] hover:text-[#A83960] hover:bg-white/85",
+    active ? "chip-active font-semibold" : "chip-glass text-[#3F3734] hover:text-[#A83960] hover:bg-white/85",
   );
 
 export function CategoryFilters({
@@ -28,9 +28,10 @@ export function CategoryFilters({
   activeTab: CatalogTab;
   onTab: (value: CatalogTab) => void;
 }) {
+  // Satu ritme vertikal: 12px antar kontrol, 16px sebelum konten (diatur pemanggil).
   return (
-    <>
-      <div className="relative mb-5">
+    <div className="flex flex-col gap-3">
+      <div className="relative">
         <SearchIcon
           aria-hidden="true"
           className="w-5 h-5 text-[#A83960] absolute left-4 top-1/2 -translate-y-1/2"
@@ -49,7 +50,7 @@ export function CategoryFilters({
 
       {subCats.length > 0 && (
         <div
-          className="mb-4 -mx-5 px-5 flex gap-2 overflow-x-auto no-scrollbar py-1"
+          className="-mx-5 px-5 flex gap-2 overflow-x-auto no-scrollbar"
           aria-label="Sub kategori"
         >
           <button
@@ -74,7 +75,7 @@ export function CategoryFilters({
         </div>
       )}
 
-      <div className="sticky top-[78px] md:top-[154px] z-30 -mx-5 px-5 py-2 mb-4">
+      <div className="sticky top-[78px] md:top-[154px] z-30 -mx-5 px-5">
         <div
           className={cn(
             `glass grid ${section.tabs.length === 2 ? "grid-cols-2" : "grid-cols-3"} gap-1 rounded-full`,
@@ -90,7 +91,7 @@ export function CategoryFilters({
               aria-pressed={activeTab === tab}
               onClick={() => onTab(tab)}
               className={cn(
-                "min-h-11 rounded-full text-[13px] font-bold capitalize transition-all duration-300",
+                "min-h-11 rounded-full text-[13px] font-semibold capitalize transition-all duration-300",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C94F78]/30",
                 activeTab === tab ? "chip-active" : "text-[#5F5552] hover:text-[#A83960]",
               )}
@@ -100,6 +101,6 @@ export function CategoryFilters({
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -31,10 +31,10 @@ export function VoucherTicket({ voucher, className }: { voucher: MyVoucher; clas
       <IconChip icon={Ticket} tone="gold" size="md" />
       <div className="min-w-0 flex-1">
         <p className="text-[12px] font-semibold text-[#8A6414] truncate">{voucher.name}</p>
-        <p className="text-[15px] font-bold text-[#2D2926] leading-tight tabular-nums truncate">
+        <p className="text-[15px] font-semibold text-[#2D2926] leading-tight tabular-nums truncate">
           Potongan {amount}
         </p>
-        <p className="text-[12px] font-bold text-[#A83960] mt-0.5 truncate">{voucher.code}</p>
+        <p className="text-[12px] font-semibold text-[#A83960] mt-0.5 truncate">{voucher.code}</p>
         {(scope || voucher.products?.name) && (
           <p className="text-[12px] text-[#766B68] truncate">
             {[
@@ -42,7 +42,7 @@ export function VoucherTicket({ voucher, className }: { voucher: MyVoucher; clas
               voucher.products?.name && `Untuk ${voucher.products.name}`,
             ]
               .filter(Boolean)
-              .join(" · ")}
+              .join(", ")}
           </p>
         )}
         {voucher.min_transaction > 0 && (
@@ -56,7 +56,7 @@ export function VoucherTicket({ voucher, className }: { voucher: MyVoucher; clas
         onClick={copy}
         aria-label={`Salin kode ${voucher.code}`}
         className={cn(
-          "shrink-0 inline-flex items-center gap-1 rounded-full px-3.5 h-11 text-[13px] font-bold transition-all duration-300 active:scale-95",
+          "shrink-0 inline-flex items-center gap-1 rounded-full px-3.5 h-11 text-[13px] font-semibold transition-all duration-300 active:scale-95",
           copied ? "chip-active" : "chip-glass text-[#A83960] hover:bg-white/90",
         )}
       >

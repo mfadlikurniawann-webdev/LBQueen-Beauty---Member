@@ -14,13 +14,11 @@ export function MenuPanel({
 }) {
   return (
     <div className="glass-lit spotlight rounded-[28px]">
-      <div className="px-4 py-3.5">
+      <div className="px-4 py-2.5">
         <PointsCard
           bare
           points={customer.points}
           tierName={tierOf(customer).name}
-          voucherCount={voucherCount}
-          cartCount={cartCount}
         />
       </div>
       <div className="border-t border-white/80 shadow-[0_-1px_0_rgba(122,34,64,0.06)] px-3 pt-4 pb-3.5">

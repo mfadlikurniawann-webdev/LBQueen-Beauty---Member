@@ -42,8 +42,8 @@ export function ActiveOrderCard({ customerId }: { customerId: number }) {
       <div className="flex items-center gap-3">
         <IconChip icon={Icon} tone="rose" size="md" />
         <div className="min-w-0 flex-1">
-          <p className="text-[12px] font-semibold text-[#A83960]">Pesanan aktif · #{invoiceNum}</p>
-          <p className="text-[15px] font-bold text-[#2D2926] truncate">{parsed.mainName}</p>
+          <p className="text-[12px] font-semibold text-[#A83960]">Pesanan aktif #{invoiceNum}</p>
+          <p className="text-[15px] font-semibold text-[#2D2926] truncate">{parsed.name}</p>
         </div>
         <ChevronRight className="w-5 h-5 shrink-0 text-[#8C8280]" aria-hidden="true" />
       </div>

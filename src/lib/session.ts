@@ -5,6 +5,10 @@ export type Session = {
   kind: "admin" | "customer";
   expires: number;
   role?: "superadmin" | "admin" | "kasir";
+  /** Versi sesi akun saat token dibuat; berbeda dengan database berarti sesi dicabut. */
+  v?: number;
+  /** Aktivitas terakhir (ms) untuk batas waktu tidak aktif. */
+  last?: number;
 };
 
 async function signingKey() {
@@ -36,14 +40,18 @@ export async function createSession(
   kind: Session["kind"],
   maxAge: number,
   role: Session["role"] = "kasir",
+  options: { version?: number; expires?: number } = {},
 ) {
+  const now = Date.now();
   const payload = encode(
     new TextEncoder().encode(
       JSON.stringify({
         id,
         kind,
-        expires: Date.now() + maxAge * 1000,
+        expires: options.expires ?? now + maxAge * 1000,
         ...(kind === "admin" ? { role } : {}),
+        v: options.version ?? 0,
+        last: now,
       }),
     ),
   );

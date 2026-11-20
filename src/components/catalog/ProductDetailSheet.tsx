@@ -68,13 +68,13 @@ function PriceBlock({
       {discount > 0 && !showRange && (
         <span className="text-[14px] text-[#8C8280] line-through">{formatRupiah(base)}</span>
       )}
-      <span className="text-[24px] md:text-[28px] font-bold text-[#C2185B] leading-tight">
+      <span className="text-[24px] md:text-[28px] font-semibold text-[#C2185B] leading-tight">
         {showRange
           ? `${formatRupiah(range.finalMin)} - ${formatRupiah(range.finalMax)}`
           : formatRupiah(finalPrice)}
       </span>
       {percent > 0 && !showRange && (
-        <span className="rounded-full bg-[#D3264A] px-2 py-0.5 text-[12px] font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
+        <span className="rounded-full bg-[#D3264A] px-2 py-0.5 text-[12px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
           -{percent}%
         </span>
       )}
@@ -87,7 +87,7 @@ function Description({ text }: { text: string }) {
   const long = text.length > DESCRIPTION_PREVIEW;
   return (
     <section className="pt-4 border-t border-[#C94F78]/12">
-      <h3 className="text-[15px] font-bold text-[#2D2926] mb-2">Deskripsi</h3>
+      <h3 className="text-[15px] font-semibold text-[#2D2926] mb-2">Deskripsi</h3>
       <p className="text-[14px] text-[#4A4340] leading-relaxed whitespace-pre-line break-words">
         {long && !expanded ? `${text.slice(0, DESCRIPTION_PREVIEW).trimEnd()}…` : text}
       </p>
@@ -95,7 +95,7 @@ function Description({ text }: { text: string }) {
         <button
           type="button"
           onClick={() => setExpanded((v) => !v)}
-          className="mt-1.5 text-[13px] font-bold text-[#A83960] hover:underline"
+          className="mt-1.5 text-[13px] font-semibold text-[#A83960] hover:underline"
         >
           {expanded ? "Tampilkan lebih sedikit" : "Lihat selengkapnya"}
         </button>
@@ -139,7 +139,7 @@ function Actions({
           >
             <Minus className="w-4 h-4" />
           </button>
-          <span className="w-6 text-center text-[17px] font-bold tabular-nums" aria-live="polite">
+          <span className="w-6 text-center text-[17px] font-semibold tabular-nums" aria-live="polite">
             <span key={qty} className="inline-block animate-in zoom-in-75 fade-in duration-200">
               {qty}
             </span>
@@ -172,7 +172,7 @@ function Actions({
           onClick={selection.buyNow}
           disabled={blocked}
           className={cn(
-            "h-[52px] px-5 rounded-full text-[15px] font-bold flex items-center justify-between gap-2 whitespace-nowrap",
+            "h-[52px] px-5 rounded-full text-[15px] font-semibold flex items-center justify-between gap-2 whitespace-nowrap",
             "active:scale-[0.98] transition-all duration-300",
             blocked
               ? "chip-glass text-[#8C8280] cursor-not-allowed"
@@ -266,7 +266,7 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar md:grid md:grid-cols-2 lg:grid-cols-[minmax(0,460px)_minmax(0,1fr)] md:gap-6 lg:gap-8 md:p-6">
+        <div className="scroll-thin flex-1 min-h-0 overflow-y-auto md:grid md:grid-cols-2 lg:grid-cols-[minmax(0,460px)_minmax(0,1fr)] md:gap-6 lg:gap-8 md:p-6">
           <div className="md:sticky md:top-0 md:self-start">
             <ProductGallery
               images={images}
@@ -275,7 +275,7 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
               focusUrl={variant?.image_url}
               badge={
                 savings > 0 ? (
-                  <span className="absolute left-3 bottom-3 rounded-full bg-[#D3264A] px-3 py-1 text-[12px] font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
+                  <span className="absolute left-3 bottom-3 rounded-full bg-[#D3264A] px-3 py-1 text-[12px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
                     Hemat {formatRupiah(savings)}
                   </span>
                 ) : null
@@ -290,7 +290,7 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
               </p>
               <h2
                 id="product-sheet-title"
-                className="text-[20px] md:text-[22px] font-bold! text-[#2D2926] leading-snug mt-0.5"
+                className="text-[20px] md:text-[22px] font-semibold! text-[#2D2926] leading-snug mt-0.5"
               >
                 {product.name}
               </h2>
@@ -301,7 +301,7 @@ export function ProductDetailSheet({ selection }: { selection: ProductSelection 
             {variants.length > 0 && (
               <div ref={variantRef} className="space-y-2.5">
                 <div className="flex items-baseline justify-between gap-3">
-                  <h3 className="text-[15px] font-bold text-[#2D2926]">
+                  <h3 className="text-[15px] font-semibold text-[#2D2926]">
                     {product.variant_label?.trim() || "Variasi"}
                   </h3>
                   {variant && (

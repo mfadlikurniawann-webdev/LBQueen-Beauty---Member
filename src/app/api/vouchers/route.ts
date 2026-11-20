@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { unstable_cache } from "next/cache";
-import { verifySession } from "@/lib/session";
+import { CUSTOMER_COOKIE, readCustomerSession } from "@/lib/customer-session";
 import { serverDatabase } from "@/lib/supabase-server";
 import { TIER_LABELS, customerTier, voucherAllowsTier } from "@/lib/vouchers";
 
@@ -45,7 +45,7 @@ const vouchersForTier = unstable_cache(
 );
 
 export async function GET(request: NextRequest) {
-  const session = await verifySession(request.cookies.get("lbqueen_customer")?.value, "customer");
+  const session = (await readCustomerSession(request.cookies.get(CUSTOMER_COOKIE)?.value))?.session;
   if (!session) return Response.json({ message: "Silakan masuk." }, { status: 401, headers });
   try {
     const db = serverDatabase();

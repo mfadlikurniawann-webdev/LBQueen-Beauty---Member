@@ -63,7 +63,7 @@ export default function OnlineInvoicePage() {
         <div className="ambient fixed inset-0 -z-10 pointer-events-none print:hidden" aria-hidden="true" />
 
         <Loader2 className="w-8 h-8 text-[#C94F78] animate-spin" />
-        <p className="text-[13px] font-medium text-[#766B68]">Memuat invoice...</p>
+        <p className="text-[13px] font-medium text-[#766B68]">Memuat invoice</p>
       </div>
     );
   }
@@ -90,7 +90,7 @@ export default function OnlineInvoicePage() {
           >
             <AlertCircle className="w-8 h-8 text-rose-600" aria-hidden="true" />
           </div>
-          <p className="text-[16px] font-bold text-[#2D2926]">
+          <p className="text-[16px] font-semibold text-[#2D2926]">
             {error || "Pesanan online tidak ditemukan"}
           </p>
           <button
@@ -111,7 +111,7 @@ export default function OnlineInvoicePage() {
     <main
       id="main-content"
       className={cn(
-        "relative isolate min-h-screen font-mono flex flex-col items-center px-4 py-6 sm:py-8",
+        "relative isolate min-h-screen flex flex-col items-center px-4 py-6 sm:py-8",
         "print:bg-white print:p-0 print:min-h-0 print:block",
       )}
     >

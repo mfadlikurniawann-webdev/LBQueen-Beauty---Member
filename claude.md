@@ -1,5 +1,15 @@
 # Architectural Decisions & Changes Log (LBQueen Member)
 
+## 2026-11-20 (lanjutan 3): Keamanan sesi, CSP, profil, pesanan, dan keranjang
+
+- Sesi pelanggan (`src/lib/customer-session.ts`, satu pemeriksa untuk proxy, API, dan server action lewat `customer-auth.ts`): cookie berisi `v` (versi sesi) dan `last` (aktivitas terakhir); berakhir bila tidak aktif 14 hari atau versi berbeda dengan `customers.session_version` (dibaca dengan cache 30 detik di `globalThis`). Cookie diperpanjang paling sering sekali sehari tanpa menambah batas absolut 30 hari. Cookie lama tanpa `v`/`last` tetap diterima lalu diperbarui. Kolom belum ada dianggap versi 0, gangguan database tidak mengeluarkan pengguna. Kolom dan bucket dibuat migrasi POS.
+- Profil: "Keluar dari semua perangkat" dan ganti password menaikkan versi sesi (ganti password tetap memasukkan perangkat ini). Bagian Profil, Keamanan, Membership & voucher, Aktivitas, Bantuan. Ubah nama, HP, username, alamat (`actions/profile.ts`, validasi bersama, cek kembar, batas percobaan). Foto profil dikompres di perangkat (persegi WebP 512px, di bawah 150 KB), diunggah ke bucket `customer-avatars`, foto lama dihapus; `avatar_url` boleh belum ada (dibaca ulang tanpa kolom itu).
+- localStorage tidak lagi menyimpan profil (`lbqueen_customer` dihapus saat aplikasi dibuka).
+- CSP lengkap di `next.config.ts` (tanpa nonce agar halaman statis tetap statis): skrip dan koneksi hanya ke domain sendiri, gambar dari Supabase/Unsplash. `npm run screenshots` gagal bila ada pelanggaran CSP.
+- Pesanan: `parseProductName` membaca format lama "Nama (Varian) [Jadwal: ...] Rp X (xN)" sehingga teks mentah tidak pernah tampil (kartu, rincian, ulasan, beranda, nota, pesan WhatsApp). Kartu pesanan, modal ulasan (bintang wajib dipilih), dan rincian disederhanakan; "Beri Ulasan" hanya untuk pesanan selesai yang belum diulas (`reviewed_at`).
+- Keranjang: kartu item ringkas, satu baris voucher membuka pemilih, jadwal dan persetujuan hanya untuk treatment dengan pesan kesalahan di tempat, pembayaran ringkas, bar bawah berisi total dan tombol Pesan.
+- Beranda: Reveal tidak menyembunyikan konten di layar sentuh atau layar sempit; header berisi pencarian dan avatar; sapaan dua baris tanpa garis hias; banner satu slide penuh; kartu poin tanpa pintasan ganda. Garis hias sebelum label seksi dihapus di semua halaman.
+
 ## 2026-11-20 (lanjutan 2): Uji perangkat, performa glass, aksesibilitas, teks ringkas
 
 - Diuji di WebKit (iPhone 14, iPad gen 7) dan Chromium mobile dengan CPU 4x lebih lambat. `.ambient` kini menggerakkan `transform` pada `::before` (compositor) dan diam di perangkat sentuh; sebelumnya `background-position` layar penuh di-repaint setiap frame dan memaksa semua permukaan kaca di atasnya diburamkan ulang. Membuka sheet produk: 17,8 menjadi ~30 fps (frame panjang 8 menjadi 2-3).

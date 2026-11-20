@@ -35,7 +35,7 @@ function RailCard({ product, onOpen }: { product: CatalogProduct; onOpen: () => 
           <ProductPlaceholder type={product.type} size="sm" />
         )}
         {percent > 0 && (
-          <span className="absolute left-2 top-2 rounded-full bg-[#D3264A] px-2 py-0.5 text-[12px] font-extrabold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
+          <span className="absolute left-2 top-2 rounded-full bg-[#D3264A] px-2 py-0.5 text-[12px] font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
             -{percent}%
           </span>
         )}
@@ -50,7 +50,7 @@ function RailCard({ product, onOpen }: { product: CatalogProduct; onOpen: () => 
         <span className="block text-[13px] font-semibold text-[#2D2926] leading-snug line-clamp-2 min-h-[2.6em]">
           {product.name}
         </span>
-        <span className="block mt-1.5 text-[15px] font-extrabold text-[#2D2926] tabular-nums">
+        <span className="block mt-1.5 text-[15px] font-bold text-[#2D2926] tabular-nums">
           {hasRange && <span className="text-[12px] font-semibold text-[#766B68]">Mulai </span>}
           {formatRupiah(price)}
         </span>
@@ -104,11 +104,11 @@ export function ProductRail({
       data-reveal
       className={cn(band && "panel-rose -mx-4 sm:mx-0 rounded-none sm:rounded-[30px] px-4 sm:px-5 pt-4 pb-5")}
     >
-      <div className="relative flex items-end justify-between gap-3 mb-3">
+      <div className="relative flex items-center justify-between gap-3 mb-3">
         <div className="min-w-0">
           <h2
             className={cn(
-              "text-[18px] font-extrabold! tracking-tight leading-tight",
+              "text-[18px] font-bold! tracking-tight leading-tight",
               band ? "text-white" : "text-[#2D2926]",
             )}
           >
@@ -128,7 +128,7 @@ export function ProductRail({
         <Link
           href={href}
           className={cn(
-            "chip-glass shrink-0 inline-flex items-center gap-0.5 h-11 rounded-full pl-3.5 pr-2.5 text-[13px] font-bold transition-colors",
+            "chip-glass shrink-0 inline-flex items-center gap-0.5 h-11 rounded-full pl-3.5 pr-2.5 text-[13px] font-semibold transition-colors",
             band ? "text-white hover:bg-white/20" : "text-[#A83960] hover:bg-white/85",
           )}
         >

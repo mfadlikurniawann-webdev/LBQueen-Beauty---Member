@@ -9,7 +9,7 @@ const INPUT_CLASS = cn(
   "input-glass min-h-12 px-4 py-3 text-base sm:text-[14px]",
 );
 const LABEL_CLASS =
-  "block text-[13px] font-bold text-[#5F5552] mb-2 ml-1";
+  "block text-[13px] font-semibold text-[#5F5552] mb-2 ml-1";
 const NOTICE = "mb-5 px-4 py-3 text-[13px] font-semibold rounded-2xl border";
 
 export function ChangePasswordForm({
@@ -75,7 +75,7 @@ export function ChangePasswordForm({
           <Lock className="w-6 h-6" aria-hidden="true" />
         </div>
         <div className="min-w-0">
-          <h3 className="text-[16px] font-bold! text-[#2D2926]">Keamanan Akun</h3>
+          <h3 className="text-[16px] font-semibold! text-[#2D2926]">Keamanan Akun</h3>
           <p className="text-[13px] text-[#766B68]">Perbarui password Anda secara berkala</p>
         </div>
       </div>
@@ -171,7 +171,7 @@ export function ChangePasswordForm({
           ) : (
             <ShieldCheck className="w-5 h-5" />
           )}
-          {loading ? "Memproses..." : "Update Password"}
+          {loading ? "Memproses" : "Update Password"}
         </button>
       </form>
     </div>

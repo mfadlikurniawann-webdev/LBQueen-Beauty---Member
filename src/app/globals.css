@@ -236,6 +236,32 @@ button:disabled {
     scrollbar-width: none;
   }
 
+  /* Isi modal/sheet yang bisa digulir: scrollbar tipis, tanpa panah, menjauh dari sudut membulat. */
+  .scroll-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(168 57 96 / 0.3) transparent;
+    scrollbar-gutter: stable;
+    overscroll-behavior: contain;
+  }
+  .scroll-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scroll-thin::-webkit-scrollbar-button {
+    display: none;
+  }
+  .scroll-thin::-webkit-scrollbar-track {
+    background: transparent;
+    margin-block: 14px;
+  }
+  .scroll-thin::-webkit-scrollbar-thumb {
+    background: rgb(168 57 96 / 0.28);
+    border-radius: 999px;
+  }
+  .scroll-thin::-webkit-scrollbar-thumb:hover {
+    background: rgb(168 57 96 / 0.45);
+  }
+
   input[type="date"]::-webkit-calendar-picker-indicator,
   input[type="time"]::-webkit-calendar-picker-indicator {
     background-color: var(--lb-pink-soft);
@@ -394,22 +420,15 @@ button:disabled {
     transform: scale(0.98);
   }
 
-  /* Label kecil di atas judul seksi (tanpa huruf kapital lebar). */
+  /* Label kecil di atas judul seksi: teks biasa, tanpa garis hias (terbaca seperti tanda pisah). */
   .eyebrow {
     display: flex;
     width: fit-content;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
     font-size: 12px;
     font-weight: 600;
     color: #a83960;
-  }
-  .eyebrow::before {
-    content: "";
-    display: block;
-    height: 1px;
-    width: 24px;
-    background: currentColor;
   }
   .panel-rose .eyebrow {
     color: #ffc4d8;
@@ -423,7 +442,7 @@ button:disabled {
     min-height: 48px;
     padding: 0 22px;
     border-radius: 9999px;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 15px;
     color: #fff;
     background: linear-gradient(180deg, #d4608a 0%, #b8416b 100%);
@@ -456,7 +475,7 @@ button:disabled {
     min-height: 48px;
     padding: 0 22px;
     border-radius: 9999px;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 15px;
     color: #a83960;
     background: rgb(255 255 255 / 0.66);

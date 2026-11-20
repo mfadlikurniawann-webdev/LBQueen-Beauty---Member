@@ -107,7 +107,7 @@ export default function CustomerPortalPage() {
   };
 
   return (
-    <div className="min-h-screen animate-in fade-in duration-500">
+    <div className="min-h-screen">
       <HomeHeader
         customer={customer}
         searchQuery={searchQuery}
@@ -118,7 +118,7 @@ export default function CustomerPortalPage() {
       />
 
       {searching ? (
-        <div className="px-4 sm:px-8 lg:px-12 pt-5">
+        <div className="px-4 sm:px-8 lg:px-12 pt-3">
           <HomeCatalog
             products={products}
             page={page}
@@ -143,7 +143,7 @@ export default function CustomerPortalPage() {
             />
           </HomeHero>
 
-          <div className="px-4 sm:px-8 lg:px-12 pt-5 space-y-6 lg:space-y-8">
+          <div className="px-4 sm:px-8 lg:px-12 pt-4 space-y-6 lg:space-y-8">
             {!customer.is_member && <MemberStrip />}
             <ActiveOrderCard customerId={customer.id} />
             <ProductRail

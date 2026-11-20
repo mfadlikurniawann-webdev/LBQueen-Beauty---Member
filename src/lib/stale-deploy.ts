@@ -23,7 +23,7 @@ export function reloadForNewVersion() {
 export function errorMessage(error: unknown, fallback: string) {
   if (isStaleDeployError(error))
     return reloadForNewVersion()
-      ? "Memuat versi terbaru aplikasi..."
+      ? "Memuat versi terbaru aplikasi"
       : "Aplikasi baru saja diperbarui. Muat ulang halaman, lalu coba lagi.";
   return error instanceof Error && error.message ? error.message : fallback;
 }

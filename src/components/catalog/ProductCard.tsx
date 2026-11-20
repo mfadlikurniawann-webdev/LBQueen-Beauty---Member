@@ -67,7 +67,7 @@ export function ProductCard({
           <span
             className={cn(
               "absolute inline-flex items-center gap-1 rounded-full bg-[#B8416B]",
-              "py-0.5 text-[12px] font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]",
+              "py-0.5 text-[12px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]",
               styles.badge,
             )}
           >
@@ -98,7 +98,7 @@ export function ProductCard({
           <p className="mt-1 text-[12px] font-medium text-[#766B68] truncate">
             {[variantCount > 1 && `${variantCount} variasi`, photoCount > 1 && `${photoCount} foto`]
               .filter(Boolean)
-              .join(" · ")}
+              .join(", ")}
           </p>
         )}
         {isHome ? (

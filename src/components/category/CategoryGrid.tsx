@@ -18,7 +18,7 @@ export function CategoryGrid({
   if (loading) {
     return (
       <div className={GRID} aria-busy="true">
-        <span className="sr-only">Memuat...</span>
+        <span className="sr-only">Memuat</span>
         {[1, 2, 3, 4].map((i) => (
           <div key={i} className="glass-soft rounded-[24px] p-1.5">
             <div className="skeleton-glass aspect-square rounded-[18px]" />
@@ -40,7 +40,7 @@ export function CategoryGrid({
         <div className="chip-glass w-16 h-16 rounded-full flex items-center justify-center mb-4">
           <SearchIcon className="w-7 h-7 text-[#A83960]" aria-hidden="true" />
         </div>
-        <p className="text-[15px] font-bold text-[#2D2926]">Produk tidak ditemukan</p>
+        <p className="text-[15px] font-semibold text-[#2D2926]">Produk tidak ditemukan</p>
         <p className="mt-1.5 max-w-[260px] text-[13px] leading-relaxed text-[#766B68]">
           Coba kata kunci lain atau ubah filter yang dipilih.
         </p>

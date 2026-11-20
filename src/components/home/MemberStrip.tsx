@@ -9,7 +9,7 @@ export function MemberStrip() {
     <div data-reveal className="panel-rose spotlight flex items-center gap-3.5 rounded-[24px] p-4">
       <IconChip icon={Crown} tone="gold" size="md" bare />
       <div className="min-w-0 flex-1">
-        <h3 className="text-[15px] font-bold! text-white leading-snug">Akun Anda sudah aktif</h3>
+        <h3 className="text-[15px] font-semibold! text-white leading-snug">Akun Anda sudah aktif</h3>
         <a
           href={waLink(WA_TEXT)}
           target="_blank"

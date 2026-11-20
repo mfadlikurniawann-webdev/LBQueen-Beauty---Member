@@ -1,86 +1,54 @@
-import { Calendar, Clock, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { CARD, SectionTitle } from "./ui";
+import { CARD } from "./ui";
 
-function BookingField({
-  id,
-  label,
-  type,
-  icon: Icon,
-  value,
-  onChange,
-  min,
-}: {
-  id: string;
-  label: string;
-  type: "date" | "time";
-  icon: LucideIcon;
-  value: string;
-  onChange: (value: string) => void;
-  min?: string;
-}) {
-  return (
-    <div className="min-w-0">
-      <label
-        htmlFor={id}
-        className="block text-[12px] font-bold text-[#766B68] mb-1.5"
-      >
-        {label}
-      </label>
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Icon className="h-4 w-4 text-[#C94F78]" aria-hidden="true" />
-        </div>
-        <input
-          id={id}
-          type={type}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          min={min}
-          className={cn(
-            "input-glass block min-w-0 min-h-12 h-12 pl-9 pr-2 text-[16px]",
-          )}
-        />
-      </div>
-    </div>
-  );
-}
+const INPUT = "input-glass block w-full min-w-0 h-12 px-3 text-[16px]";
 
+/** Jadwal treatment ringkas: hanya tampil bila keranjang berisi treatment. */
 export function BookingScheduleCard({
   date,
   time,
   onDate,
   onTime,
+  invalid,
 }: {
   date: string;
   time: string;
   onDate: (value: string) => void;
   onTime: (value: string) => void;
+  invalid?: string | null;
 }) {
   return (
-    <div className={`${CARD} p-5 flex flex-col gap-4`}>
-      <div>
-        <SectionTitle>Jadwal Treatment</SectionTitle>
+    <fieldset className={`${CARD} p-4`} aria-describedby={invalid ? "booking-error" : undefined}>
+      <legend className="sr-only">Jadwal treatment</legend>
+      <p className="text-[15px] font-semibold text-[#2D2926] mb-2.5">Jadwal treatment</p>
+      <div className="grid grid-cols-2 gap-2.5">
+        <label className="min-w-0">
+          <span className="block text-[12px] font-semibold text-[#766B68] mb-1">Tanggal</span>
+          <input
+            type="date"
+            value={date}
+            min={new Date().toISOString().split("T")[0]}
+            onChange={(e) => onDate(e.target.value)}
+            aria-invalid={!!invalid && !date}
+            className={INPUT}
+          />
+        </label>
+        <label className="min-w-0">
+          <span className="block text-[12px] font-semibold text-[#766B68] mb-1">Jam</span>
+          <input
+            type="time"
+            value={time}
+            onChange={(e) => onTime(e.target.value)}
+            aria-invalid={!!invalid && !time}
+            className={INPUT}
+          />
+        </label>
       </div>
-      <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-3">
-        <BookingField
-          id="booking-date"
-          label="Tanggal"
-          type="date"
-          icon={Calendar}
-          value={date}
-          onChange={onDate}
-          min={new Date().toISOString().split("T")[0]}
-        />
-        <BookingField
-          id="booking-time"
-          label="Jam"
-          type="time"
-          icon={Clock}
-          value={time}
-          onChange={onTime}
-        />
-      </div>
-    </div>
+      {invalid && (
+        <p id="booking-error" role="alert" className={cn("mt-2 text-[13px] font-semibold text-rose-700")}>
+          {invalid}
+        </p>
+      )}
+    </fieldset>
   );
 }

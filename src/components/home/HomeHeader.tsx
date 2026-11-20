@@ -1,20 +1,11 @@
 import Link from "next/link";
-import { Crown, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useScrolled } from "@/hooks/useScrolled";
 import type { Customer } from "@/lib/customer";
-import { tierOf } from "@/lib/membership";
 import { cn } from "@/lib/utils";
+import { CustomerAvatar } from "@/components/CustomerAvatar";
 
-
-const initials = (name?: string) =>
-  (name || "?")
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((w) => w.charAt(0).toUpperCase())
-    .join("");
-
-/** Bar atas beranda: pencarian, lencana tier membership, dan avatar profil pelanggan. */
+/** Bar atas beranda: pencarian selebar mungkin dan avatar profil (tier sudah ada di kartu poin). */
 export function HomeHeader({
   customer,
   searchQuery,
@@ -24,17 +15,16 @@ export function HomeHeader({
   searchQuery: string;
   onSearch: (value: string) => void;
 }) {
-  const tier = tierOf(customer);
   const scrolled = useScrolled();
   return (
     <header
-      className="sticky top-0 z-40 md:static px-3 sm:px-8 lg:px-12 pb-2 md:pb-4"
+      className="sticky top-0 z-40 md:static px-4 sm:px-8 lg:px-12 pb-3 md:pb-4"
       style={{ paddingTop: "max(env(safe-area-inset-top, 0px), 10px)" }}
     >
       {/* Di HP bar menyatu dengan latar; saat digulir menjadi pil kaca melayang. */}
       <div
         className={cn(
-          "morph-bar mx-auto flex items-center gap-2 md:gap-3 rounded-full border",
+          "morph-bar mx-auto flex items-center gap-3 rounded-full border",
           scrolled
             ? "glass p-1.5 max-w-[640px] md:max-w-none md:p-0 md:bg-transparent md:border-transparent md:shadow-none md:backdrop-blur-none"
             : "p-0 border-transparent",
@@ -48,7 +38,7 @@ export function HomeHeader({
           />
           <input
             type="search"
-            placeholder="Cari facial, skinbooster..."
+            placeholder="Cari treatment, produk"
             value={searchQuery}
             onChange={(e) => onSearch(e.target.value)}
             className={cn(
@@ -58,32 +48,14 @@ export function HomeHeader({
           />
         </label>
         <Link
-          href="/membership"
-          className={cn(
-            "md:hidden shrink-0 h-11 pl-2 pr-3 rounded-full flex items-center gap-1.5",
-            "bg-gradient-to-b from-[#FFE9A8] to-[#F6C94E] border-2 border-[#FFF4CF]",
-            "shadow-[0_6px_14px_-8px_rgba(90,24,52,0.6)] active:scale-95 transition-transform",
-          )}
-        >
-          <span className="w-7 h-7 rounded-full bg-[#7A5410] flex items-center justify-center">
-            <Crown className="w-4 h-4 text-[#FFE38A]" aria-hidden="true" />
-          </span>
-          <span className="leading-[1.05] text-[#5A3B06]">
-            <span className="block text-[13px] font-extrabold">{tier.name}</span>
-            <span className="block text-[12px] font-bold">Member</span>
-          </span>
-        </Link>
-        <Link
           href="/profile"
           className={cn(
-            "md:hidden shrink-0 w-11 h-11 rounded-full p-[2px] bg-gradient-to-b from-[#FFE9A8] to-[#F6C94E]",
+            "md:hidden shrink-0 w-11 h-11 rounded-full ring-2 ring-white shadow-[0_6px_14px_-8px_rgba(90,24,52,0.6)]",
             "active:scale-95 transition-transform",
           )}
         >
-          <span className="w-full h-full rounded-full bg-gradient-to-br from-[#D9648C] to-[#7E2449] text-white text-[14px] font-bold flex items-center justify-center ring-2 ring-white">
-            <span className="sr-only">Profil </span>
-            {initials(customer.name)}
-          </span>
+          <span className="sr-only">Profil</span>
+          <CustomerAvatar name={customer.name} src={customer.avatar_url} size={44} className="text-[14px]" />
         </Link>
       </div>
     </header>

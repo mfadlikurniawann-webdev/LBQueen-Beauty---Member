@@ -13,7 +13,7 @@ export function BannerCarousel({
   className?: string;
   intervalMs?: number;
   dots?: boolean;
-  /** Slide lebih kecil dengan slide berikutnya mengintip (gaya marketplace) di ponsel. */
+  /** Mode beranda: satu slide penuh selebar konten (sudut membulat), titik kecil di bawah. */
   peek?: boolean;
   onIndexChange?: (index: number) => void;
 }) {
@@ -88,7 +88,7 @@ export function BannerCarousel({
             className={cn(
               "relative shrink-0 aspect-[1440/956]",
               peek
-                ? "w-[80%] sm:w-[56%] md:w-full snap-start overflow-hidden rounded-[22px] md:rounded-none border border-white/90 md:border-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_14px_30px_-18px_rgba(122,34,64,0.45)] md:shadow-none"
+                ? "w-full snap-start overflow-hidden rounded-[22px] md:rounded-none border border-white/90 md:border-0 md:shadow-none"
                 : "w-full snap-center",
             )}
             style={peek ? { background: BANNER_BG } : undefined}
@@ -100,7 +100,7 @@ export function BannerCarousel({
               alt={banner.alt}
               fill
               priority={i === 0}
-              sizes={peek ? "(min-width: 768px) 760px, 80vw" : "(min-width: 1024px) 760px, 100vw"}
+              sizes="(min-width: 1024px) 760px, 100vw"
               className="object-contain"
             />
           </div>
@@ -111,7 +111,7 @@ export function BannerCarousel({
           className={cn(
             "flex",
             peek
-              ? "justify-center md:absolute md:bottom-0 md:right-1"
+              ? "justify-center -mt-1 -mb-3 md:m-0 md:absolute md:bottom-0 md:right-1"
               : "absolute bottom-0 right-1",
           )}
         >

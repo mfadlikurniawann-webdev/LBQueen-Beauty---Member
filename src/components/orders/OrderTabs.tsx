@@ -10,7 +10,7 @@ export function OrderTabs({
 }) {
   return (
     <div
-      className="flex gap-2 -mx-4 px-4 sm:-mx-8 sm:px-8 overflow-x-auto no-scrollbar py-1 mb-4"
+      className="flex gap-2 -mx-4 px-4 sm:-mx-8 sm:px-8 overflow-x-auto no-scrollbar py-1 mb-2"
       role="group"
       aria-label="Filter status pesanan"
     >
@@ -25,7 +25,7 @@ export function OrderTabs({
             className={cn(
               "shrink-0 h-11 px-4 rounded-full text-[14px] whitespace-nowrap transition-all duration-300",
               isActive
-                ? "chip-active font-bold"
+                ? "chip-active font-semibold"
                 : "chip-glass font-semibold text-[#5F5552] hover:bg-white/85",
             )}
           >

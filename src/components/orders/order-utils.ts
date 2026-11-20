@@ -12,6 +12,7 @@ export type Order = {
   qty?: number;
   total_price?: number;
   product_id?: number;
+  reviewed_at?: string | null;
 };
 
 export type OrderProduct = {
@@ -59,33 +60,96 @@ export function getOrderStatus(s: string) {
   };
 }
 
+/**
+ * Nama di customer_orders memakai format lama dari database:
+ * "Nama (Varian) [Jadwal: 2026-11-21 19:00] Rp 19.250.000 (x7)". Format DB tidak diubah;
+ * teks mentah (kurung siku, Rp, xN) tidak pernah ditampilkan ke pelanggan.
+ */
 export function parseProductName(fullName: string) {
-  let clean = fullName.replace(/\s*\(x\d+\)$/, "").trim();
-  const priceMatch = clean.match(/Rp\s*([\d.]+)/);
-  const itemPrice = priceMatch ? parseInt(priceMatch[1].replace(/\./g, "")) : 0;
+  let rest = (fullName || "").trim();
+  let qty = 0;
+  const qtyMatch = rest.match(/\s*\(x(\d+)\)\s*$/);
+  if (qtyMatch) {
+    qty = parseInt(qtyMatch[1], 10);
+    rest = rest.slice(0, qtyMatch.index).trim();
+  }
+  let price = 0;
+  const priceMatch = rest.match(/\s*Rp\s*([\d.]+)\s*$/);
   if (priceMatch) {
-    clean = clean.replace(/\s*Rp\s*[\d.]+/, "").trim();
+    price = parseInt(priceMatch[1].replace(/\./g, ""), 10) || 0;
+    rest = rest.slice(0, priceMatch.index).trim();
   }
-  let mainName = clean;
-  let variantName = "";
-  const parenMatch = clean.match(/\(([^)]+)\)$/);
-  if (parenMatch) {
-    variantName = parenMatch[1];
-    mainName = clean.replace(/\s*\([^)]+\)$/, "").trim();
+  let schedule: Date | null = null;
+  const scheduleMatch = rest.match(/\s*\[Jadwal:\s*(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})[^\]]*\]/i);
+  if (scheduleMatch) {
+    // Jadwal disimpan dalam WIB.
+    const parsed = new Date(`${scheduleMatch[1]}T${scheduleMatch[2]}:00+07:00`);
+    schedule = Number.isNaN(parsed.getTime()) ? null : parsed;
+    rest = (rest.slice(0, scheduleMatch.index) + rest.slice(scheduleMatch.index! + scheduleMatch[0].length)).trim();
   }
-  return { mainName, variantName, itemPrice };
+  rest = rest.replace(/\s*\[[^\]]*\]\s*/g, " ").trim();
+  let name = rest;
+  let variant = "";
+  const variantMatch = rest.match(/^(.*?)\s*\(([^()]+)\)$/);
+  if (variantMatch && variantMatch[1]) {
+    name = variantMatch[1].trim();
+    variant = variantMatch[2].trim();
+  }
+  return {
+    name,
+    variant,
+    schedule,
+    qty,
+    price,
+    // Nama lama tetap tersedia untuk pemanggil yang belum diperbarui.
+    mainName: name,
+    variantName: variant,
+    itemPrice: price,
+  };
+}
+
+/** "Sab, 21 Nov, 19.00" (WIB, tanpa detik). */
+export function formatSchedule(date: Date) {
+  const day = date.toLocaleDateString("id-ID", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    timeZone: "Asia/Jakarta",
+  });
+  const time = date
+    .toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Jakarta" })
+    .replace(":", ".");
+  return `${day}, ${time}`;
+}
+
+/** Baris kecil di bawah nama: varian dan/atau jadwal. */
+export function orderDetailLine(parsed: ReturnType<typeof parseProductName>) {
+  return [parsed.variant, parsed.schedule ? formatSchedule(parsed.schedule) : ""]
+    .filter(Boolean)
+    .join(", ");
 }
 
 export function describeOrder(o: Order) {
   const parsed = parseProductName(o.product_name);
-  const match = o.product_name.match(/\(x(\d+)\)$/);
-  const qty = o.qty || (match ? parseInt(match[1]) : 1);
+  const qty = o.qty || parsed.qty || 1;
+  const unit = Number(o.price) || parsed.price;
   return {
     parsed,
     qty,
-    total: o.total_price || parsed.itemPrice * qty,
+    unit,
+    total: Number(o.total_price) || unit * qty,
     invoiceNum: `ONL-${o.id.toString().padStart(5, "0")}`,
   };
+}
+
+/** "19 Nov 2026" tanpa jam. */
+export function formatOrderDay(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "Asia/Jakarta",
+  });
 }
 
 export function formatOrderDate(dateStr: string) {
@@ -104,7 +168,7 @@ export function openWhatsApp(text: string) {
 }
 
 export const orderQuestion = (o: Order, invoiceNum: string) =>
-  `Halo, saya tanya pesanan: ${o.product_name} (#${invoiceNum})`;
+  `Halo, saya tanya pesanan: ${parseProductName(o.product_name).name} (#${invoiceNum})`;
 
 export function isTreatmentOrder(product: OrderProduct | undefined, name: string) {
   return product?.type === TREATMENT_TYPE || /treatment|facial/i.test(name);

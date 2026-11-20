@@ -82,7 +82,6 @@ export default function CustomerRegisterPage() {
         throw new Error(res.error);
       }
 
-      localStorage.setItem("lbqueen_customer", JSON.stringify(res.data));
       await refresh();
       router.push("/");
     } catch (err) {
@@ -112,10 +111,10 @@ export default function CustomerRegisterPage() {
       title="Daftar Akun"
       subtitle="PT. LBQueen Care Beauty"
       footer="Care & Beauty Clinic"
-      bodyClassName="overflow-y-auto"
+      bodyClassName="scroll-thin overflow-y-auto"
       contentClassName="w-full max-w-[440px] my-auto"
     >
-      <h1 className="text-[28px] font-extrabold! text-[#2D2926] tracking-tight leading-tight">
+      <h1 className="text-[28px] font-bold! text-[#2D2926] tracking-tight leading-tight">
         Daftar akun
       </h1>
       <p className="text-[15px] text-[#766B68] mt-1.5 mb-7">Isi data di bawah untuk mulai pesan.</p>
@@ -131,7 +130,7 @@ export default function CustomerRegisterPage() {
           className="absolute -left-[9999px] h-0 w-0 opacity-0"
         />
         <p className="text-[12px] text-[#766B68]">
-          Kolom bertanda <span className="font-bold text-[#A83960]">*</span> wajib diisi.
+          Kolom bertanda <span className="font-semibold text-[#A83960]">*</span> wajib diisi.
         </p>
         <div>
           <label htmlFor="reg-name" className={LABEL_CLASS}>
@@ -242,7 +241,7 @@ export default function CustomerRegisterPage() {
           <textarea
             id="reg-address"
             autoComplete="street-address"
-            placeholder="Masukkan alamat lengkap Anda..."
+            placeholder="Masukkan alamat lengkap Anda"
             rows={2}
             {...field("address")}
             className={`${INPUT_CLASS} resize-none`}

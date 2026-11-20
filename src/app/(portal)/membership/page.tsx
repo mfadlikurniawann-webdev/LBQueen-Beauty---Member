@@ -124,7 +124,7 @@ export default function MembershipPage() {
                   <div className="relative flex items-start justify-between">
                     <div>
                       <p className="text-[12px] font-semibold opacity-80">LBQueen Member</p>
-                      <p className="text-[24px] font-extrabold leading-tight">{t.label}</p>
+                      <p className="text-[24px] font-bold leading-tight">{t.label}</p>
                     </div>
                     <span className="w-11 h-11 rounded-full bg-white/25 border border-white/40 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] flex items-center justify-center">
                       <Crown className="w-6 h-6" aria-hidden="true" />
@@ -134,12 +134,12 @@ export default function MembershipPage() {
                     {mine ? (
                       <>
                         <div>
-                          <p className="text-[26px] font-extrabold leading-none tabular-nums">
+                          <p className="text-[26px] font-bold leading-none tabular-nums">
                             {formatNumber(customer.points || 0)}
                           </p>
                           <p className="text-[12px] font-semibold opacity-80 mt-1">Poin</p>
                         </div>
-                        <span className="rounded-full bg-white/80 backdrop-blur-md border border-white px-3 py-1 text-[12px] font-bold text-[#2D2926]">
+                        <span className="rounded-full bg-white/80 backdrop-blur-md border border-white px-3 py-1 text-[12px] font-semibold text-[#2D2926]">
                           Tier Anda
                         </span>
                       </>
@@ -177,7 +177,7 @@ export default function MembershipPage() {
       </div>
 
       <div data-reveal className="px-4 sm:px-8 max-w-2xl mx-auto pb-6">
-        <h2 className="text-[20px] font-bold! text-[#2D2926] mb-3.5">
+        <h2 className="text-[20px] font-semibold! text-[#2D2926] mb-3.5">
           Nikmati {benefits.length} benefit{isCurrent ? "" : ` ${tier.label}`}
         </h2>
         <ul className="glass rounded-[26px] divide-y divide-[#C94F78]/10">

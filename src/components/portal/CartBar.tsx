@@ -36,11 +36,11 @@ export function CartBar() {
           <span className="block text-[12px] font-semibold text-white/85 tabular-nums">
             {totalItems} item di keranjang
           </span>
-          <span className="block text-[16px] font-bold leading-tight tabular-nums">
+          <span className="block text-[16px] font-semibold leading-tight tabular-nums">
             {formatRupiah(total)}
           </span>
         </span>
-        <span className="flex items-center gap-1 text-[14px] font-bold text-[#FFC4D8]">
+        <span className="flex items-center gap-1 text-[14px] font-semibold text-[#FFC4D8]">
           Lihat
           <ChevronRight className="w-4 h-4" aria-hidden="true" />
         </span>
