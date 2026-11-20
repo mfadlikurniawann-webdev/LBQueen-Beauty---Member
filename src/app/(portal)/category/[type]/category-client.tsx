@@ -4,7 +4,7 @@ import { Suspense, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { notFound, useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import { PageControls } from "@/components/PageControls";
-import { ProductDetailSheet } from "@/components/catalog/ProductDetailSheet";
+import dynamic from "next/dynamic";
 import { CatalogLoadError } from "@/components/category/CatalogLoadError";
 import { CategoryFilters } from "@/components/category/CategoryFilters";
 import { CategoryGrid } from "@/components/category/CategoryGrid";
@@ -19,6 +19,12 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { useProductSelection } from "@/hooks/useProductSelection";
 import { loadCatalog } from "@/lib/catalog";
 import { useCustomer } from "@/context/CustomerContext";
+
+// Lembar detail baru dipakai saat produk diketuk; pisahkan dari bundel awal halaman.
+const ProductDetailSheet = dynamic(
+  () => import("@/components/catalog/ProductDetailSheet").then((m) => m.ProductDetailSheet),
+  { ssr: false },
+);
 
 export default function CategoryClient() {
   return (

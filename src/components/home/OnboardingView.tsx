@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { BannerCarousel } from "./BannerCarousel";
 import { BrandMark } from "@/components/BrandMark";
 
+// Satu teks per banner (urutan sama dengan BRAND_BANNERS).
 const SLIDES = [
   {
     title: "Selamat datang di LBQueen!",
@@ -14,6 +15,10 @@ const SLIDES = [
   {
     title: "Pesan treatment favoritmu",
     desc: "Pilih treatment, atur jadwal, lalu konfirmasi lewat WhatsApp.",
+  },
+  {
+    title: "Ditangani tenaga medis",
+    desc: "Pelayanan ramah dan terstandar oleh tim profesional.",
   },
   {
     title: "Buka Senin sampai Sabtu",

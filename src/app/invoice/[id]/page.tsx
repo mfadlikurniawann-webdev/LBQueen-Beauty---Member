@@ -26,7 +26,7 @@ export default function OnlineInvoicePage() {
       try {
         const { data: ord, error: ordError } = await supabase
           .from("customer_orders")
-          .select("*")
+          .select("id,product_name,customer_name,customer_id,status,ordered_at,qty,price,total_price,product_id")
           .eq("id", params.id)
           .single();
 

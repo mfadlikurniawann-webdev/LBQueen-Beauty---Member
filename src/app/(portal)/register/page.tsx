@@ -31,7 +31,7 @@ function FieldHint({ id, error, hint }: { id: string; error?: string | null; hin
 
 export default function CustomerRegisterPage() {
   const router = useRouter();
-  const { customer } = useCustomer();
+  const { customer, refresh } = useCustomer();
   const [form, setForm] = useState({
     name: "",
     username: "",
@@ -83,6 +83,7 @@ export default function CustomerRegisterPage() {
       }
 
       localStorage.setItem("lbqueen_customer", JSON.stringify(res.data));
+      await refresh();
       router.push("/");
     } catch (err) {
       setError(errorMessage(err, "Pendaftaran gagal. Coba lagi."));

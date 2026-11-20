@@ -5,10 +5,9 @@ import Link from "next/link";
 import { ChevronRight, CircleHelp, Loader2, ShoppingBag, ShoppingCart } from "lucide-react";
 import { PageControls } from "@/components/PageControls";
 import { OrderCard } from "@/components/orders/OrderCard";
-import { OrderDetailModal } from "@/components/orders/OrderDetailModal";
+import dynamic from "next/dynamic";
 import { OrderTabs } from "@/components/orders/OrderTabs";
 import { TAB_STATUS, type Order, type OrderProduct } from "@/components/orders/order-utils";
-import { ReviewModal } from "@/components/orders/ReviewModal";
 import { useOrderReview } from "@/components/orders/useOrderReview";
 import { PageHero } from "@/components/portal/PageHero";
 import { useCart } from "@/context/CartContext";
@@ -18,6 +17,15 @@ import { waLink } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
 import { watchWhileVisible } from "@/lib/watch-visible";
 import { cn } from "@/lib/utils";
+
+const OrderDetailModal = dynamic(
+  () => import("@/components/orders/OrderDetailModal").then((m) => m.OrderDetailModal),
+  { ssr: false },
+);
+const ReviewModal = dynamic(
+  () => import("@/components/orders/ReviewModal").then((m) => m.ReviewModal),
+  { ssr: false },
+);
 
 export default function OrdersPage() {
   const { customer } = useCustomer();
@@ -44,7 +52,7 @@ export default function OrdersPage() {
       setLoadError("");
       let query = supabase
         .from("customer_orders")
-        .select("*")
+        .select("id,product_name,status,ordered_at,completed_at,customer_id,price,qty,total_price,product_id")
         .eq("customer_id", custId)
         .order("ordered_at", { ascending: false })
         .order("id", { ascending: false })

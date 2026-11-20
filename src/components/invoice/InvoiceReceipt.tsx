@@ -62,7 +62,7 @@ export function InvoiceReceipt({
 
       <div className="flex flex-col items-center mb-4">
         <div className={`relative mb-2 ${is58 ? "w-12 h-12" : "w-16 h-16"}`}>
-          <Image src="/lbqueen_logo.png" alt="Logo" fill className="object-contain" />
+          <Image src="/lbqueen_logo.png" alt="Logo" fill sizes="64px" className="object-contain" />
         </div>
         <h2 className={`${is58 ? "text-[11px]" : "text-sm"} font-bold text-center leading-tight`}>
           LBQueen.id Care & Beauty

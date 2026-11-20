@@ -27,7 +27,7 @@ import { cn } from "@/lib/utils";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { customer } = useCustomer();
+  const { customer, refresh } = useCustomer();
   const { totalItems } = useCart();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -36,6 +36,7 @@ export default function ProfilePage() {
   const logout = async () => {
     localStorage.removeItem("lbqueen_customer");
     await logoutCustomer();
+    await refresh();
     router.push("/");
   };
 

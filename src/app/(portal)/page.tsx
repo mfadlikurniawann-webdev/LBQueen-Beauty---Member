@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
 import { PageControls } from "@/components/PageControls";
-import { ProductDetailSheet } from "@/components/catalog/ProductDetailSheet";
+import dynamic from "next/dynamic";
 import { ActiveOrderCard } from "@/components/home/ActiveOrderCard";
 import { CatalogUnavailable } from "@/components/home/CatalogUnavailable";
 import { HomeCatalog } from "@/components/home/HomeCatalog";
@@ -23,6 +23,12 @@ import { useProductSelection } from "@/hooks/useProductSelection";
 import { loadCatalog, priceRange, type CatalogProduct } from "@/lib/catalog";
 import { loadMyVouchers } from "@/lib/vouchers";
 import { TREATMENT_TYPE } from "@/lib/constants";
+
+// Lembar detail baru dipakai saat produk diketuk; pisahkan dari bundel awal halaman.
+const ProductDetailSheet = dynamic(
+  () => import("@/components/catalog/ProductDetailSheet").then((m) => m.ProductDetailSheet),
+  { ssr: false },
+);
 
 const RAIL_OPTIONS = { revalidateOnFocus: false, keepPreviousData: true };
 
@@ -51,7 +57,8 @@ export default function CustomerPortalPage() {
     error: catalogError,
     mutate,
   } = useSWR(
-    ["/api/catalog", debouncedSearch, searching ? page : 1],
+    // Pengunjung yang sudah pasti belum login hanya melihat layar sambutan.
+    customer || customerLoading ? ["/api/catalog", debouncedSearch, searching ? page : 1] : null,
     ([, search, page]) => loadCatalog({ search, category: search ? "semua" : "promo", page }),
     RAIL_OPTIONS,
   );

@@ -79,11 +79,12 @@ export async function loginCustomer(identifier: string, passwordPlain: string) {
   if (!isPhone && usernameError(username))
     return { error: `${usernameError(username)} Anda juga bisa masuk dengan nomor HP.` };
   try {
-    if (
-      !(await consumeLimit("customer-ip", await clientIp(), 60)) ||
-      !(await consumeLimit("customer", phone || username))
-    )
-      return { error: tooMany };
+    const ip = await clientIp();
+    const allowed = await Promise.all([
+      consumeLimit("customer-ip", ip, 60),
+      consumeLimit("customer", phone || username),
+    ]);
+    if (allowed.includes(false)) return { error: tooMany };
     const db = serverDatabase();
     const query = () => db.from("customers").select("*").limit(5);
     const lookups = isPhone
@@ -145,11 +146,12 @@ export async function registerCustomer(input: {
   const username = normalizeUsername(input.username);
   const phone = normalizePhone(input.phone);
   try {
-    if (
-      !(await consumeLimit("register-ip", await clientIp(), 300)) ||
-      !(await consumeLimit("register", phone))
-    )
-      return { error: tooMany };
+    const ip = await clientIp();
+    const allowed = await Promise.all([
+      consumeLimit("register-ip", ip, 300),
+      consumeLimit("register", phone),
+    ]);
+    if (allowed.includes(false)) return { error: tooMany };
     const db = serverDatabase();
     const [byUsername, byPhone] = await Promise.all([
       db.from("customers").select("id").ilike("username", likeEscape(username)).limit(1),

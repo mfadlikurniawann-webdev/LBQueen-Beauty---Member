@@ -1,12 +1,15 @@
 import { NextRequest } from "next/server";
 import { verifySession } from "@/lib/session";
 import { normalizeEnvValue } from "@/lib/env";
+import { clientIp, consumeLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
 const catalog = new Set(["products", "product_variants", "vouchers"]);
 const owned = new Set(["customers", "customer_orders"]);
 const maxRows = 100;
+const ORDER_COLUMNS =
+  "id,product_name,customer_name,status,ordered_at,completed_at,customer_id,price,qty,total_price,product_id";
 const JSON_ACCEPT = /^application\/(json|vnd\.pgrst\.object\+json)(\s*;.*)?$/i;
 const SECRET_KEYS = [
   "password",
@@ -45,8 +48,17 @@ async function handle(request: NextRequest, context: { params: Promise<{ path: s
         type?.startsWith("eq.") ? type : 'in.("Treatment Care & Beauty","Product Care & Beauty")',
       );
     } else query.set("is_active", "eq.true");
-    if (table === "vouchers" && !/^eq\.[\w-]{1,50}$/.test(query.get("code") || ""))
-      return fail("Masukkan kode voucher.", 400);
+    if (table === "vouchers") {
+      if (!/^eq\.[\w-]{1,50}$/.test(query.get("code") || ""))
+        return fail("Masukkan kode voucher.", 400);
+      // Kode baru selalu lolos cache CDN; batasi per IP agar kode tidak bisa ditebak beruntun.
+      try {
+        if (!(await consumeLimit("voucher-ip", await clientIp(), 60)))
+          return fail("Terlalu banyak percobaan kode voucher. Coba lagi sebentar.", 429);
+      } catch {
+        return fail("Voucher belum dapat diperiksa. Coba lagi.", 503);
+      }
+    }
   } else {
     const customer = await verifySession(
       request.cookies.get("lbqueen_customer")?.value,
@@ -54,6 +66,8 @@ async function handle(request: NextRequest, context: { params: Promise<{ path: s
     );
     if (!customer) return fail("Silakan masuk untuk melanjutkan.", 401);
     query.set(table === "customers" ? "id" : "customer_id", `eq.${customer.id}`);
+    if (table === "customer_orders" && (query.get("select") || "*").includes("*"))
+      query.set("select", ORDER_COLUMNS);
     if (table === "customers")
       query.set(
         "select",
@@ -106,10 +120,10 @@ async function handle(request: NextRequest, context: { params: Promise<{ path: s
     if (!/json/i.test(response.headers.get("content-type") || ""))
       return fail("Respons database tidak valid.", 502);
     const data = await response.json();
-    const clean = JSON.parse(
-      JSON.stringify(data, (name, value) => (SECRET_KEYS.includes(name) ? undefined : value)),
+    const body = JSON.stringify(data, (name, value) =>
+      SECRET_KEYS.includes(name) ? undefined : value,
     );
-    return Response.json(clean, { status: response.status, headers: outgoing });
+    return new Response(body, { status: response.status, headers: outgoing });
   } catch {
     return fail(
       "Database belum dapat dihubungi. Silakan coba kembali atau hubungi pengelola.",

@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     let query = db
       .from("products")
       .select(
-        `id,name,type,selling_price,image_url,images,description,variant_label,product_code,is_set,sub_category,variants:product_variants(id,product_id,variant_name,price,stock,image_url,sort_order),promotions:vouchers${promo ? "!inner" : ""}(product_id,type,discount_amount,min_transaction,membership_types)`,
+        `id,name,type,selling_price,image_url,images,description,variant_label,is_set,sub_category,variants:product_variants(id,product_id,variant_name,price,stock,image_url,sort_order),promotions:vouchers${promo ? "!inner" : ""}(product_id,type,discount_amount,min_transaction,membership_types)`,
       )
       .in("type", categories)
       .eq("variants.is_active", true)

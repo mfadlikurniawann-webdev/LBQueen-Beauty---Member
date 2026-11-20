@@ -13,7 +13,7 @@ import { errorMessage } from "@/lib/stale-deploy";
 
 export default function CustomerLoginPage() {
   const router = useRouter();
-  const { customer } = useCustomer();
+  const { customer, refresh } = useCustomer();
   const [form, setForm] = useState({ phone: "", password: "" });
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -55,6 +55,7 @@ export default function CustomerLoginPage() {
       }
 
       localStorage.setItem("lbqueen_customer", JSON.stringify(res.data));
+      await refresh();
       router.push("/");
     } catch (err) {
       setError(errorMessage(err, "Gagal masuk. Coba lagi."));

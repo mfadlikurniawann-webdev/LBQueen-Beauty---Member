@@ -1,5 +1,13 @@
 # Architectural Decisions & Changes Log (LBQueen Member)
 
+## 2026-11-20: Optimasi beban server & banner baru
+
+- Profil sesi memakai satu key SWR (`customer-profile`) dengan refresh 120 detik; navigasi tetap memperbarui profil bila data lebih tua dari 15 detik. Login, daftar, logout, dan checkout memanggil `refresh()` dari `useCustomer` secara eksplisit.
+- Gateway: cek kode voucher dibatasi 8/menit per IP (kode baru selalu lolos cache CDN); `customer_orders` tanpa daftar kolom dipaksa ke kolom aman; JSON diserialisasi sekali. Pesanan dan nota memilih kolom eksplisit.
+- `/api/vouchers` men-cache daftar voucher per tier 60 detik (`unstable_cache`); data pelanggan tetap dibaca per permintaan. `/api/catalog` tidak lagi mengirim `product_code`.
+- `ProductDetailSheet`, `OrderDetailModal`, `ReviewModal` dimuat lewat `next/dynamic`; katalog beranda tidak diambil untuk pengunjung yang belum login; React Query (tidak dipakai, semua data lewat SWR) dihapus; `sw.js` tanpa fetch handler; pembersihan `auth_attempts` lewat `after()`; cek rate limit login/daftar paralel. Index pendukung ada di migrasi POS `20261120090000_*`.
+- Carousel beranda, layar sambutan, dan panel login/daftar memakai 4 banner baru (`public/banners/lbqueen-percaya-diri|perawatan-lengkap|tenaga-medis|investasi-kecantikan.webp`); teks layar sambutan kini 4 slide. Banner lama tidak dipakai lagi.
+
 ## 2026-11-19 (lanjutan 2): Voucher per membership, beranda, motion, keamanan gateway
 
 - Beranda: kartu Info Klinik dan daftar voucher dihapus. Header seperti GoStar: pencarian, lencana tier ("Silver Member", ke `/membership`), dan avatar inisial pelanggan (ke `/profile`); logo tidak lagi di header ponsel. Sapaan + nama besar, kalimat singkat sesuai jam, pil tanggal + jam WIB (tanpa status buka/tutup).

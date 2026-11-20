@@ -16,7 +16,6 @@ export type CatalogProduct = {
   type: string;
   selling_price: number;
   image_url: string | null;
-  product_code: string;
   is_set: boolean;
   sub_category?: string;
   description?: string | null;

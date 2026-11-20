@@ -10,14 +10,21 @@ export const CLINIC_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=
 
 export const BRAND_BANNERS = [
   {
-    src: "/banners/lbqueen-ambassador.webp",
-    alt: "LBQueen Care & Beauty Clinic, perawatan kulit dan beauty care",
+    src: "/banners/lbqueen-percaya-diri.webp",
+    alt: "Tampil lebih percaya diri dengan LBQueen, perawatan profesional untuk kecantikanmu",
   },
   {
-    src: "/banners/lbqueen-treatment.webp",
-    alt: "Skinbooster dan treatment dermatologi bersama dokter LBQueen",
+    src: "/banners/lbqueen-perawatan-lengkap.webp",
+    alt: "Perawatan kecantikan lengkap di LBQueen: facial, body care, laser, dan treatment",
   },
-  { src: "/banners/lbqueen-jam-buka.webp", alt: "Jam buka LBQueen Care & Beauty Clinic" },
+  {
+    src: "/banners/lbqueen-tenaga-medis.webp",
+    alt: "Tenaga medis profesional LBQueen dengan pelayanan ramah dan terstandar",
+  },
+  {
+    src: "/banners/lbqueen-investasi-kecantikan.webp",
+    alt: "Investasi kecantikan terbaik untuk kulit sehat dan penampilan lebih menawan",
+  },
 ];
 
 export const waLink = (text: string) =>

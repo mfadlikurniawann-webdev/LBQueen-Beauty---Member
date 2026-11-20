@@ -6,7 +6,7 @@ import useSWR from "swr";
 import { BadgePercent, ChevronRight, Crown, Ticket } from "lucide-react";
 import { PageControls } from "@/components/PageControls";
 import { ProductCard } from "@/components/catalog/ProductCard";
-import { ProductDetailSheet } from "@/components/catalog/ProductDetailSheet";
+import dynamic from "next/dynamic";
 import { CatalogLoadError } from "@/components/category/CatalogLoadError";
 import { IconChip } from "@/components/IconChip";
 import { EmptyVouchers, VoucherTicket } from "@/components/promo/VoucherTicket";
@@ -19,6 +19,12 @@ import { TREATMENT_TYPE } from "@/lib/constants";
 import { tierOf } from "@/lib/membership";
 import { loadMyVouchers } from "@/lib/vouchers";
 import { cn } from "@/lib/utils";
+
+// Lembar detail baru dipakai saat produk diketuk; pisahkan dari bundel awal halaman.
+const ProductDetailSheet = dynamic(
+  () => import("@/components/catalog/ProductDetailSheet").then((m) => m.ProductDetailSheet),
+  { ssr: false },
+);
 
 const FILTERS = [
   { id: "semua", label: "Semua", category: "promo", mode: undefined },

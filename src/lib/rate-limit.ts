@@ -1,5 +1,6 @@
 import "server-only";
 import { headers } from "next/headers";
+import { after } from "next/server";
 import { createHash } from "node:crypto";
 import { serverDatabase } from "./supabase-server";
 
@@ -22,10 +23,13 @@ export async function consumeLimit(
   const db = serverDatabase();
   const { data, error } = await db.rpc("consume_login_attempt", { p_key: key });
   if (error) throw error;
+  // Pembersihan tidak perlu ditunggu pengguna; jalankan setelah respons terkirim.
   if (Math.random() < 0.02)
-    await db
-      .from("auth_attempts")
-      .delete()
-      .lt("started_at", new Date(Date.now() - 86400000).toISOString());
+    after(async () => {
+      await db
+        .from("auth_attempts")
+        .delete()
+        .lt("started_at", new Date(Date.now() - 86400000).toISOString());
+    });
   return data === true;
 }

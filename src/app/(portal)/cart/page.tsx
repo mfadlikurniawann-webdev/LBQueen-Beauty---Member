@@ -26,7 +26,7 @@ export default function CartPage() {
   const router = useRouter();
   const { toast } = useToast();
   const { cart, removeFromCart, updateQty, clearCart, totalItems } = useCart();
-  const { customer } = useCustomer();
+  const { customer, refresh } = useCustomer();
   const [processing, setProcessing] = useState(false);
   const checkoutKey = useRef<string | null>(null);
   const checkoutInFlight = useRef(false);
@@ -86,6 +86,7 @@ export default function CartPage() {
       clearCart();
       checkoutKey.current = null;
       window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
+      void refresh();
       router.push("/orders");
     } catch (e) {
       toast("Gagal: " + errorMessage(e, "Terjadi kesalahan"), "error");
