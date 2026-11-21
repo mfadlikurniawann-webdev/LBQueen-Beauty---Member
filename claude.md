@@ -1,5 +1,12 @@
 # Architectural Decisions & Changes Log (LBQueen Member)
 
+## 2026-11-21: QRIS, konfirmasi pesanan, dan slot jadwal treatment
+
+- QRIS di keranjang ditampilkan besar (maks 300px, bisa dibuka ukuran penuh) dengan tombol Unduh QRIS (`download`). Kartu Pembayaran menampilkan tiga langkah singkat (Buat pesanan, bayar, kirim bukti lewat WhatsApp). Komponen `BankPanel`/`QrisPanel`/`PaymentSteps` di `components/cart/PaymentMethodCard.tsx`.
+- Checkout tidak lagi memanggil `window.open` WhatsApp setelah menunggu server (diblokir Safari iOS sehingga pengguna tidak pernah melihat konfirmasi) lalu langsung pindah ke Pesanan. Kini muncul `OrderCreatedSheet`: total bayar, QRIS/rekening sesuai metode, tautan "Kirim bukti di WhatsApp" (diketuk pengguna) dan "Lihat pesanan".
+- Jadwal treatment memakai slot satu jam dalam jam buka (`slotTimes` di `lib/clinic.ts`, Senin-Kamis 09-20, Jumat-Sabtu 10-20, Minggu tutup) untuk 14 hari ke depan: tanggal berupa chip, jam berupa grid. Slot terpakai = booking POS selain dibatalkan + pesanan online treatment yang belum dibatalkan (jadwal dibaca dari `[Jadwal: YYYY-MM-DD HH:MM]` di nama produk), dibulatkan ke jam (`lib/booking-slots.ts`). `GET /api/slots` (wajib sesi) hanya mengirim kunci slot, tanpa data pelanggan. Slot terpakai/lewat nonaktif, tanggal yang penuh nonaktif, pilihan dikosongkan bila slot terpakai saat data diperbarui (60 detik). `checkoutOnline` menolak jam di luar slot atau yang sudah terpakai (pesanan pelanggan itu sendiri dikecualikan agar kirim ulang dengan kunci sama tetap lolos). Pemeriksaan ini di server action, belum atomik di `create_online_order`; dua checkout bersamaan di detik yang sama masih bisa lolos. Deskripsi "Jadwal dikonfirmasi admin" dihapus; teks persetujuan rata kanan-kiri.
+- `npm run screenshots` kini menguji QRIS (lebar minimal 240px, tautan unduh), alur Buat pesanan sampai lembar konfirmasi dan tab WhatsApp terbuka dari ketukan, serta slot terpakai nonaktif dan keranjang tidak melebar (mock `bookings` dan RPC `create_online_order`).
+
 ## 2026-11-21: Clean UI dengan aksen liquid glass
 
 - Kaca dibatasi pada navigasi, banner, kartu poin/membership, dan area unggulan. `.surface` serta alias `.glass-soft` kini solid di kedua tema dengan garis tipis dan bayangan ringan; katalog, daftar voucher/pesanan, menu profil, form autentikasi, dan ringkasan checkout tidak membiaskan latar.

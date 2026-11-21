@@ -8,6 +8,7 @@ import { BookingScheduleCard } from "@/components/cart/BookingScheduleCard";
 import { CartItemCard } from "@/components/cart/CartItemCard";
 import { buildOrderMessage, isTreatmentItem } from "@/components/cart/cart-utils";
 import { EmptyCart } from "@/components/cart/EmptyCart";
+import { OrderCreatedSheet, type CreatedOrder } from "@/components/cart/OrderCreatedSheet";
 import { PaymentMethodCard, type PaymentMethod } from "@/components/cart/PaymentMethodCard";
 import { TreatmentNotice } from "@/components/cart/TreatmentNotice";
 import { useCartVoucher } from "@/components/cart/useCartVoucher";
@@ -35,6 +36,7 @@ export default function CartPage() {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("bank");
 
   const [attempted, setAttempted] = useState(false);
+  const [created, setCreated] = useState<CreatedOrder | null>(null);
 
   const hasTreatment = cart.some(isTreatmentItem);
   const scheduleDate =
@@ -93,11 +95,15 @@ export default function CartPage() {
         discount,
         paymentMethod,
       });
+      // Konfirmasi lewat lembar "Pesanan dibuat": tautan WhatsApp diketuk pengguna (window.open di sini diblokir Safari iOS).
+      setCreated({
+        total: result.data.total,
+        method: paymentMethod,
+        waHref: `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,
+      });
       clearCart();
       checkoutKey.current = null;
-      window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
       void refresh();
-      router.push("/orders");
     } catch (e) {
       toast("Gagal: " + errorMessage(e, "Terjadi kesalahan"), "error");
     } finally {
@@ -106,11 +112,14 @@ export default function CartPage() {
     }
   };
 
+  const createdSheet = created && <OrderCreatedSheet order={created} onClose={() => router.push("/orders")} />;
+
   if (cart.length === 0) {
     return (
       <div className="min-h-screen">
         <PageHero title="Keranjang" onBack={() => router.back()} />
         <EmptyCart onShop={() => router.push("/")} />
+        {createdSheet}
       </div>
     );
   }

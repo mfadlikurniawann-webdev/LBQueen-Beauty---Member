@@ -146,6 +146,15 @@ Object.assign(products[1], {
   ],
 });
 const upstream = [];
+// Hari buka pertama setelah hari ini (WIB, lewati Minggu): jam 10.30 sudah dibooking sehingga slot 10.00 penuh.
+const TAKEN_DATE = (() => {
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jakarta" }).format(new Date());
+  for (let i = 1; ; i++) {
+    const d = new Date(`${today}T00:00:00Z`);
+    d.setUTCDate(d.getUTCDate() + i);
+    if (d.getUTCDay() !== 0) return d.toISOString().slice(0, 10);
+  }
+})();
 const mock = http.createServer((request, response) => {
   const url = new URL(request.url, "http://localhost");
   upstream.push({
@@ -162,6 +171,12 @@ const mock = http.createServer((request, response) => {
   }
   let data = [];
   if (table === "consume_login_attempt") data = true;
+  else if (table === "bookings") data = [{ booking_date: TAKEN_DATE, booking_time: "10:30:00", status: "confirmed" }];
+  else if (table === "create_online_order")
+    data = {
+      orders: [{ id: 99, product_name: "Daily Cleanser (50 ml) Rp 85.000 (x1)", qty: 1, price: 85000, total_price: 85000 }],
+      total: 85000,
+    };
   else if (table === "customers") data = customers;
   else if (table === "products") data = products;
   else if (table === "customer_orders") data = orders;
@@ -563,16 +578,6 @@ try {
     p.getByRole("heading", { name: /Nikmati/ }).waitFor(),
   );
   await both(member, "13-nota-online", "/invoice/1");
-  // Checkout membuka WhatsApp lewat window.open: tidak boleh diblokir CSP/COOP.
-  await visit(member, "/cart", (p) =>
-    p.getByRole("button", { name: "Buat pesanan", exact: true }).first().waitFor(),
-  );
-  const [popup] = await Promise.all([
-    memberContext.waitForEvent("page"),
-    member.evaluate(() => window.open("https://wa.me/6200000000?text=tes", "_blank")),
-  ]);
-  if (!popup) failures.push("window.open WhatsApp diblokir");
-  await popup?.close();
   // Pesanan: nama format lama tampil bersih; modal ulasan dan rincian.
   await visit(member, "/orders", (p) => p.getByText(/Breshaugmentation/).first().waitFor());
   if (await member.getByText(/\[Jadwal|\(x\d+\)|Rp 19\.250\.000 \(x/).count())
@@ -636,6 +641,27 @@ try {
   }
   await member.setViewportSize(MOBILE);
 
+  // Jadwal treatment: slot yang sudah dibooking pelanggan lain nonaktif, slot lain bisa dipilih.
+  for (const [label, viewport] of [
+    ["mobile", MOBILE],
+    ["desktop", DESKTOP],
+  ]) {
+    await visit(member, "/cart", (p) => p.locator(`[data-date="${TAKEN_DATE}"]`).waitFor(), viewport);
+    await member.locator(`[data-date="${TAKEN_DATE}"]:not([disabled])`).click();
+    await member.locator('[data-slot="10:00"]').waitFor();
+    if (!(await member.locator('[data-slot="10:00"]').isDisabled())) failures.push(`slot terpakai masih bisa dipilih ${label}`);
+    await member.locator('[data-slot="11:00"]').click();
+    if ((await member.locator('[data-slot="11:00"]').getAttribute("aria-checked")) !== "true")
+      failures.push(`slot jadwal tidak bisa dipilih ${label}`);
+    if (await member.getByText("Jadwal dikonfirmasi admin").count()) failures.push("deskripsi jadwal masih tampil");
+    const overflow = await member.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    if (overflow > 1) failures.push(`keranjang melebar ${overflow}px ${label}`);
+    await member.locator('[data-slot="11:00"]').scrollIntoViewIfNeeded();
+    await member.waitForTimeout(300);
+    await shoot(member, `25-jadwal-${label}`, viewport, { full: false });
+  }
+  await member.setViewportSize(MOBILE);
+
   // Keranjang tanpa treatment.
   const productContext = await watch(await newContext(browser, { viewport: MOBILE }));
   await productContext.addCookies([
@@ -648,6 +674,40 @@ try {
   await both(await productContext.newPage(), "20-keranjang-produk", "/cart", (p) =>
     p.getByRole("button", { name: "Buat pesanan", exact: true }).first().waitFor(),
   );
+
+  // QRIS besar + unduh, lalu lembar "Pesanan dibuat" dengan tautan WhatsApp yang diketuk pengguna.
+  for (const [label, viewport] of [
+    ["mobile", MOBILE],
+    ["desktop", DESKTOP],
+  ]) {
+    const page = await productContext.newPage();
+    await page.setViewportSize(viewport);
+    await page.goto(`${base}/cart`);
+    await page.getByRole("radio", { name: "QRIS" }).click();
+    await page.getByRole("link", { name: "Unduh QRIS" }).waitFor();
+    if ((await page.getByRole("link", { name: "Unduh QRIS" }).getAttribute("download")) !== "QRIS-LBQueen.png")
+      failures.push(`unduh QRIS tidak tersedia ${label}`);
+    const qrisWidth = await page.getByRole("img", { name: "QRIS LBQueen" }).evaluate((el) => el.getBoundingClientRect().width);
+    if (qrisWidth < 240) failures.push(`QRIS terlalu kecil ${label}: ${Math.round(qrisWidth)}px`);
+    await page.getByRole("radio", { name: "QRIS" }).scrollIntoViewIfNeeded();
+    await page.waitForTimeout(300);
+    await shoot(page, `23-qris-${label}`, viewport, { full: false });
+    await page.getByRole("button", { name: "Buat pesanan", exact: true }).first().click();
+    const sheet = page.getByRole("dialog", { name: "Pesanan dibuat" });
+    await sheet.waitFor();
+    await page.waitForTimeout(400);
+    await shoot(page, `24-pesanan-dibuat-${label}`, viewport, { full: false });
+    const wa = sheet.getByRole("link", { name: /Kirim bukti di WhatsApp/ });
+    if (!(await wa.getAttribute("href"))?.startsWith("https://wa.me/")) failures.push(`tautan WhatsApp salah ${label}`);
+    // Ketukan pengguna pada tautan harus membuka tab WhatsApp (tidak diblokir CSP/COOP).
+    const [popup] = await Promise.all([productContext.waitForEvent("page", { timeout: 5000 }).catch(() => null), wa.click()]);
+    if (!popup) failures.push(`tautan WhatsApp tidak terbuka ${label}`);
+    await popup?.close();
+    await sheet.getByRole("button", { name: "Lihat pesanan" }).click();
+    await page.waitForURL("**/orders");
+    // Keranjang dikosongkan checkout; init script konteks mengisinya lagi di halaman berikutnya.
+    await page.close();
+  }
 
   // Layar pertama beranda tanpa menggulir (HP sentuh + WebKit iPhone): tidak boleh ada yang tersembunyi.
   const hiddenInView = () =>

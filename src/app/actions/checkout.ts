@@ -3,6 +3,8 @@
 import { getCustomerSession } from "@/lib/customer-auth";
 import { serverDatabase } from "@/lib/supabase-server";
 import { consumeLimit } from "@/lib/rate-limit";
+import { takenSlots } from "@/lib/booking-slots";
+import { slotKey, slotTimes } from "@/lib/clinic";
 
 export async function checkoutOnline(input: {
   items: { product_id: number; variant_id?: number; qty: number }[];
@@ -41,6 +43,14 @@ export async function checkoutOnline(input: {
   try {
     if (!(await consumeLimit("checkout", session.id, 300)))
       return { error: "Terlalu banyak percobaan checkout. Coba kembali dalam beberapa menit." };
+    // Jadwal treatment: harus slot jam buka dan belum dipakai pelanggan lain.
+    if (input.bookingDate || input.bookingTime) {
+      const time = input.bookingTime.slice(0, 5);
+      if (!slotTimes(input.bookingDate).includes(time))
+        return { error: "Pilih jam sesuai jadwal klinik." };
+      if ((await takenSlots(serverDatabase(), { exceptCustomer: session.id })).includes(slotKey(input.bookingDate, time)))
+        return { error: "Jadwal ini baru saja dipesan pelanggan lain. Pilih jam lain." };
+    }
     const { data, error } = await serverDatabase().rpc("create_online_order", {
       p_customer_id: session.id,
       p_items: input.items,

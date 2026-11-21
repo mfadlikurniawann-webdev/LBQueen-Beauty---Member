@@ -15,9 +15,9 @@ export function TreatmentNotice({
         className="mt-0.5 w-5 h-5 shrink-0 cursor-pointer"
         style={{ accentColor: "#C94F78" }}
       />
-      <span className="text-[14px] text-ink leading-snug">
-        Saya tidak mengonsumsi alkohol dan obat terlarang H-7 s/d H+7 treatment, dan akan
-        menyampaikan kondisi kesehatan ke therapist.
+      <span lang="id" className="flex-1 min-w-0 text-[14px] text-ink leading-relaxed text-justify hyphens-auto">
+        Saya tidak mengonsumsi alkohol dan obat terlarang H-7 sampai H+7 treatment, serta akan menyampaikan
+        kondisi kesehatan saya kepada terapis.
       </span>
     </label>
   );
