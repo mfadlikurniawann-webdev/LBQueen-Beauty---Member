@@ -689,6 +689,18 @@ try {
       failures.push(`unduh QRIS tidak tersedia ${label}`);
     const qrisWidth = await page.getByRole("img", { name: "QRIS LBQueen" }).evaluate((el) => el.getBoundingClientRect().width);
     if (qrisWidth < 240) failures.push(`QRIS terlalu kecil ${label}: ${Math.round(qrisWidth)}px`);
+    if (label === "mobile") {
+      // Ujung keranjang: kartu terakhir berhenti tepat di atas bar total, tanpa ruang kosong besar atau tertutup.
+      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+      await page.waitForTimeout(300);
+      const gap = await page.evaluate(() => {
+        const bar = document.querySelector(".md\\:hidden.fixed.bottom-0 > div").getBoundingClientRect();
+        const cards = [...document.querySelectorAll("main .space-y-3 > *")];
+        return Math.round(bar.top - cards.at(-1).getBoundingClientRect().bottom);
+      });
+      if (gap < 4 || gap > 40) failures.push(`jarak bawah keranjang ${gap}px`);
+      await shoot(page, "23-keranjang-bawah-mobile", viewport, { full: false });
+    }
     await page.getByRole("radio", { name: "QRIS" }).scrollIntoViewIfNeeded();
     await page.waitForTimeout(300);
     await shoot(page, `23-qris-${label}`, viewport, { full: false });

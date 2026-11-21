@@ -142,7 +142,7 @@ export default function CartPage() {
     <div className="min-h-screen">
       <PageHero title="Keranjang" subtitle={`${totalItems} item`} onBack={() => router.back()} />
 
-      <div className="px-4 md:px-8 pb-8">
+      <div className="px-4 md:px-8 md:pb-8">
         <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_340px] lg:grid-cols-[minmax(0,1fr)_380px] gap-3 md:gap-6 md:items-start">
           <div className="space-y-3">
             {cart.map((item, idx) => (

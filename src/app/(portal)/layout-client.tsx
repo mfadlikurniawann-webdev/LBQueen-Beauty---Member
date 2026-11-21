@@ -39,7 +39,8 @@ function Layout({ children }: { children: React.ReactNode }) {
 
   const cartBar = !!customer && totalItems > 0 && showsCartBar(pathname);
   const checkout = pathname === "/cart";
-  const mobilePad = !customer ? 0 : checkout ? 168 : cartBar ? 196 : 112;
+  // Keranjang: cukup setinggi bar total (sekitar 76-92px) plus sedikit jarak, tanpa ruang nav bawah.
+  const mobilePad = !customer ? 0 : checkout ? 104 : cartBar ? 196 : 112;
 
   return (
     <div className="relative isolate min-h-screen flex flex-col items-center">
